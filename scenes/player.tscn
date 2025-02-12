@@ -287,7 +287,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run_1",
-"speed": 20.0
+"speed": 30.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -316,7 +316,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run_2",
-"speed": 20.0
+"speed": 30.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -389,7 +389,7 @@ script = ExtResource("1_0xtnp")
 texture_filter = 1
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_pu5gm")
-animation = &"switch_to_idle_1"
+animation = &"run_2"
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -9)
