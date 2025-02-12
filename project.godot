@@ -12,13 +12,14 @@ config_version=5
 
 config/name="Juxtra-game"
 config/version="0.1"
+run/main_scene="res://scenes/local_multiplayer.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=925
-window/size/viewport_height=600
+window/size/viewport_width=1387
+window/size/viewport_height=900
 window/stretch/mode="canvas_items"
 
 [file_customization]
@@ -27,6 +28,7 @@ folder_colors={
 "res://assets/": "yellow",
 "res://assets/levels/tileset/": "orange",
 "res://assets/levels/tileset/saved/": "red",
+"res://assets/players/": "orange",
 "res://scenes/": "purple"
 }
 
