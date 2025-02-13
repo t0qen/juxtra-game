@@ -1,5 +1,7 @@
 extends CharacterBody2D
+class_name Player
 
+# MOVEMENTSd
 @export var base_speed : int = 120 # base speed of player, on ground
 @export var air_speed : int = 80 # it can change in air
 @export var jump_height : float = 50.0 # height of player's jump
@@ -12,6 +14,13 @@ extends CharacterBody2D
 @onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
 
 @onready var sprites = $Sprites # get the animated sprite node from player
+
+# timers
+@export var exit_idle_timer : Timer
+@export var exit_fall_timer : Timer
+@export var exit_wait_timer : Timer
+@export var jump_bug_timer : Timer
+
 
 enum STATE { # each states of player for finite state machine
 	IDLE,
@@ -44,10 +53,6 @@ func _physics_process(delta: float) -> void: # each frame we call this function 
 	get_inputs()
 	_update_state(delta)
 	prev_state = current_state
-	#print(jumping)
-	 
-	#print(is_on_floor())
-	#Engine.time_scale = 0.1
 	
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
 	if current_player == 1: # if current player is 1 get input with player's 1 inputs
@@ -68,40 +73,41 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 		STATE.IDLE:
 			play_animation("idle")
 			exit_idle = false
-			await get_tree().create_timer(5).timeout
-			exit_idle = true
+			exit_idle_timer.start() # start timer
+			
 			
 		STATE.WAIT:
 			if !exit_fall:
 				play_animation("wait")
 			else:
-				print("HERE")
 				play_animation("exit_fall")
+				exit_fall_timer.start()
 				exit_fall = false
-				await get_tree().create_timer(2).timeout
-				play_animation("wait")
 				
 			exit_wait = false
-			await get_tree().create_timer(2).timeout
-			exit_wait = true
+			exit_wait_timer.start()
+			
 			
 		STATE.SLEEP:
 			play_animation("sleep")	
 
 		STATE.RUN: 
+			stop_idle_timers()
 			current_speed = base_speed # set on ground speed
 			play_animation("run")
 			
 		STATE.JUMP: 
+			stop_idle_timers()
 			current_speed = air_speed
 			jumping = true
 			play_animation("jump")
 			velocity.y = jump_velocity # apply jump
-			await get_tree().create_timer(0.1).timeout # this timer is here to prevent bug if STATE.JUMP begin to soon
-			jumping = false
+			jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
+			
 			
 			
 		STATE.FLY: 
+			stop_idle_timers()
 			current_speed = air_speed # set air speed
 			play_animation("fly")
 			
@@ -252,9 +258,23 @@ func x_move():
 func apply_gravity(delta):
 	velocity.y += get_current_gravity() * delta	
 		
+func stop_idle_timers(): # must be call on every movments states
+	exit_fall_timer.stop()
+	exit_idle_timer.stop()
+	exit_wait_timer.stop()
 		
-		
-		
+# timers calls
+func _on_exit_idle_timeout() -> void:
+	exit_idle = true
+	
+func _on_exit_fall_timeout() -> void:
+	play_animation("wait")
+	
+func _on_exit_wait_timeout() -> void:
+	exit_wait = true
+
+func _on_jump_bug_timeout() -> void:
+	jumping = false	
 		
 		
 		

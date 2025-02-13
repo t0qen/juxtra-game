@@ -72,6 +72,10 @@ region = Rect2(96, 0, 32, 32)
 atlas = ExtResource("5_ry10l")
 region = Rect2(128, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_8d3sm"]
+atlas = ExtResource("5_ryfuf")
+region = Rect2(0, 256, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_wslk6"]
 atlas = ExtResource("5_ryfuf")
 region = Rect2(32, 256, 32, 32)
@@ -91,10 +95,6 @@ region = Rect2(128, 256, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_cpemc"]
 atlas = ExtResource("5_ry10l")
 region = Rect2(32, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1132r"]
-atlas = ExtResource("5_ry10l")
-region = Rect2(64, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_owlqu"]
 atlas = ExtResource("5_ry10l")
@@ -235,16 +235,16 @@ animations = [{
 }],
 "loop": false,
 "name": &"exit_fall_1",
-"speed": 3.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_cxg33")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_sn2b1")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_egs4v")
 }, {
 "duration": 1.0,
@@ -308,7 +308,10 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 0.2,
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_8d3sm")
+}, {
+"duration": 0.15,
 "texture": SubResource("AtlasTexture_wslk6")
 }, {
 "duration": 0.1,
@@ -317,7 +320,7 @@ animations = [{
 "duration": 0.08,
 "texture": SubResource("AtlasTexture_giymr")
 }, {
-"duration": 0.05,
+"duration": 0.07,
 "texture": SubResource("AtlasTexture_jahd6")
 }],
 "loop": false,
@@ -325,27 +328,24 @@ animations = [{
 "speed": 1.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_cpemc")
 }, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1132r")
-}, {
-"duration": 1.0,
+"duration": 0.15,
 "texture": SubResource("AtlasTexture_owlqu")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_015al")
 }, {
-"duration": 1.0,
+"duration": 0.08,
 "texture": SubResource("AtlasTexture_n5qgr")
 }, {
-"duration": 1.0,
+"duration": 0.07,
 "texture": SubResource("AtlasTexture_p34mf")
 }],
 "loop": false,
 "name": &"jump_2",
-"speed": 5.0
+"speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -469,15 +469,19 @@ height = 10.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1n1i0"]
 size = Vector2(0.999996, 6)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer")]
 script = ExtResource("1_0xtnp")
+exit_idle_timer = NodePath("Timers/Exit_idle")
+exit_fall_timer = NodePath("Timers/Exit_fall")
+exit_wait_timer = NodePath("Timers/Exit_wait")
+jump_bug_timer = NodePath("Timers/Jump_bug")
 
 [node name="Sprites" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_wb510")
-animation = &"exit_fall_1"
-frame = 1
+animation = &"exit_fall_2"
+frame = 3
 frame_progress = 1.0
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
@@ -489,3 +493,30 @@ shape = SubResource("CapsuleShape2D_fcguk")
 position = Vector2(0, -0.5)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_1n1i0")
+
+[node name="Timers" type="Node" parent="."]
+
+[node name="Exit_idle" type="Timer" parent="Timers"]
+process_callback = 0
+wait_time = 10.0
+one_shot = true
+
+[node name="Exit_fall" type="Timer" parent="Timers"]
+process_callback = 0
+wait_time = 1.5
+one_shot = true
+
+[node name="Exit_wait" type="Timer" parent="Timers"]
+process_callback = 0
+wait_time = 3.0
+one_shot = true
+
+[node name="Jump_bug" type="Timer" parent="Timers"]
+process_callback = 0
+wait_time = 0.1
+one_shot = true
+
+[connection signal="timeout" from="Timers/Exit_idle" to="." method="_on_exit_idle_timeout"]
+[connection signal="timeout" from="Timers/Exit_fall" to="." method="_on_exit_fall_timeout"]
+[connection signal="timeout" from="Timers/Exit_wait" to="." method="_on_exit_wait_timeout"]
+[connection signal="timeout" from="Timers/Jump_bug" to="." method="_on_jump_bug_timeout"]
