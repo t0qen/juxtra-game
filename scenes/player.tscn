@@ -227,32 +227,32 @@ region = Rect2(128, 0, 32, 32)
 [sub_resource type="SpriteFrames" id="SpriteFrames_wb510"]
 animations = [{
 "frames": [{
-"duration": 2.0,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_8m7ct")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_l0voy")
 }],
 "loop": false,
 "name": &"exit_fall_1",
-"speed": 5.0
+"speed": 1.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_cxg33")
 }, {
 "duration": 0.5,
 "texture": SubResource("AtlasTexture_sn2b1")
 }, {
-"duration": 0.5,
+"duration": 0.25,
 "texture": SubResource("AtlasTexture_egs4v")
 }, {
-"duration": 1.0,
+"duration": 0.25,
 "texture": SubResource("AtlasTexture_v46dn")
 }],
 "loop": false,
 "name": &"exit_fall_2",
-"speed": 5.0
+"speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -469,19 +469,20 @@ height = 10.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1n1i0"]
 size = Vector2(0.999996, 6)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "sprites")]
 script = ExtResource("1_0xtnp")
 exit_idle_timer = NodePath("Timers/Exit_idle")
 exit_fall_timer = NodePath("Timers/Exit_fall")
 exit_wait_timer = NodePath("Timers/Exit_wait")
 jump_bug_timer = NodePath("Timers/Jump_bug")
+sprites = NodePath("Sprites")
 
 [node name="Sprites" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_wb510")
-animation = &"exit_fall_2"
-frame = 3
+animation = &"exit_fall_1"
+frame = 1
 frame_progress = 1.0
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]

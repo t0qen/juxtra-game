@@ -1,28 +1,48 @@
 extends CharacterBody2D
 class_name Player
 
-# MOVEMENTSd
+#region VARIABLES
+@export_group("Global")
+@export var current_player : int = 1 # wich player this script is for, can be changed by other script via func
+
+#region MOVEMENTS
+@export_group("Movements")
+@export var gravity : int = ProjectSettings.get_setting("physics/2d/default_gravity") # default gravity 
+
+# - RUN
+@export_subgroup("Run")
 @export var base_speed : int = 120 # base speed of player, on ground
 @export var air_speed : int = 80 # it can change in air
+var current_speed : float = base_speed # store the current speed
+
+# - JUMP
+@export_subgroup("Jump")
 @export var jump_height : float = 50.0 # height of player's jump
 @export var jump_time_to_peak : float = 0.3
 @export var jump_time_to_fall : float = 0.15
-
-# jump maths
-@onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
+@onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 # maths
 @onready var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
 @onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
+#endregion
 
-@onready var sprites = $Sprites # get the animated sprite node from player
+#region NODES
+@export_group("Nodes")
+# - TIMERS
+@export_subgroup("Timers")
+@export var exit_idle_timer : Timer # cooldown before switch to idle to sleep state
+@export var exit_fall_timer : Timer # cooldown to play fall animation before enter state wait
+@export var exit_wait_timer : Timer # cooldown before switch to wait to idle state 
+@export var jump_bug_timer : Timer # little delay after apply jump to prevent bug
 
-# timers
-@export var exit_idle_timer : Timer
-@export var exit_fall_timer : Timer
-@export var exit_wait_timer : Timer
-@export var jump_bug_timer : Timer
+# - OTHERS
+@export_subgroup("Others")
+@export var sprites : AnimatedSprite2D # get the animated sprite node from player
+#endregion
 
+#region STATES
+@export_group("States")
 
-enum STATE { # each states of player for finite state machine
+enum STATE { # each states of player 
 	IDLE,
 	RUN,
 	FLY,
@@ -31,28 +51,35 @@ enum STATE { # each states of player for finite state machine
 	SLEEP
 }
 
-var prev_state : STATE
+@export var first_state : STATE = STATE.IDLE # with wich state player will begin ?
+
+# - OTHERS
 var current_state : STATE # where the current state of player will be stored
-var gravity : int = ProjectSettings.get_setting("physics/2d/default_gravity")
-var current_player : int = 1 # wich player this script is for, can change for multiplayer
-var current_speed : float = base_speed # store the current speed
+var jumping : bool = false # bool to know if player is jumping
+var exit_wait : bool = false # bool to store the end of timer
+var exit_idle : bool = false # same for idle
+var exit_fall : bool = false # same for fall
+#endregion
+
+#region INPUTS
 var want_to_jump : bool = false # a bool to know if player want to jump
-var direction : int = 0 # the direction of player, maybe a Vector2 ? consider jump as direction ?
-var want_to_dash : bool = false # same for dash
-var jumping : bool = false
+var direction : int = 0 # the direction of player, may a Vector2 ? consider jump as direction ? TODO
+var want_to_dash : bool = false # same for dash 
 
-var exit_wait : bool = false  # exit wait state after a delay
-var exit_idle : bool = false  # same for idle
-var exit_fall : bool = false
+#endregion
+#endregion
 
-func _ready() -> void: # first we set the state of player to idle
-	set_player_1()
-	_set_state(STATE.WAIT)
+#region GLOBAL FUNCTIONS
+
+func _ready() -> void: 
+	set_player_1() # for test, set player 1
+	_set_state(first_state) # set player's state to first state
 	
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	get_inputs()
-	_update_state(delta)
-	prev_state = current_state
+	_update_state(delta) #
+#endregion
+
 	
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
 	if current_player == 1: # if current player is 1 get input with player's 1 inputs
@@ -122,6 +149,7 @@ func _exit_state() -> void: # exit transition, nothing for now
 			pass
 			
 		STATE.JUMP: 
+			jumping = false
 			exit_fall = true
 			
 		STATE.FLY: 
