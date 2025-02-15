@@ -1,6 +1,7 @@
-[gd_scene load_steps=18 format=4 uid="uid://dgn4jle4xtlp5"]
+[gd_scene load_steps=19 format=4 uid="uid://dgn4jle4xtlp5"]
 
 [ext_resource type="PackedScene" uid="uid://ux1l01a7iemk" path="res://scenes/player.tscn" id="2_yb62x"]
+[ext_resource type="PackedScene" uid="uid://vsj867ii6l7t" path="res://scenes/ball.tscn" id="4_qlfqu"]
 [ext_resource type="Texture2D" uid="uid://dyu4wu4qev4c5" path="res://assets/levels/tileset/custom.png" id="10_ykiw6"]
 [ext_resource type="Texture2D" uid="uid://r8nku622d1jt" path="res://assets/levels/tileset/shadows.png" id="11_rgkix"]
 [ext_resource type="Texture2D" uid="uid://bdkfqpm45vsng" path="res://assets/levels/tileset/clouds.png" id="12_6cbun"]
@@ -425,8 +426,11 @@ position = Vector2(200, -80)
 tile_map_data = PackedByteArray("AADi//b/AAAFAAUAAADj//L/AAAFAAUAAADk//H/AAAFAAUAAADu//D/AAAFAAUAAAD4//D/AAAFAAQAAAABAPH/AAAFAAQAAAACAPL/AAAFAAQAAAADAPb/AAAFAAQAAAA=")
 tile_set = SubResource("TileSet_14g55")
 
+[node name="Ball" parent="." instance=ExtResource("4_qlfqu")]
+position = Vector2(-3, -202)
+
 [node name="Player" parent="." instance=ExtResource("2_yb62x")]
-position = Vector2(-271, -32)
+position = Vector2(-281, -80)
 scale = Vector2(1.5, 1.5)
 
 [node name="Camera2D" type="Camera2D" parent="."]

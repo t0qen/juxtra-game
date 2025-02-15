@@ -43,18 +43,16 @@ var current_speed : float = base_speed # store the current speed
 @export_group("States")
 
 enum STATE { # each states of player 
-	IDLE,
-	RUN,
-	FLY,
-	JUMP,
-	WAIT,
-	SLEEP
+	IDLE, # 0
+	RUN, # 1 
+	FLY, # 2
+	JUMP, # 3
+	WAIT, # 4
+	SLEEP # 5
 }
-
-@export var first_state : STATE = STATE.IDLE # with wich state player will begin ?
+@export var current_state : STATE = STATE.WAIT # where the current state of player will be stored, can stored to first state
 
 # - OTHERS
-var current_state : STATE # where the current state of player will be stored
 var jumping : bool = false # bool to know if player is jumping
 var exit_wait : bool = false # bool to store the end of timer
 var exit_idle : bool = false # same for idle
@@ -72,12 +70,13 @@ var want_to_dash : bool = false # same for dash
 #region GLOBAL FUNCTIONS
 func _ready() -> void: 
 	set_player_1() # for test, set player 1
-	_set_state(first_state) # set player's state to first state
 	
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	get_inputs() # first get inputs
 	_update_state(delta) # update the behavior of current state
-
+	#Engine.time_scale = 0.01
+	#print(current_state)	
+	
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
 	if current_player == 1: # if current player is 1 get input with player's 1 inputs
 		want_to_jump = Input.is_action_just_pressed("jump_1") # bool to jump
@@ -99,18 +98,15 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 	match current_state:
 		STATE.IDLE:
 			play_animation("idle")
-			exit_idle = false # restart a idle timer
 			exit_idle_timer.start() # start timer, after end, set exit_idle to true
 			
 		STATE.WAIT:
 			if !exit_fall: # if player wasn't falling before
 				play_animation("wait") # play basic animation
 			else: # if player was landng before, after jump or fly, play first exit fall animation
-				exit_fall = false # set exit fall to false
 				play_animation("exit_fall") 
 				exit_fall_timer.start() # start a timer to have the time to play exit fall animation
 				
-			exit_wait = false # same as idle state, restart a timer
 			exit_wait_timer.start() # on the end of this timer, exit wait will be true
 			
 			
@@ -118,11 +114,13 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			play_animation("sleep")	
 
 		STATE.RUN: 
+			exit_fall = false # reset exit fall
 			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
 			current_speed = base_speed # set on ground speed
 			play_animation("run")
 			
 		STATE.JUMP: 
+			exit_fall = false # reset exit fall
 			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
 			current_speed = air_speed # set in air speed
 			jumping = true # set this variable to true to prevent some bug on other functions TODO
@@ -131,6 +129,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
 			
 		STATE.FLY: 
+			exit_fall = false # reset exit fall
 			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
 			current_speed = air_speed # set air speed
 			play_animation("fly")
@@ -173,9 +172,6 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			move_and_slide() # move
 			
 		STATE.IDLE: 
-			if exit_idle: # if player need to stop idling to sleep
-				_set_state(STATE.SLEEP)
-				
 			if direction: # if left or right is pressed, start walking
 				_set_state(STATE.RUN)
 				
@@ -186,8 +182,6 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 				_set_state(STATE.FLY)
 				
 		STATE.WAIT:
-			if exit_wait: # if player need to stop waiting to idling
-				_set_state(STATE.IDLE)
 				
 			if direction: # ef left or right is pressed, start walking
 				_set_state(STATE.RUN)
@@ -205,38 +199,44 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			elif want_to_jump: # jump action, come with inputs system
 				_set_state(STATE.JUMP) # if the jump button is pressed, then jump
 				
-			elif !is_on_floor() && !jumping: # if not on floor, fall down
+			elif !is_on_floor() && !jumping: # if not on floor, fall down TODO
 				_set_state(STATE.FLY)		
 			
 		STATE.RUN:
-			x_move()
-			if !direction: 
+			x_move() # move on x axis
+			
+			if !direction: # if player doesn't move anymore 
 				_set_state(STATE.WAIT)
-			if want_to_jump:
-				_set_state(STATE.JUMP) # if jump is pressed, jump
-			if !is_on_floor() && !jumping: 
+				
+			if want_to_jump: # if jump is pressed, jump
+				_set_state(STATE.JUMP)
+				
+			if !is_on_floor() && !jumping: #  # if not on floor, fall down TODO
 				_set_state(STATE.FLY)
 			
-			move_and_slide() 
+			move_and_slide() # move
 			
 		STATE.FLY: 
-			x_move()
-			if is_on_floor(): # If the ground is reached, change back to idle
-				if direction:
+			x_move() # move on x axis
+			
+			if is_on_floor(): # if player comes back on floor
+				if direction: # if he want to move
 					_set_state(STATE.RUN)
-				else:
+				else: # else
 					_set_state(STATE.WAIT)
 			else: 
-				apply_gravity(delta)
-			move_and_slide()
+				apply_gravity(delta) # else apply gravity
+				
+			move_and_slide() # move
+			
 #endregion
 #endregion
 
-
+#region OTHER
 func set_player_1(): # we can choose for player 1 or player 2 when multiplayer, so keyboard will change
 	current_player = 1
 	
-func set_player_2():
+func set_player_2(): # same for player 2
 	current_player = 2
 	
 func play_animation(animation: String): # play animation
@@ -275,50 +275,39 @@ func play_animation(animation: String): # play animation
 				sprites.play("exit_fall_2")
 					
 func get_current_gravity() -> float: # return gravity
-	return jump_gravity if velocity.y < 0.0 else fall_gravity
+	return jump_gravity if velocity.y < 0.0 else fall_gravity # if player's velocity < 0, it means that player is jumping so return jump gravity
 
-func flip_sprites():
-	if velocity.x > 0: # set Sprite direction
+func apply_gravity(delta): # apply gravity
+	velocity.y += get_current_gravity() * delta	
+		
+func flip_sprites(): # simple func to automaticlly flip player sprite with the player's x velocity
+	if velocity.x > 0: 
 		sprites.flip_h = false
+		
 	elif velocity.x < 0:
 		sprites.flip_h = true
 
-func x_move():
+func x_move(): # simple func to move player on x axis
 	velocity.x = direction * current_speed 
 	flip_sprites() # flip player's sprite with his direction
 	
-func apply_gravity(delta):
-	velocity.y += get_current_gravity() * delta	
-		
-func stop_idle_timers(): # must be call on every movments states
+#region TIMERS
+func stop_idle_timers(): # must be call on every movments states, stop all current timer
 	exit_fall_timer.stop()
 	exit_idle_timer.stop()
 	exit_wait_timer.stop()
 		
-# timers calls
-func _on_exit_idle_timeout() -> void:
-	exit_idle = true
-	
-func _on_exit_fall_timeout() -> void:
-	play_animation("wait")
-	
-func _on_exit_wait_timeout() -> void:
-	exit_wait = true
+func _on_exit_idle_timeout() -> void: # called when idle timer is finished
+	_set_state(STATE.SLEEP) # so set sleep state
 
-func _on_jump_bug_timeout() -> void:
+func _on_exit_wait_timeout() -> void: # same for wait state
+	_set_state(STATE.IDLE)
+	
+func _on_exit_fall_timeout() -> void: # called when this timer is finish, it lasts 1.5s, the time to play exit fall animation
+	exit_fall = false # set exit fall to false
+	play_animation("wait") # play wait animation after
+	
+func _on_jump_bug_timeout() -> void: # prevent bugs
 	jumping = false	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+#endregion
+#endregion

@@ -471,6 +471,8 @@ size = Vector2(0.999996, 6)
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "sprites")]
 script = ExtResource("1_0xtnp")
+base_speed = 175
+air_speed = 220
 exit_idle_timer = NodePath("Timers/Exit_idle")
 exit_fall_timer = NodePath("Timers/Exit_fall")
 exit_wait_timer = NodePath("Timers/Exit_wait")
