@@ -1,8 +1,25 @@
-[gd_scene load_steps=62 format=3 uid="uid://ux1l01a7iemk"]
+[gd_scene load_steps=65 format=3 uid="uid://ux1l01a7iemk"]
 
 [ext_resource type="Script" path="res://scenes/scripts/player.gd" id="1_0xtnp"]
+[ext_resource type="Texture2D" uid="uid://c2d5qge6dofv3" path="res://assets/players/Red Panda Sprite Sheet.png" id="3_jadnl"]
 [ext_resource type="Texture2D" uid="uid://dl3hc2q8of8hb" path="res://assets/players/Fox Sprite Sheet.png" id="5_ry10l"]
 [ext_resource type="Texture2D" uid="uid://00inw7h2kexm" path="res://assets/players/Cat Sprite Sheet.png" id="5_ryfuf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qn5qx"]
+atlas = ExtResource("5_ryfuf")
+region = Rect2(192, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dx6o1"]
+atlas = ExtResource("3_jadnl")
+region = Rect2(224, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_085vx"]
+atlas = ExtResource("5_ryfuf")
+region = Rect2(224, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lp0v1"]
+atlas = ExtResource("3_jadnl")
+region = Rect2(160, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8m7ct"]
 atlas = ExtResource("5_ryfuf")
@@ -72,10 +89,6 @@ region = Rect2(96, 0, 32, 32)
 atlas = ExtResource("5_ry10l")
 region = Rect2(128, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8d3sm"]
-atlas = ExtResource("5_ryfuf")
-region = Rect2(0, 256, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_wslk6"]
 atlas = ExtResource("5_ryfuf")
 region = Rect2(32, 256, 32, 32)
@@ -91,10 +104,6 @@ region = Rect2(96, 256, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_jahd6"]
 atlas = ExtResource("5_ryfuf")
 region = Rect2(128, 256, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cpemc"]
-atlas = ExtResource("5_ry10l")
-region = Rect2(32, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_owlqu"]
 atlas = ExtResource("5_ry10l")
@@ -228,6 +237,38 @@ region = Rect2(128, 0, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_qn5qx")
+}],
+"loop": true,
+"name": &"before_dash_1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dx6o1")
+}],
+"loop": true,
+"name": &"before_dash_2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_085vx")
+}],
+"loop": true,
+"name": &"dash_1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lp0v1")
+}],
+"loop": true,
+"name": &"dash_2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_8m7ct")
 }, {
 "duration": 0.5,
@@ -308,10 +349,7 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_8d3sm")
-}, {
-"duration": 0.15,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_wslk6")
 }, {
 "duration": 0.1,
@@ -328,10 +366,7 @@ animations = [{
 "speed": 1.0
 }, {
 "frames": [{
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_cpemc")
-}, {
-"duration": 0.15,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_owlqu")
 }, {
 "duration": 0.1,
@@ -469,7 +504,7 @@ height = 10.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1n1i0"]
 size = Vector2(0.999996, 6)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "sprites")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "before_dash_timer", "sprites")]
 script = ExtResource("1_0xtnp")
 base_speed = 175
 air_speed = 220
@@ -477,15 +512,14 @@ exit_idle_timer = NodePath("Timers/Exit_idle")
 exit_fall_timer = NodePath("Timers/Exit_fall")
 exit_wait_timer = NodePath("Timers/Exit_wait")
 jump_bug_timer = NodePath("Timers/Jump_bug")
+before_dash_timer = NodePath("Timers/Before_dash")
 sprites = NodePath("Sprites")
 
 [node name="Sprites" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_wb510")
-animation = &"exit_fall_1"
-frame = 1
-frame_progress = 1.0
+animation = &"jump_2"
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -6)
@@ -519,7 +553,13 @@ process_callback = 0
 wait_time = 0.1
 one_shot = true
 
+[node name="Before_dash" type="Timer" parent="Timers"]
+process_callback = 0
+wait_time = 2.5
+one_shot = true
+
 [connection signal="timeout" from="Timers/Exit_idle" to="." method="_on_exit_idle_timeout"]
 [connection signal="timeout" from="Timers/Exit_fall" to="." method="_on_exit_fall_timeout"]
 [connection signal="timeout" from="Timers/Exit_wait" to="." method="_on_exit_wait_timeout"]
 [connection signal="timeout" from="Timers/Jump_bug" to="." method="_on_jump_bug_timeout"]
+[connection signal="timeout" from="Timers/Before_dash" to="." method="_on_before_dash_timeout"]
