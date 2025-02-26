@@ -11,10 +11,14 @@ config_version=5
 [application]
 
 config/name="Juxtra-game"
-config/version="0.1"
+config/version="0.2"
 run/main_scene="res://scenes/local_multiplayer.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
-config/icon="res://icon.svg"
+run/max_fps=120
+boot_splash/bg_color=Color(0.6, 0.6, 0.6, 1)
+boot_splash/show_image=false
+config/icon="res://icon.png"
+config/macos_native_icon="res://exports/icon.ico"
 
 [display]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hib55hnf64hp"
-path="res://.godot/imported/local multiplayer text.png-c7a9519e0d295f4547eba515c917a42e.ctex"
+uid="uid://bouwowesih2r4"
+path="res://.godot/imported/banner.png-21438af8cc4ba39ca0f0162002402634.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/levels/objects/local multiplayer text.png"
-dest_files=["res://.godot/imported/local multiplayer text.png-c7a9519e0d295f4547eba515c917a42e.ctex"]
+source_file="res://exports/images/banner.png"
+dest_files=["res://.godot/imported/banner.png-21438af8cc4ba39ca0f0162002402634.ctex"]
 
 [params]
 

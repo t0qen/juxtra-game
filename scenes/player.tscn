@@ -1,16 +1,14 @@
-[gd_scene load_steps=65 format=3 uid="uid://ux1l01a7iemk"]
+[gd_scene load_steps=64 format=3 uid="uid://ux1l01a7iemk"]
 
 [ext_resource type="Script" path="res://scenes/scripts/player.gd" id="1_0xtnp"]
-[ext_resource type="Texture2D" uid="uid://c2d5qge6dofv3" path="res://assets/players/Red Panda Sprite Sheet.png" id="3_jadnl"]
-[ext_resource type="Texture2D" uid="uid://dl3hc2q8of8hb" path="res://assets/players/Fox Sprite Sheet.png" id="5_ry10l"]
-[ext_resource type="Texture2D" uid="uid://00inw7h2kexm" path="res://assets/players/Cat Sprite Sheet.png" id="5_ryfuf"]
+[ext_resource type="Texture2D" uid="uid://brwkshkxnswr5" path="res://assets/players/player2.png" id="5_ry10l"]
+[ext_resource type="Texture2D" uid="uid://5il8xp6hdywr" path="res://assets/players/player1.png" id="5_ryfuf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qn5qx"]
 atlas = ExtResource("5_ryfuf")
 region = Rect2(192, 160, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dx6o1"]
-atlas = ExtResource("3_jadnl")
 region = Rect2(224, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_085vx"]
@@ -18,7 +16,6 @@ atlas = ExtResource("5_ryfuf")
 region = Rect2(224, 160, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lp0v1"]
-atlas = ExtResource("3_jadnl")
 region = Rect2(160, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8m7ct"]
