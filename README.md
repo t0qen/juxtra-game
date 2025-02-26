@@ -1,16 +1,20 @@
-<h2 style="text-align: center;">
+<p align="center">
   
-  ✨ JUXTRA-GAME
+  <h3>✨ JUXTRA-GAME</h3>
   
-</h2>
+</p>
 
-> <h3 style="text-align: center;"> "Your free, 2d, multiplayer and physics-based ball game."</h3>
+<p align="center"> 
   
-<div style="text-align: center;"> 
-  
-  ![banner](https://github.com/user-attachments/assets/284ae3a2-82f5-4e3e-b8c6-185ccb987537)
+> <h3> "Your free, 2d, multiplayer and physics-based ball game."</h3>
 
-</div>
+</p>
+
+<p align="center"> 
+  
+  <img src="https://github.com/user-attachments/assets/284ae3a2-82f5-4e3e-b8c6-185ccb987537">
+
+</p>
   
 
 
