@@ -30,6 +30,9 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 ## ❓ Frequently Asked Questions
 **Coming soon**
 
+## 🤩 The team behind this project
+**Coming soon**
+
 ## 😘 Thanks
 - *Elthen*, who make the cat and fox characters, here is his art shop on itch : https://elthen.itch.io/
 The rest is made by *t0qen*.
