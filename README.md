@@ -11,5 +11,25 @@
 
 </div>
   
+## 🤔 For whom ?
+**If you ...**
+- want to play a game, for few minutes
+- want to play with your friend abd have fun
+- want to practice mecanics and become very good at this game
+- ...
 
+## 📥 Installation fro Windows and Linux
+**Will come with first release, please wait**
 
+## 📜 How to play
+**Will come with first release, please wait**
+
+## 🤝 How to contribute
+**Coming soon**
+
+## ❓ Frequently Asked Questions
+**Coming soon**
+
+## 😘 Thanks
+- *Elthen*, who make the cat and fox characters, here is his art shop on itch : https://elthen.itch.io/
+The rest is made by *t0qen*.
