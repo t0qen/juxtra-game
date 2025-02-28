@@ -4,7 +4,7 @@
   <img src="/ressources/images/logo.png">
 
   ### "Your free, 2d, multiplayer and physics-based ball game."</h4>
- It's a cute 2d game, colorful retro style, where you have to **shoot** a bouncing ball into the enemy goal. To do this, you use a very **advanced movement system** to move very quickly in the air. You can play **against your friend**, on the same keyboard, or online. You can also **practice alone** to wait to have a friend.
+It's a cute 2d game with a colorful retro style, where you have to **shoot** a bouncing ball into the enemy goal. To do this, you use an **advanced movement system** to move very quickly in the air. You can play **1v1 against your friends**, on the same keyboard or online, or **practice alone**.
 
 
   <img src="/ressources/images/banner.png">
@@ -12,10 +12,10 @@
 </div>
   
 ## 🤔 For whom ?
-**If you ...**
-- want to play a game, for few minutes
+**You probably like this game if you ...**
+- want to have a game you can kill with a few minutes 
 - want to play with your friend abd have fun
-- want to practice mecanics and become very good at this game
+- want to practice mecanics and master this game
 - ...
 
 ## 📥 Installation fro Windows and Linux
