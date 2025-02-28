@@ -18,7 +18,7 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 - want to practice mecanics and master this game
 - ...
 
-## 📥 Installation fro Windows and Linux
+## 📥 Installation for Windows and Linux
 **Will come with first release, please wait**
 
 ## 📜 How to play
