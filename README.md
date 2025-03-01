@@ -8,7 +8,7 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 
 
   <img src="/ressources/images/banner.png">
-
+  here add link to section
 </div>
   
 ## 🤔 For whom ?
