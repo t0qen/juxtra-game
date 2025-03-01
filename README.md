@@ -8,8 +8,12 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 
 
   <img src="/ressources/images/banner.png">
+
+  
   here add link to section
 </div>
+
+
   
 ## 🤔 For whom ?
 **You probably like this game if you ...**
@@ -18,20 +22,26 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 - want to practice mecanics and master this game
 - ...
 
+
 ## 📥 Installation for Windows and Linux
 **Will come with first release, please wait**
+
 
 ## 📜 How to play
 **Will come with first release, please wait**
 
+
 ## 🤝 How to contribute
 **Coming soon**
+
 
 ## ❓ Frequently Asked Questions
 **Coming soon**
 
+
 ## 🤩 The team behind this project
 **Coming soon**
+
 
 ## 😘 Thanks
 - *Elthen*, who make the cat and fox characters, here is his art shop on itch : https://elthen.itch.io/
