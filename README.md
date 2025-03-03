@@ -9,7 +9,7 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 
   <img src="/ressources/images/banner.png">
 
-  
+todo : add link to every sections in every sections
    
 </div>
   
