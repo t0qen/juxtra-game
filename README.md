@@ -10,7 +10,7 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
   <img src="/ressources/images/banner.png">
 
   
-  here add link to section
+   [tkt](##🤩-the-team-behind-this-project)
 </div>
 
 
