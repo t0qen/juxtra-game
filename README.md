@@ -12,8 +12,6 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
   
    
 </div>
-
-[tkt](#-tkt)
   
 ## 🤔 For whom ?
 **You probably like this game if you ...**
