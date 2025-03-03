@@ -10,10 +10,10 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
   <img src="/ressources/images/banner.png">
 
   
-   [tkt](##🤩-the-team-behind-this-project)
+   
 </div>
 
-
+[tkt](#-tkt)
   
 ## 🤔 For whom ?
 **You probably like this game if you ...**
@@ -22,6 +22,7 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 - want to practice mecanics and master this game
 - ...
 
+# tkt
 
 ## 📥 Installation for Windows and Linux
 **Will come with first release, please wait**
