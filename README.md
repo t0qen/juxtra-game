@@ -10,7 +10,7 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
   <img src="/ressources/images/banner.png">
 
 todo : add link to every sections in every sections
-   
+[tkt](##-how-to-play)
 </div>
   
 ## 🤔 For whom ?
@@ -19,9 +19,7 @@ todo : add link to every sections in every sections
 - want to play with your friend abd have fun
 - want to practice mecanics and master this game
 - ...
-
-# tkt
-
+  
 ## 📥 Installation for Windows and Linux
 **Will come with first release, please wait**
 
