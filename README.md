@@ -1,8 +1,4 @@
-> [!TIP]
-> We're looking for contributors ! Developpers, 2d artists, ...
->
->
-> Please contact **t0qen** on Discord *(t0qen is the pseudo)* if you are interested.
+
 
 
 
@@ -19,7 +15,11 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 
 todo : add link to every sections in every sections
 </div>
-  
+
+> [!TIP]
+> **We're looking for contributors !** Developpers, 2d artists, ...
+> Please contact **t0qen** on Discord *(t0qen is the pseudo)* if you are interested.
+
 ## 🤔 For whom ?
 **You probably like this game if you ...**
 - want to have a game you can kill with a few minutes 
