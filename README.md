@@ -1,3 +1,11 @@
+> [!TIP]
+> We're looking for contributors ! Developpers, 2d artists, ...
+>
+>
+> Please contact **t0qen** on Discord *(t0qen is the pseudo)* if you are interested.
+
+
+
 
 <div align="center"> 
   <img src="/ressources/images/small_icon.png" width="50" height="50">
