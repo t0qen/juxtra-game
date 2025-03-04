@@ -16,7 +16,7 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 todo : add link to every sections in every sections
 </div>
 
-> [!TIP]
+> [!IMPORTANT]
 > **We're looking for contributors !** Developpers, 2d artists, ...
 > Please contact **t0qen** on Discord *(t0qen is the pseudo)* if you are interested.
 
