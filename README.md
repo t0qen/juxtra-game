@@ -36,8 +36,26 @@ todo : add link to every sections in every sections
 
 
 ## 🤝 How to contribute
-**Coming soon**
+### 1. Requirements
+- Install **Godot 4.4** : https://godotengine.org/download/
+- A **github** account
+- Install Git or **Github desktop** *(recommended)* : https://desktop.github.com/download/
+- **Discord** account
+### 2. Initialize juxtra on your pc
+- Open Github desktop on click on "clone a repo", select from web and add this "https://github.com/t0qen/juxtra-game.git"
+- Open the directory where the repo has been cloned and open "project.godot" with Godot 4.4
+- If you want to add music or somethings else wich doesn't need to open godot you can simply modify directory where the repo is cloned
+- Enjoy add cool things to the game !
+### 3. Upload to Github
+- Send a message to t0qen on Discord to ask him to add you as a contributor on Github
+- Go o Github desktop, here you can see what you have did/changed, click on "commit" (before choose a name for your commit) and click to "push origin"
+- A good things is to tell us what you have did in juxtra's server Discord : https://discord.gg/jxZ5n6mtAY
+### 4. Contributing every day
+If you want to contribute not just one time read this :
+- Before contributing, go to github desktop and click in "fetch", this will add the last commits from other contributors to your directory
 
+
+It's all !
 
 ## ❓ Frequently Asked Questions
 **Coming soon**
