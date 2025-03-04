@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bouwowesih2r4"
-path="res://.godot/imported/banner.png-1d70465ef7df7b7a9086ca65de2f39d4.ctex"
+uid="uid://do0sdc1tln741"
+path="res://.godot/imported/palette.png-902406b8bc4c8c9c3cd0a13ed068ac9d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ressources/images/banner.png"
-dest_files=["res://.godot/imported/banner.png-1d70465ef7df7b7a9086ca65de2f39d4.ctex"]
+source_file="res://assets/palette.png"
+dest_files=["res://.godot/imported/palette.png-902406b8bc4c8c9c3cd0a13ed068ac9d.ctex"]
 
 [params]
 

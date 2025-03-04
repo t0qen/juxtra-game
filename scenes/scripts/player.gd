@@ -33,6 +33,13 @@ var current_speed : float = base_speed # store the current speed
 @onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 # maths
 @onready var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
 @onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
+enum JUMP {
+	NO,
+	JUMP,
+	JUMP_2,
+	JUMP_3
+}
+var current_jump = JUMP.JUMP # store the current what jump player is actually perform
 #endregion
 
 #region NODES
@@ -52,12 +59,13 @@ var current_speed : float = base_speed # store the current speed
 
 #region STATES
 @export_group("States")
-
 enum STATE { # each states of player 
 	IDLE, # 0
 	RUN, # 1 
 	FLY, # 2
 	JUMP, # 3
+	JUMP_2,
+	JUMP_3,
 	WAIT, # 4
 	SLEEP, # 5
 	DASH # 6
@@ -70,8 +78,6 @@ var exit_wait : bool = false # bool to store the end of timer
 var exit_idle : bool = false # same for idle
 var exit_fall : bool = false # same for fall
 var before_dash_finish : bool = false
-var jump_counter : int
-var dash_counter : int
 #endregion
 
 #region INPUTS
@@ -90,9 +96,10 @@ func _ready() -> void:
 	
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	get_inputs() # first get inputs
+	if is_on_floor():
+		reset_jump()
+	print(direction)
 	_update_state(delta) # update the behavior of current state
-	Engine.time_scale = 0.01
-	print(jump_counter)	
 	
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
 	if current_player == 1: # if current player is 1 get input with player's 1 inputs
@@ -121,7 +128,6 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			exit_idle_timer.start() # start timer, after end, set exit_idle to true
 			
 		STATE.WAIT:
-			reset_jump_dash_counters()
 			if !exit_fall: # if player wasn't falling before
 				play_animation("wait") # play basic animation
 			else: # if player was landng before, after jump or fly, play first exit fall animation
@@ -134,21 +140,22 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			play_animation("sleep")	
 
 		STATE.RUN: 
-			reset_jump_dash_counters()
 			exit_fall = false # reset exit fall
 			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
 			current_speed = base_speed # set on ground speed
 			play_animation("run")
 			
 		STATE.JUMP: 
-			jump_counter = jump_counter + 1
-			exit_fall = false # reset exit fall
-			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
-			current_speed = air_speed # set in air speed
-			jumping = true # set this variable to true to prevent some bug on other functions TODO
-			play_animation("jump")
-			velocity.y = jump_velocity # apply jump
-			jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
+			current_jump = JUMP.JUMP
+			perform_jump(1)
+			
+		STATE.JUMP_2: 
+			current_jump = JUMP.JUMP_2
+			perform_jump(1)
+			
+		STATE.JUMP_3: 
+			current_jump = JUMP.JUMP_3
+			perform_jump(1)	
 			
 		STATE.FLY: 
 			exit_fall = false # reset exit fall
@@ -156,8 +163,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			current_speed = air_speed # set air speed
 			play_animation("fly")
 			
-		STATE.DASH:
-			dash_counter = dash_counter + 1
+		STATE.DASH: # TODO
 			play_animation("before_dash")
 			before_dash_finish = false
 			before_dash_timer.start()
@@ -194,23 +200,14 @@ func _exit_state() -> void: # exit transition, nothing really important
 func _update_state(delta: float) -> void:  # every behavior of each states updated every physics process
 	match current_state:
 		STATE.JUMP: 
-			x_move() # move on x axiswith inputs
-			can_jump() # jump action, come with inputs system
-			if is_on_floor() && !jumping: # if player is on ground after his jump; var jumping is set to false after propulsion and after timer, without it, some bugs
-				if direction: # if he want to run
-					_set_state(STATE.RUN) # run
-				else: # else
-					_set_state(STATE.WAIT) # set wait; we play exit fall animation
+			jump_update(delta)
+		
+		STATE.JUMP_2: 
+			jump_update(delta)
 			
-			else:	
-				if propulsion_down:
-					print("yes")
-					apply_gravity(get_current_gravity() * propulsion_down_force, delta)
-				else:
-					apply_gravity(get_current_gravity(), delta) # else apply gravity
-			
-			move_and_slide() # move
-			
+		STATE.JUMP_3: 
+			jump_update(delta)
+				
 		STATE.IDLE: 
 			if direction: # if left or right is pressed, start walking
 				_set_state(STATE.RUN)
@@ -238,6 +235,7 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			can_jump()
 				
 			if !is_on_floor() && !jumping: # if not on floor, fall down TODO
+				reset_jump()
 				_set_state(STATE.FLY)		
 			
 		STATE.RUN:
@@ -277,6 +275,51 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 #endregion
 
 #region OTHER
+func reset_jump():
+	current_jump = JUMP.NO
+	
+func perform_jump(coef: float): # func to do a jump
+	exit_fall = false # reset exit fall
+	stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
+	current_speed = air_speed # set in air speed
+	jumping = true # set this variable to true to prevent some bug on other functions TODO
+	play_animation("jump")
+	velocity.y = jump_velocity * coef # apply jump
+	jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
+
+func jump_update(delta): # basic func wich control jump int state update 
+	x_move() # move on x axis with inputs
+	can_jump() # jump action, come with inputs system
+	if is_on_floor() && !jumping: # if player is on ground after his jump; var jumping is set to false after propulsion and after timer, without it, some bugs
+		if direction: # if he want to run
+			_set_state(STATE.RUN) # run
+		else: # else
+			_set_state(STATE.WAIT) # set wait; we play exit fall animation
+			
+	else:	
+		if propulsion_down:
+			apply_gravity(get_current_gravity() * propulsion_down_force, delta)
+		else:
+			apply_gravity(get_current_gravity(), delta) # else apply gravity
+			
+			move_and_slide() # move
+
+func can_jump(): # TODO
+	if !want_to_jump:
+		return false
+	else:
+		if current_jump == JUMP.JUMP_3:
+			return false
+		else:
+			if current_jump == JUMP.NO:
+				_set_state(STATE.JUMP)
+			elif current_jump == JUMP.JUMP:
+				_set_state(STATE.JUMP_2)
+			elif current_jump == JUMP.JUMP_2:
+				_set_state(STATE.JUMP_3)
+			else:
+				print("error line 364")			
+
 func set_player_1(): # we can choose for player 1 or player 2 when multiplayer, so keyboard will change
 	current_player = 1
 	
@@ -326,16 +369,6 @@ func play_animation(animation: String): # play animation
 			"dash":
 				sprites.play("dash_2")
 					
-func can_jump(): # TODO
-	if !want_to_jump:
-		return 
-	else:
-		if jump_counter > max_jumps:
-			return 
-		else:
-			print("jump ++")
-			_set_state(STATE.JUMP)
-
 func can_dash(): # TODO
 	pass
 				
@@ -355,10 +388,6 @@ func flip_sprites(): # simple func to automaticlly flip player sprite with the p
 func x_move(): # simple func to move player on x axis
 	velocity.x = direction * current_speed 
 	flip_sprites() # flip player's sprite with his direction
-
-func reset_jump_dash_counters():
-	jump_counter = 0
-	dash_counter = 0
 	
 #region TIMERS
 func stop_idle_timers(): # must be call on every movments states, stop all current timer

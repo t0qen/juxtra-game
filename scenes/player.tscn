@@ -1,6 +1,6 @@
 [gd_scene load_steps=64 format=3 uid="uid://ux1l01a7iemk"]
 
-[ext_resource type="Script" path="res://scenes/scripts/player.gd" id="1_0xtnp"]
+[ext_resource type="Script" uid="uid://e4s2rjoh7grb" path="res://scenes/scripts/player.gd" id="1_0xtnp"]
 [ext_resource type="Texture2D" uid="uid://brwkshkxnswr5" path="res://assets/players/player2.png" id="5_ry10l"]
 [ext_resource type="Texture2D" uid="uid://5il8xp6hdywr" path="res://assets/players/player1.png" id="5_ryfuf"]
 
@@ -516,7 +516,9 @@ sprites = NodePath("Sprites")
 texture_filter = 1
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_wb510")
-animation = &"jump_2"
+animation = &"run_1"
+frame = 7
+frame_progress = 0.328578
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -6)
