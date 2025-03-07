@@ -155,7 +155,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			
 		STATE.JUMP_3: 
 			current_jump = JUMP.JUMP_3
-			perform_jump(1)	
+			perform_jump(1.25)	
 			
 		STATE.FLY: 
 			exit_fall = false # reset exit fall
