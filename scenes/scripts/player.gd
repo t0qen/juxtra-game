@@ -64,11 +64,11 @@ enum STATE { # each states of player
 	RUN, # 1 
 	FLY, # 2
 	JUMP, # 3
-	JUMP_2,
-	JUMP_3,
-	WAIT, # 4
-	SLEEP, # 5
-	DASH # 6
+	JUMP_2, # 4
+	JUMP_3, # 5
+	WAIT, # 6
+	SLEEP, # 7
+	DASH # 8
 }
 @export var current_state : STATE = STATE.WAIT # where the current state of player will be stored, can stored to first state
 
@@ -95,10 +95,9 @@ func _ready() -> void:
 	set_player_1() # for test, set player 1
 	
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
-	get_inputs() # first get inputs
-	if is_on_floor():
-		reset_jump()
-	print(direction)
+	#Engine.time_scale = 0.1
+	get_inputs() # first get inputs	
+	print(current_jump)
 	_update_state(delta) # update the behavior of current state
 	
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
@@ -128,6 +127,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			exit_idle_timer.start() # start timer, after end, set exit_idle to true
 			
 		STATE.WAIT:
+			reset_jump()
 			if !exit_fall: # if player wasn't falling before
 				play_animation("wait") # play basic animation
 			else: # if player was landng before, after jump or fly, play first exit fall animation
@@ -140,6 +140,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			play_animation("sleep")	
 
 		STATE.RUN: 
+			reset_jump()
 			exit_fall = false # reset exit fall
 			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
 			current_speed = base_speed # set on ground speed
@@ -212,10 +213,9 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			if direction: # if left or right is pressed, start walking
 				_set_state(STATE.RUN)
 				
-			if can_jump(): # jump action, come with inputs system
-				_set_state(STATE.JUMP) 
+			can_jump()
 				
-			elif !is_on_floor() && !jumping: # if not on floor, fall down and fly TODO
+			if !is_on_floor() && !jumping: # if not on floor, fall down and fly TODO
 				_set_state(STATE.FLY)
 				
 		STATE.WAIT:
@@ -235,7 +235,6 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			can_jump()
 				
 			if !is_on_floor() && !jumping: # if not on floor, fall down TODO
-				reset_jump()
 				_set_state(STATE.FLY)		
 			
 		STATE.RUN:
@@ -253,7 +252,7 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			
 		STATE.FLY: 
 			x_move() # move on x axis
-			
+			current_state
 			can_jump()
 				
 			if is_on_floor(): # if player comes back on floor
@@ -291,6 +290,7 @@ func jump_update(delta): # basic func wich control jump int state update
 	x_move() # move on x axis with inputs
 	can_jump() # jump action, come with inputs system
 	if is_on_floor() && !jumping: # if player is on ground after his jump; var jumping is set to false after propulsion and after timer, without it, some bugs
+		print("here")
 		if direction: # if he want to run
 			_set_state(STATE.RUN) # run
 		else: # else
@@ -302,7 +302,7 @@ func jump_update(delta): # basic func wich control jump int state update
 		else:
 			apply_gravity(get_current_gravity(), delta) # else apply gravity
 			
-			move_and_slide() # move
+	move_and_slide() # move
 
 func can_jump(): # TODO
 	if !want_to_jump:
@@ -311,11 +311,15 @@ func can_jump(): # TODO
 		if current_jump == JUMP.JUMP_3:
 			return false
 		else:
+			print("can jump")
 			if current_jump == JUMP.NO:
+				#print("0")
 				_set_state(STATE.JUMP)
 			elif current_jump == JUMP.JUMP:
+				#print("1")
 				_set_state(STATE.JUMP_2)
 			elif current_jump == JUMP.JUMP_2:
+				#print("2")
 				_set_state(STATE.JUMP_3)
 			else:
 				print("error line 364")			
