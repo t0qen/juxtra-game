@@ -1,10 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://beenxjvyp6tpg"]
+[gd_scene load_steps=3 format=3 uid="uid://beenxjvyp6tpg"]
+
+[ext_resource type="Script" uid="uid://dfvxsar8ctmqd" path="res://scenes/scripts/goal.gd" id="1_jbojv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xl315"]
 size = Vector2(213, 199)
 
-[node name="Goal" type="Area2D"]
+[node name="Goal" type="Area2D" groups=["ball"]]
 collision_layer = 4
+script = ExtResource("1_jbojv")
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_xl315")

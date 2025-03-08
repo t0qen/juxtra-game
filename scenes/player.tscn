@@ -495,11 +495,11 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fcguk"]
-radius = 4.0
-height = 10.0
+radius = 7.0
+height = 20.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1n1i0"]
-size = Vector2(0.999996, 6)
+size = Vector2(2.00003, 12)
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "before_dash_timer", "sprites")]
 collision_mask = 14
@@ -515,19 +515,20 @@ sprites = NodePath("Sprites")
 
 [node name="Sprites" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(0, -16)
+position = Vector2(0, -32)
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_wb510")
 animation = &"run_1"
 frame = 7
 frame_progress = 0.328578
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0, -6)
+position = Vector2(0, -12)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_fcguk")
 
 [node name="Floor_hitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0, -0.5)
+position = Vector2(0, -1)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_1n1i0")
 

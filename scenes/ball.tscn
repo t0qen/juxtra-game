@@ -1,28 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://vsj867ii6l7t"]
+[gd_scene load_steps=2 format=3 uid="uid://vsj867ii6l7t"]
 
-[ext_resource type="Texture2D" uid="uid://gqamadderlwg" path="res://assets/levels/objects/ball.png" id="1_20f1r"]
-[ext_resource type="Script" uid="uid://dpaqd6t3peivi" path="res://scenes/scripts/ball.gd" id="1_cxlvu"]
+[ext_resource type="PackedScene" uid="uid://p0d1rd85t620" path="res://scenes/root_ball.tscn" id="1_7s4qf"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4mlqk"]
-friction = 0.0
-bounce = 1.0
+[node name="Ball" type="Node2D"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_vfq42"]
-radius = 28.0179
-
-[node name="Ball" type="RigidBody2D"]
-collision_layer = 2
-collision_mask = 9
-mass = 1.5
-physics_material_override = SubResource("PhysicsMaterial_4mlqk")
-gravity_scale = 0.25
-lock_rotation = true
-script = ExtResource("1_cxlvu")
-
-[node name="Sprite" type="Sprite2D" parent="."]
-texture_filter = 1
-scale = Vector2(4, 4)
-texture = ExtResource("1_20f1r")
-
-[node name="Hitbox" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_vfq42")
+[node name="Root ball" parent="." instance=ExtResource("1_7s4qf")]

@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://p0d1rd85t620"]
+
+[ext_resource type="Script" uid="uid://dpaqd6t3peivi" path="res://scenes/scripts/ball.gd" id="1_hje8c"]
+[ext_resource type="Texture2D" uid="uid://gqamadderlwg" path="res://assets/levels/objects/ball.png" id="2_2pyro"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4mlqk"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vfq42"]
+radius = 28.0179
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cxlvu"]
+radius = 44.0114
+
+[node name="Ball" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 9
+mass = 1.5
+physics_material_override = SubResource("PhysicsMaterial_4mlqk")
+gravity_scale = 0.25
+lock_rotation = true
+contact_monitor = true
+max_contacts_reported = 100
+script = ExtResource("1_hje8c")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(4, 4)
+texture = ExtResource("2_2pyro")
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_vfq42")
+
+[node name="Area" type="Area2D" parent="." groups=["ball"]]
+
+[node name="Hitbox" type="CollisionShape2D" parent="Area"]
+shape = SubResource("CircleShape2D_cxlvu")
+
+[connection signal="area_entered" from="Area" to="." method="_on_area_area_entered"]

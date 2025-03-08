@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Juxtra-game"
 config/version="0.2"
-run/main_scene="res://scenes/local_multiplayer.tscn"
+run/main_scene="uid://cnm3vgcgigw3e"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 run/max_fps=120
 boot_splash/bg_color=Color(0.184314, 0.184314, 0.180392, 1)
@@ -37,6 +37,10 @@ folder_colors={
 "res://assets/players/": "orange",
 "res://scenes/": "purple"
 }
+
+[global_group]
+
+ball=""
 
 [input]
 

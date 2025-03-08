@@ -97,7 +97,6 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	#Engine.time_scale = 0.1
 	get_inputs() # first get inputs	
-	print(current_jump)
 	_update_state(delta) # update the behavior of current state
 	
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
