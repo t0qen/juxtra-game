@@ -8,10 +8,10 @@ friction = 0.0
 bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vfq42"]
-radius = 28.0179
+radius = 31.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cxlvu"]
-radius = 44.0114
+radius = 31.0
 
 [node name="Ball" type="RigidBody2D"]
 collision_layer = 2

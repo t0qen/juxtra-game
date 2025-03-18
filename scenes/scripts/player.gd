@@ -7,11 +7,11 @@ class_name Player
 
 #region MOVEMENTS
 @export_group("Movements")
-@export var gravity : int = ProjectSettings.get_setting("physics/2d/default_gravity") # default gravity 
+@export var gravity : int = 10 # default gravity 
 
 # - PROPULSE DOWN
 @export_subgroup("Propulse down")
-@export var propulsion_down_force : int = 50 # with wich force player will be propulsed down
+@export var propulsion_down_force : int = 4 # with wich force player will be propulsed down
 
 # - DASH
 @export_subgroup("Dash")
@@ -27,8 +27,8 @@ var current_speed : float = base_speed # store the current speed
 # - JUMP
 @export_subgroup("Jump")
 @export var jump_height : float = 50.0 # height of player's jump
-@export var jump_time_to_peak : float = 0.3
-@export var jump_time_to_fall : float = 0.15
+@export var jump_time_to_peak : float = 0.40
+@export var jump_time_to_fall : float = 0.20
 @export var max_jumps : int = 2
 @onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 # maths
 @onready var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
