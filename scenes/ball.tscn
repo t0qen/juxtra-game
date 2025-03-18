@@ -1,7 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://vsj867ii6l7t"]
+[gd_scene load_steps=4 format=3 uid="uid://vsj867ii6l7t"]
 
 [ext_resource type="PackedScene" uid="uid://p0d1rd85t620" path="res://scenes/root_ball.tscn" id="1_7s4qf"]
+[ext_resource type="Texture2D" uid="uid://bqx1yenbulsst" path="res://assets/levels/objects/ball_shadow.png" id="1_f7cbr"]
+[ext_resource type="Script" uid="uid://bw3nv72fottkd" path="res://scenes/scripts/ball_shadow.gd" id="2_4dx81"]
 
 [node name="Ball" type="Node2D"]
 
+[node name="BallShadow" type="Sprite2D" parent="."]
+light_mask = 2
+visibility_layer = 2
+texture_filter = 1
+position = Vector2(0, 1)
+scale = Vector2(4, 3.884)
+texture = ExtResource("1_f7cbr")
+script = ExtResource("2_4dx81")
+
 [node name="Root ball" parent="." instance=ExtResource("1_7s4qf")]
+light_mask = 2
+visibility_layer = 2

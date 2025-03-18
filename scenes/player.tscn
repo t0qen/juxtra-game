@@ -346,7 +346,7 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 0.2,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_wslk6")
 }, {
 "duration": 0.2,
@@ -363,7 +363,7 @@ animations = [{
 "speed": 1.0
 }, {
 "frames": [{
-"duration": 0.2,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_owlqu")
 }, {
 "duration": 0.2,
@@ -502,6 +502,7 @@ height = 20.0
 size = Vector2(2.00003, 12)
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "before_dash_timer", "sprites")]
+top_level = true
 collision_mask = 14
 platform_on_leave = 1
 script = ExtResource("1_0xtnp")
@@ -519,7 +520,7 @@ texture_filter = 1
 position = Vector2(0, -32)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_wb510")
-animation = &"wait_2"
+animation = &"jump_2"
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -12)

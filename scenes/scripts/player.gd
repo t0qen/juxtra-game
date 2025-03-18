@@ -27,7 +27,7 @@ var current_speed : float = base_speed # store the current speed
 # - JUMP
 @export_subgroup("Jump")
 @export var jump_height : float = 50.0 # height of player's jump
-@export var jump_time_to_peak : float = 0.40
+@export var jump_time_to_peak : float = 0.30
 @export var jump_time_to_fall : float = 0.20
 @export var max_jumps : int = 2
 @onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 # maths
