@@ -150,10 +150,12 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			perform_jump(1)
 			
 		STATE.JUMP_2: 
+			sprites.stop() # stop current jump animation to restart it
 			current_jump = JUMP.JUMP_2
 			perform_jump(1)
 			
 		STATE.JUMP_3: 
+			sprites.stop() # stop current jump animation to restart it
 			current_jump = JUMP.JUMP_3
 			perform_jump(1.25)	
 			

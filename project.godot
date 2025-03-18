@@ -14,7 +14,7 @@ config/name="Juxtra-game"
 config/version="0.2"
 run/main_scene="uid://cnm3vgcgigw3e"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-run/max_fps=120
+run/max_fps=30
 boot_splash/bg_color=Color(0.184314, 0.184314, 0.180392, 1)
 boot_splash/fullsize=false
 boot_splash/use_filter=false
@@ -24,8 +24,9 @@ config/macos_native_icon="res://exports/icon.ico"
 
 [display]
 
-window/size/viewport_width=1387
-window/size/viewport_height=900
+window/size/viewport_width=173
+window/size/viewport_height=112
+window/size/mode=2
 window/stretch/mode="canvas_items"
 
 [file_customization]
@@ -81,4 +82,8 @@ down_1={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality=0
+shading/overrides/force_lambert_over_burley.mobile=false
+camera/depth_of_field/depth_of_field_bokeh_quality=0
 environment/defaults/default_clear_color=Color(0.273873, 0.273873, 0.273873, 0.643137)

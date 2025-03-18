@@ -461,7 +461,7 @@ position = Vector2(150, 0)
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(0, -144)
-zoom = Vector2(2, 2)
+zoom = Vector2(0.25, 0.25)
 
 [connection signal="area_entered" from="Goals/Goal2" to="." method="_on_goal_2_area_entered"]
 [connection signal="area_entered" from="Goals/Goal" to="." method="_on_goal_area_entered"]
