@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://ux1l01a7iemk"]
+[gd_scene load_steps=65 format=3 uid="uid://ux1l01a7iemk"]
 
 [ext_resource type="Script" uid="uid://e4s2rjoh7grb" path="res://scenes/scripts/player.gd" id="1_0xtnp"]
 [ext_resource type="Texture2D" uid="uid://brwkshkxnswr5" path="res://assets/players/player2.png" id="5_ry10l"]
@@ -15,8 +15,9 @@ region = Rect2(224, 64, 32, 32)
 atlas = ExtResource("5_ryfuf")
 region = Rect2(224, 160, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_lp0v1"]
-region = Rect2(160, 64, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_qhqgy"]
+atlas = ExtResource("5_ry10l")
+region = Rect2(192, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8m7ct"]
 atlas = ExtResource("5_ryfuf")
@@ -258,17 +259,17 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_lp0v1")
+"texture": SubResource("AtlasTexture_qhqgy")
 }],
 "loop": true,
 "name": &"dash_2",
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.5,
 "texture": SubResource("AtlasTexture_8m7ct")
 }, {
-"duration": 0.5,
+"duration": 0.25,
 "texture": SubResource("AtlasTexture_l0voy")
 }],
 "loop": false,
@@ -276,16 +277,16 @@ animations = [{
 "speed": 1.0
 }, {
 "frames": [{
-"duration": 0.5,
+"duration": 0.25,
 "texture": SubResource("AtlasTexture_cxg33")
 }, {
-"duration": 0.5,
+"duration": 0.25,
 "texture": SubResource("AtlasTexture_sn2b1")
 }, {
-"duration": 0.25,
+"duration": 0.15,
 "texture": SubResource("AtlasTexture_egs4v")
 }, {
-"duration": 0.25,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_v46dn")
 }],
 "loop": false,
@@ -501,6 +502,10 @@ height = 20.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1n1i0"]
 size = Vector2(2.00003, 12)
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dqkch"]
+radius = 18.0
+height = 48.0
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "before_dash_timer", "sprites")]
 top_level = true
 collision_mask = 14
@@ -520,17 +525,27 @@ texture_filter = 1
 position = Vector2(0, -32)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_wb510")
-animation = &"jump_2"
+animation = &"dash_2"
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -12)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_fcguk")
+debug_color = Color(0.766486, 0.37665, 0.632263, 0.572549)
 
 [node name="Floor_hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -1)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_1n1i0")
+debug_color = Color(0.784602, 0.334636, 0.705903, 0.42)
+
+[node name="Area" type="Area2D" parent="."]
+
+[node name="Hitbox" type="CollisionShape2D" parent="Area"]
+position = Vector2(0, -14)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_dqkch")
+debug_color = Color(0.729412, 0.2, 0.956863, 0.176471)
 
 [node name="Timers" type="Node" parent="."]
 
@@ -541,7 +556,7 @@ one_shot = true
 
 [node name="Exit_fall" type="Timer" parent="Timers"]
 process_callback = 0
-wait_time = 1.5
+wait_time = 0.75
 one_shot = true
 
 [node name="Exit_wait" type="Timer" parent="Timers"]
@@ -559,6 +574,8 @@ process_callback = 0
 wait_time = 2.5
 one_shot = true
 
+[connection signal="area_entered" from="Area" to="." method="_on_area_area_entered"]
+[connection signal="area_exited" from="Area" to="." method="_on_area_area_exited"]
 [connection signal="timeout" from="Timers/Exit_idle" to="." method="_on_exit_idle_timeout"]
 [connection signal="timeout" from="Timers/Exit_fall" to="." method="_on_exit_fall_timeout"]
 [connection signal="timeout" from="Timers/Exit_wait" to="." method="_on_exit_wait_timeout"]

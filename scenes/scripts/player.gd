@@ -42,6 +42,31 @@ enum JUMP {
 var current_jump = JUMP.JUMP # store the current what jump player is actually perform
 #endregion
 
+#region CAMERA
+# - CAMERA
+@export_group("Camera")
+@export var enable_camera_effects : bool = true
+var camera = null
+var camera_set = false
+@export_subgroup("Presets")
+# Jump 1
+@export var jump_1_intensity : float = 0.4
+@export var jump_1_duration : float = 0.3
+@export var jump_1_direction : Vector2 = Vector2(0, 1)
+# Jump 2
+@export var jump_2_intensity : float = 0.35
+@export var jump_2_duration : float = 0.2
+@export var jump_2_direction : Vector2 = Vector2(0, 1)
+# Jump 3
+@export var jump_3_intensity : float = 0.35
+@export var jump_3_duration : float = 0.2
+@export var jump_3_direction : Vector2 = Vector2(0, 1)
+# Ball collision
+@export var ball_intensity : float = 0.5
+@export var ball_duration : float = 0.4
+@export var ball_direction : Vector2 = Vector2(1, 1)
+#endregion
+
 #region NODES
 @export_group("Nodes")
 # - TIMERS
@@ -93,7 +118,10 @@ var propulsion_down : bool = false # a bool to know if player want to be propuls
 #region GLOBAL FUNCTIONS
 func _ready() -> void: 
 	set_player_1() # for test, set player 1
-	
+	while camera_set != true:
+		print("Camera not set...")
+		pass
+		
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	#Engine.time_scale = 0.1
 	get_inputs() # first get inputs	
@@ -146,15 +174,18 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			play_animation("run")
 			
 		STATE.JUMP: 
+			camera_shake(jump_1_intensity, jump_1_duration, jump_1_direction)
 			current_jump = JUMP.JUMP
 			perform_jump(1)
 			
 		STATE.JUMP_2: 
+			camera_shake(jump_2_intensity, jump_2_duration, jump_2_direction)
 			sprites.stop() # stop current jump animation to restart it
 			current_jump = JUMP.JUMP_2
 			perform_jump(1)
 			
 		STATE.JUMP_3: 
+			camera_shake(jump_3_intensity, jump_3_duration, jump_3_direction)
 			sprites.stop() # stop current jump animation to restart it
 			current_jump = JUMP.JUMP_3
 			perform_jump(1.25)	
@@ -185,8 +216,14 @@ func _exit_state() -> void: # exit transition, nothing really important
 		STATE.RUN:
 			pass
 			
-		STATE.JUMP: 
+		STATE.JUMP:
 			exit_fall = true # say that player just land,to play land animaton also called exit_fall 
+			
+		STATE.JUMP_2:
+			exit_fall = true
+			
+		STATE.JUMP_3:
+			exit_fall = true
 			
 		STATE.FLY: 
 			exit_fall = true # say that player just land,to play land animaton also called exit_fall 
@@ -275,6 +312,21 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 #endregion
 
 #region OTHER
+func _on_area_area_entered(area: Area2D) -> void:
+	camera_shake(ball_intensity, ball_duration, ball_direction)
+	
+func stop_camera_shake():
+	camera.stop_shake()
+	
+func camera_shake(intensity : float, duration : float, direction : Vector2):
+	if enable_camera_effects:
+		print("Camera shake")
+		camera.shake(intensity, duration, direction)
+	
+func set_camera(object):
+	camera = object
+	camera_set = true
+	
 func reset_jump():
 	current_jump = JUMP.NO
 	
@@ -291,7 +343,6 @@ func jump_update(delta): # basic func wich control jump int state update
 	x_move() # move on x axis with inputs
 	can_jump() # jump action, come with inputs system
 	if is_on_floor() && !jumping: # if player is on ground after his jump; var jumping is set to false after propulsion and after timer, without it, some bugs
-		print("here")
 		if direction: # if he want to run
 			_set_state(STATE.RUN) # run
 		else: # else
@@ -312,7 +363,6 @@ func can_jump(): # TODO
 		if current_jump == JUMP.JUMP_3:
 			return false
 		else:
-			print("can jump")
 			if current_jump == JUMP.NO:
 				#print("0")
 				_set_state(STATE.JUMP)

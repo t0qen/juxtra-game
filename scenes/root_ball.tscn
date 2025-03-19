@@ -11,7 +11,7 @@ bounce = 1.0
 radius = 31.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cxlvu"]
-radius = 31.0
+radius = 35.0
 
 [node name="Ball" type="RigidBody2D"]
 collision_layer = 2
@@ -22,6 +22,7 @@ gravity_scale = 1.5
 lock_rotation = true
 contact_monitor = true
 max_contacts_reported = 100
+constant_force = Vector2(0, -0.5)
 script = ExtResource("1_hje8c")
 
 [node name="Sprite" type="Sprite2D" parent="."]
@@ -31,10 +32,10 @@ texture = ExtResource("2_2pyro")
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_vfq42")
+debug_color = Color(0.439216, 0.580392, 0.423529, 0.329412)
 
 [node name="Area" type="Area2D" parent="." groups=["ball"]]
 
 [node name="Hitbox" type="CollisionShape2D" parent="Area"]
 shape = SubResource("CircleShape2D_cxlvu")
-
-[connection signal="area_entered" from="Area" to="." method="_on_area_area_entered"]
+debug_color = Color(0.3102, 0.605972, 0.458647, 0.576471)

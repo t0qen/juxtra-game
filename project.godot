@@ -24,8 +24,8 @@ config/macos_native_icon="res://exports/icon.ico"
 
 [display]
 
-window/size/viewport_width=173
-window/size/viewport_height=112
+window/size/viewport_width=512
+window/size/viewport_height=336
 window/size/mode=2
 window/stretch/mode="canvas_items"
 
