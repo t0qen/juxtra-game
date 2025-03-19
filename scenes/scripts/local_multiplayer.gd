@@ -6,7 +6,7 @@ enum game_mode {
 @onready var respawn_ball_point = $Spawn/RespawnPoint
 @onready var player_2_spawn: Marker2D = $"Spawn/Player 2 spawn"
 @onready var player_1_spawn: Marker2D = $"Spawn/Player 1 spawn"
-@onready var camera_spawn: Marker2D = $Camera_spawn
+@onready var camera_spawn: Marker2D = $Spawn/Camera_spawn
 
 # Goal camera effect
 @export var goal_intensity : float = 0.7
@@ -20,6 +20,7 @@ var camera = preload("res://scenes/camera.tscn")
 var current_ball = null
 var current_camera = null
 var player_1
+var player_2
 
 func _ready() -> void:
 	spawn_ball()
@@ -68,6 +69,13 @@ func initialize_local_players():
 	player_1.set_player_1()
 	player_1.global_position = player_1_spawn.global_position
 	add_child(player_1)
+	
+	print("initialize player 2")
+	player_2 = player.instantiate()
+	player_2.set_camera(current_camera)
+	player_2.set_player_2()
+	player_2.global_position = player_2_spawn.global_position
+	add_child(player_2)
 	
 func initalize_local():
 	initialize_local_players()

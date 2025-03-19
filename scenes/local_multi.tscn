@@ -460,13 +460,13 @@ position = Vector2(-150, 0)
 [node name="Player 2 spawn" type="Marker2D" parent="Spawn"]
 position = Vector2(150, 0)
 
+[node name="Camera_spawn" type="Marker2D" parent="Spawn"]
+position = Vector2(0, -145)
+
 [node name="LocalMultiplayerText" type="Sprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -268)
 texture = ExtResource("6_p8ruy")
-
-[node name="Camera_spawn" type="Marker2D" parent="."]
-position = Vector2(0, -145)
 
 [connection signal="area_entered" from="Goals/Goal2" to="." method="_on_goal_2_area_entered"]
 [connection signal="area_entered" from="Goals/Goal" to="." method="_on_goal_area_entered"]

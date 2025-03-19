@@ -3,8 +3,8 @@ class_name Player
 
 #region VARIABLES  -
 @export_group("Global")
-@export var current_player : int = 1 # wich player this script is for, can be changed by other script via func
-
+@export var current_player : int  # wich player this script is for, can be changed by other script via func
+var player_set : bool = false
 #region MOVEMENTS
 @export_group("Movements")
 @export var gravity : int = 10 # default gravity 
@@ -117,10 +117,11 @@ var propulsion_down : bool = false # a bool to know if player want to be propuls
 
 #region GLOBAL FUNCTIONS
 func _ready() -> void: 
-	set_player_1() # for test, set player 1
+	while !player_set :
+		print("Player isn't set..")
+		
 	while camera_set != true:
 		print("Camera not set...")
-		pass
 		
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	#Engine.time_scale = 0.1
@@ -135,7 +136,15 @@ func get_inputs(): # essential function to get player inputs, depend on wich pla
 		propulsion_down = Input.is_action_pressed("down_1")
 		dash_dir.x = Input.get_axis("move_left_1", "move_right_1")
 		dash_dir.y = Input.get_axis("jump_1", "down_1")
-	# TODO player 2
+	elif current_player == 2:
+		want_to_jump = Input.is_action_just_pressed("jump_2") # bool to jump
+		direction = Input.get_axis("move_left_2", "move_right_2") # int to get axis : -1 / 0 / 1
+		want_to_dash = Input.is_action_just_pressed("dash_2")
+		propulsion_down = Input.is_action_pressed("down_2")
+		dash_dir.x = Input.get_axis("move_left_2", "move_right_2")
+		dash_dir.y = Input.get_axis("jump_2", "down_2")
+	else:
+		print("Error l. 147 : Unknow player")
 #endregion	
 
 #region STATE FUNCTIONS
@@ -376,11 +385,15 @@ func can_jump(): # TODO
 				print("error line 364")			
 
 func set_player_1(): # we can choose for player 1 or player 2 when multiplayer, so keyboard will change
+	print("PLAYER 1 initialized")
 	current_player = 1
+	player_set = true
 	
 func set_player_2(): # same for player 2
+	print("PLAYER 2 initialized")
 	current_player = 2
-	
+	player_set = true
+
 func play_animation(animation: String): # play animation
 	if current_player == 1: # aniamtions with player's 1 skin
 		match animation:
