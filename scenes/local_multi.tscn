@@ -1,11 +1,11 @@
-[gd_scene load_steps=22 format=4 uid="uid://bi3ja6q2d0edq"]
+[gd_scene load_steps=24 format=4 uid="uid://bi3ja6q2d0edq"]
 
 [ext_resource type="Script" uid="uid://bkipvw42ochei" path="res://scenes/scripts/local_multiplayer.gd" id="1_p8ruy"]
 [ext_resource type="Texture2D" uid="uid://bdkfqpm45vsng" path="res://assets/levels/tileset/clouds.png" id="2_evb6e"]
 [ext_resource type="Texture2D" uid="uid://r8nku622d1jt" path="res://assets/levels/tileset/shadows.png" id="3_0kpru"]
 [ext_resource type="Texture2D" uid="uid://dyu4wu4qev4c5" path="res://assets/levels/tileset/custom.png" id="4_28ewj"]
 [ext_resource type="PackedScene" uid="uid://beenxjvyp6tpg" path="res://scenes/goal.tscn" id="5_3q71m"]
-[ext_resource type="Texture2D" uid="uid://hib55hnf64hp" path="res://assets/levels/objects/local multiplayer text.png" id="6_p8ruy"]
+[ext_resource type="FontFile" uid="uid://bb8rdhfu6uqrq" path="res://assets/fonts/Tiny5-Bold.otf" id="7_0kpru"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3aild"]
 texture = ExtResource("2_evb6e")
@@ -409,6 +409,16 @@ texture = ExtResource("3_0kpru")
 [sub_resource type="TileSet" id="TileSet_14g55"]
 sources/0 = SubResource("TileSetAtlasSource_lw72l")
 
+[sub_resource type="LabelSettings" id="LabelSettings_0kpru"]
+font = ExtResource("7_0kpru")
+font_size = 32
+shadow_size = 0
+
+[sub_resource type="LabelSettings" id="LabelSettings_p8ruy"]
+font = ExtResource("7_0kpru")
+font_size = 32
+shadow_size = 0
+
 [node name="Local Multiplayer" type="Node2D"]
 script = ExtResource("1_p8ruy")
 
@@ -455,18 +465,34 @@ position = Vector2(-550, -132)
 position = Vector2(0, -419)
 
 [node name="Player 1 spawn" type="Marker2D" parent="Spawn"]
-position = Vector2(-150, 0)
+position = Vector2(-288, -32)
 
 [node name="Player 2 spawn" type="Marker2D" parent="Spawn"]
-position = Vector2(150, 0)
+position = Vector2(288, -32)
 
 [node name="Camera_spawn" type="Marker2D" parent="Spawn"]
 position = Vector2(0, -145)
 
-[node name="LocalMultiplayerText" type="Sprite2D" parent="."]
+[node name="Player1Score" type="Label" parent="."]
 texture_filter = 1
-position = Vector2(0, -268)
-texture = ExtResource("6_p8ruy")
+offset_left = -255.0
+offset_top = -175.0
+offset_right = -215.0
+offset_bottom = -152.0
+size_flags_horizontal = 4
+text = "1"
+label_settings = SubResource("LabelSettings_0kpru")
+
+[node name="Player2Score" type="Label" parent="."]
+texture_filter = 1
+offset_left = 202.0
+offset_top = -176.0
+offset_right = 257.0
+offset_bottom = -153.0
+text = "1
+"
+label_settings = SubResource("LabelSettings_p8ruy")
+horizontal_alignment = 1
 
 [connection signal="area_entered" from="Goals/Goal2" to="." method="_on_goal_2_area_entered"]
 [connection signal="area_entered" from="Goals/Goal" to="." method="_on_goal_area_entered"]

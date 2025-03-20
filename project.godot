@@ -24,8 +24,8 @@ config/macos_native_icon="res://exports/icon.ico"
 
 [display]
 
-window/size/viewport_width=512
-window/size/viewport_height=336
+window/size/viewport_width=682
+window/size/viewport_height=448
 window/size/mode=2
 window/stretch/mode="canvas_items"
 
@@ -109,6 +109,7 @@ down_2={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0

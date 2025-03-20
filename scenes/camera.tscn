@@ -4,5 +4,4 @@
 
 [node name="Camera" type="Camera2D"]
 ignore_rotation = false
-zoom = Vector2(0.75, 0.75)
 script = ExtResource("1_cvpoc")

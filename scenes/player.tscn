@@ -1,6 +1,8 @@
-[gd_scene load_steps=65 format=3 uid="uid://ux1l01a7iemk"]
+[gd_scene load_steps=67 format=3 uid="uid://ux1l01a7iemk"]
 
 [ext_resource type="Script" uid="uid://e4s2rjoh7grb" path="res://scenes/scripts/player.gd" id="1_0xtnp"]
+[ext_resource type="Texture2D" uid="uid://bpepcd1d1ev3v" path="res://assets/players/player_1_text.png" id="2_dqkch"]
+[ext_resource type="Texture2D" uid="uid://dc7knwnhbv8e0" path="res://assets/players/player_2_text.png" id="3_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://brwkshkxnswr5" path="res://assets/players/player2.png" id="5_ry10l"]
 [ext_resource type="Texture2D" uid="uid://5il8xp6hdywr" path="res://assets/players/player1.png" id="5_ryfuf"]
 
@@ -520,6 +522,20 @@ exit_wait_timer = NodePath("Timers/Exit_wait")
 jump_bug_timer = NodePath("Timers/Jump_bug")
 before_dash_timer = NodePath("Timers/Before_dash")
 sprites = NodePath("Sprites")
+
+[node name="Player1Text" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(0, -28)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_dqkch")
+
+[node name="Player2Text" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(0, -28)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("3_qlg0r")
 
 [node name="Sprites" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

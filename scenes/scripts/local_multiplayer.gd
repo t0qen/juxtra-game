@@ -7,6 +7,8 @@ enum game_mode {
 @onready var player_2_spawn: Marker2D = $"Spawn/Player 2 spawn"
 @onready var player_1_spawn: Marker2D = $"Spawn/Player 1 spawn"
 @onready var camera_spawn: Marker2D = $Spawn/Camera_spawn
+@onready var player_1_score_text: Label = $Player1Score
+@onready var player_2_score_text: Label = $Player2Score
 
 # Goal camera effect
 @export var goal_intensity : float = 0.7
@@ -21,6 +23,8 @@ var current_ball = null
 var current_camera = null
 var player_1
 var player_2
+var player_1_score : int = 0
+var player_2_score : int = 0
 
 func _ready() -> void:
 	spawn_ball()
@@ -32,6 +36,8 @@ func _ready() -> void:
 	else:
 		print("error no initialize game mode : no game mode")	
 		
+func _process(delta: float) -> void:
+	update_score()
 	
 func spawn_camera():
 	current_camera = camera.instantiate()
@@ -48,19 +54,26 @@ func _on_goal_2_area_entered(area: Area2D) -> void:
 	if area.is_in_group("ball"):
 		print("ball in right goal")
 		current_ball.queue_free()
+		respawn_players()
 		spawn_ball()
 		player_1.camera_shake(goal_intensity, goal_duration, goal_direction)
+		player_1_score = player_1_score+1
 		
 func _on_goal_area_entered(area: Area2D) -> void:
 	if area.is_in_group("ball"):
 		print("ball in left goal")
 		current_ball.queue_free()
+		respawn_players()
 		spawn_ball()
 		player_1.camera_shake(goal_intensity, goal_duration, goal_direction)
+		player_2_score = player_2_score+1
 
 func set_game_mode(mode : game_mode):
 	current_game_mode = mode
 	
+func update_score():
+	player_1_score_text.text = str(player_1_score)
+	player_2_score_text.text = str(player_2_score)
 		
 func initialize_local_players():
 	print("initialize player 1")
@@ -82,3 +95,7 @@ func initalize_local():
 
 func initialize_multi():
 	pass
+
+func respawn_players():
+	player_1.global_position = player_1_spawn.global_position
+	player_2.global_position = player_2_spawn.global_position

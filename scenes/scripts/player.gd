@@ -5,6 +5,9 @@ class_name Player
 @export_group("Global")
 @export var current_player : int  # wich player this script is for, can be changed by other script via func
 var player_set : bool = false
+@onready var player_1_text: Sprite2D = $Player1Text
+@onready var player_2_text: Sprite2D = $Player2Text
+
 #region MOVEMENTS
 @export_group("Movements")
 @export var gravity : int = 10 # default gravity 
@@ -122,6 +125,14 @@ func _ready() -> void:
 		
 	while camera_set != true:
 		print("Camera not set...")
+	
+	if current_player == 1:
+		player_1_text.show()
+		player_2_text.hide()
+	else:
+		sprites.flip_h = true # flip player 2 sprite 
+		player_1_text.hide()
+		player_2_text.show()
 		
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	#Engine.time_scale = 0.1
