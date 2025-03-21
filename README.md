@@ -1,3 +1,11 @@
+> [!TIP]
+> **⚡ v0.2 is out !** Play directly in your browser without downloading anythings !
+>
+> - (link comming soon)
+> 
+> It's recommended to read these texts bellow to learn a bit about this game.
+
+
 <div align="center"> 
   <img src="/ressources/images/small_icon.png" width="50" height="50">
   <img src="/ressources/images/logo.png">
@@ -8,7 +16,7 @@ It's a cute 2d game with a colorful retro style, where you have to **shoot** a b
 
   <img src="/ressources/images/banner.png">
 
-todo : add link to every sections in every sections
+todo : add link to every sections here
 </div>
 
 > [!IMPORTANT]
@@ -21,13 +29,24 @@ todo : add link to every sections in every sections
 - want to play with your friends and have fun
 - want to practice mechanics and master this game
 - ...
-  
-## 📥 Installation for Windows and Linux
-**Will come with first release, please wait**
+
+## 📸 Previews
+
+
 
 
 ## 📜 How to play
-**Will come with first release, please wait**
+For now, to **move the player 1 : ZQSD or WASD**, and for **player 2 : just use arrow keys**.
+You can press tab button on your keyboard to show score.
+
+## 📥 Installation 
+> [!TIP]
+> **You can play in your browser without downloading any files by clicking on the link bellow. (recommended)**
+>
+> - (link comming soon)
+>
+> Else you can download the game and run it on your machine without any internet connection.
+> The weak point of that last method is that you need to reinstall the game if you want to play with the latest version.
 
 
 ## 🤝 How to contribute
