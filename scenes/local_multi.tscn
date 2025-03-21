@@ -419,8 +419,9 @@ font = ExtResource("6_p8ruy")
 font_size = 32
 shadow_size = 0
 
-[node name="Local Multiplayer" type="Node2D"]
+[node name="Local Multiplayer" type="Node2D" node_paths=PackedStringArray("tab_timer")]
 script = ExtResource("1_p8ruy")
+tab_timer = NodePath("TabTimer")
 
 [node name="Level" type="Node2D" parent="."]
 
@@ -494,6 +495,12 @@ text = "1
 label_settings = SubResource("LabelSettings_p8ruy")
 horizontal_alignment = 1
 
+[node name="TabTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 2.0
+one_shot = true
+
 [connection signal="area_entered" from="Goals/Goal2" to="." method="_on_goal_2_area_entered"]
 [connection signal="area_entered" from="Goals/Goal" to="." method="_on_goal_area_entered"]
 [connection signal="body_entered" from="Goals/Goal" to="." method="_on_goal_body_entered"]
+[connection signal="timeout" from="TabTimer" to="." method="_on_tab_timer_timeout"]

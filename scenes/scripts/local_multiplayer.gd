@@ -3,6 +3,8 @@ enum game_mode {
 	LOCAL,
 	MULTI
 }
+@export var tab_timer : Timer
+var tab_timer_finished : bool = false
 @onready var respawn_ball_point = $Spawn/RespawnPoint
 @onready var player_2_spawn: Marker2D = $"Spawn/Player 2 spawn"
 @onready var player_1_spawn: Marker2D = $"Spawn/Player 1 spawn"
@@ -27,6 +29,9 @@ var player_1_score : int = 0
 var player_2_score : int = 0
 
 func _ready() -> void:
+	player_1_score_text.hide()
+	player_2_score_text.hide()
+
 	spawn_ball()
 	spawn_camera()
 	if current_game_mode == game_mode.LOCAL:
@@ -35,10 +40,26 @@ func _ready() -> void:
 		initialize_multi()
 	else:
 		print("error no initialize game mode : no game mode")	
-		
+	
+	player_1.player_1_text.hide()
+	player_2.player_2_text.hide()
+	
 func _process(delta: float) -> void:
 	update_score()
+	if Input.is_action_just_pressed("tab"):
+		player_1_score_text.show()
+		player_2_score_text.show()
+		tab_timer_finished = false
+		player_1.player_1_text.show()
+		player_2.player_2_text.show()
+		tab_timer.start()
 	
+	if tab_timer_finished:
+		player_1_score_text.hide()
+		player_2_score_text.hide()
+		player_1.player_1_text.hide()
+		player_2.player_2_text.hide()
+			
 func spawn_camera():
 	current_camera = camera.instantiate()
 	current_camera.global_position = camera_spawn.global_position
@@ -99,3 +120,7 @@ func initialize_multi():
 func respawn_players():
 	player_1.global_position = player_1_spawn.global_position
 	player_2.global_position = player_2_spawn.global_position
+
+
+func _on_tab_timer_timeout() -> void:
+	tab_timer_finished = true
