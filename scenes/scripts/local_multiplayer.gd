@@ -119,7 +119,9 @@ func initialize_multi():
 
 func respawn_players():
 	player_1.global_position = player_1_spawn.global_position
+	player_1.sprites.flip_h = false
 	player_2.global_position = player_2_spawn.global_position
+	player_2.sprites.flip_h = true
 
 
 func _on_tab_timer_timeout() -> void:
