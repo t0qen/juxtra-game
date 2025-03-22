@@ -143,6 +143,7 @@ func _physics_process(delta: float) -> void: # each frame we call this function 
 	
 	get_inputs() # first gedzsxqt inputs	
 	_update_state(delta) # update the behavior of current state
+	move_and_slide()
 	
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
 	if current_player == 1: # if current player is 1 get input with player's 1 inputs
@@ -179,6 +180,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			exit_idle_timer.start() # start timer, after end, set exit_idle to true
 			
 		STATE.WAIT:
+			
 			reset_jump()
 			if !exit_fall: # if player wasn't falling before
 				play_animation("wait") # play basic animation
@@ -309,7 +311,7 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			if !is_on_floor() && !jumping: #  # if not on floor, fall down TODO
 				_set_state(STATE.FLY)
 			
-			move_and_slide() # move
+			#move_and_slide() # move
 			
 		STATE.FLY: 
 			x_move() # move on x axis
@@ -327,7 +329,7 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 				else:
 					apply_gravity(get_current_gravity(), delta) # else apply gravity
 				 
-			move_and_slide() # move
+			#move_and_slide() # move
 			
 		STATE.DASH: # jump action, come with inputs system
 			pass
@@ -377,7 +379,7 @@ func jump_update(delta): # basic func wich control jump int state update
 		else:
 			apply_gravity(get_current_gravity(), delta) # else apply gravity
 			
-	move_and_slide() # move
+	#move_and_slide() # move
 
 func can_jump(): # TODO
 	if !want_to_jump:

@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dc7knwnhbv8e0" path="res://assets/players/player_2_text.png" id="3_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://brwkshkxnswr5" path="res://assets/players/player2.png" id="5_ry10l"]
 [ext_resource type="Texture2D" uid="uid://5il8xp6hdywr" path="res://assets/players/player1.png" id="5_ryfuf"]
+[ext_resource type="Texture2D" uid="uid://c8qw1gilu5mue" path="res://assets/levels/lights/circle_light_1.tres" id="6_tuyoq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qn5qx"]
 atlas = ExtResource("5_ryfuf")
@@ -508,14 +509,8 @@ size = Vector2(16, 8)
 radius = 18.0
 height = 48.0
 
-[sub_resource type="Gradient" id="Gradient_qlg0r"]
-offsets = PackedFloat32Array(0, 0.0829787, 0.434043)
-colors = PackedColorArray(0.885106, 0.885106, 0.885106, 1, 0.659491, 0.659491, 0.659491, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_tuyoq"]
-gradient = SubResource("Gradient_qlg0r")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_tuyoq"]
+polygon = PackedVector2Array(-4, -10, 6, -10, 6, -16, -7, -17)
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "before_dash_timer", "sprites")]
 top_level = true
@@ -600,16 +595,21 @@ process_callback = 0
 wait_time = 2.5
 one_shot = true
 
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+visible = false
+occluder = SubResource("OccluderPolygon2D_tuyoq")
+occluder_light_mask = 2
+
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(0, -14)
-energy = 0.1
+color = Color(0.211765, 0.631373, 0.768627, 1)
+energy = 0.2
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
-shadow_filter_smooth = 10.0
-shadow_item_cull_mask = 3
-texture = SubResource("GradientTexture2D_tuyoq")
-texture_scale = 6.0
+shadow_filter_smooth = 4.0
+texture = ExtResource("6_tuyoq")
+texture_scale = 2.5
 
 [connection signal="area_entered" from="Area" to="." method="_on_area_area_entered"]
 [connection signal="area_exited" from="Area" to="." method="_on_area_area_exited"]

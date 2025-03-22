@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://p0d1rd85t620"]
+[gd_scene load_steps=8 format=3 uid="uid://p0d1rd85t620"]
 
 [ext_resource type="Script" uid="uid://dpaqd6t3peivi" path="res://scenes/scripts/ball.gd" id="1_hje8c"]
 [ext_resource type="Texture2D" uid="uid://gqamadderlwg" path="res://assets/levels/objects/ball.png" id="2_2pyro"]
+[ext_resource type="Texture2D" uid="uid://c8qw1gilu5mue" path="res://assets/levels/lights/circle_light_1.tres" id="3_2pyro"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4mlqk"]
-friction = 0.0
+friction = 0.1
 bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vfq42"]
@@ -12,15 +13,6 @@ radius = 31.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cxlvu"]
 radius = 35.0
-
-[sub_resource type="Gradient" id="Gradient_f7cbr"]
-offsets = PackedFloat32Array(0, 0.219665, 0.674468)
-colors = PackedColorArray(0.780851, 0.780851, 0.780851, 1, 0.51482, 0.51482, 0.51482, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_hje8c"]
-gradient = SubResource("Gradient_f7cbr")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_hje8c"]
 polygon = PackedVector2Array(-12, -28, -12, -20, -20, -20, -20, -12, -28, -12, -28, 12, -20, 12, -20, 20, -12, 20, -12, 28, 12, 28, 12, 20, 20, 20, 20, 12, 28, 12, 28, -12, 20, -12, 20, -20, 12, -20, 12, -28)
@@ -52,15 +44,16 @@ debug_color = Color(0.439216, 0.580392, 0.423529, 0.329412)
 shape = SubResource("CircleShape2D_cxlvu")
 debug_color = Color(0.3102, 0.605972, 0.458647, 0.576471)
 
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_hje8c")
+
 [node name="PointLight2D" type="PointLight2D" parent="."]
-energy = 0.3
+visible = false
+energy = 1.86
+range_item_cull_mask = 2
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
-shadow_filter_smooth = 1.0
-texture = SubResource("GradientTexture2D_hje8c")
-texture_scale = 6.0
-
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
-occluder = SubResource("OccluderPolygon2D_hje8c")
-occluder_light_mask = 2
+shadow_item_cull_mask = 2
+texture = ExtResource("3_2pyro")
+texture_scale = 2.0
