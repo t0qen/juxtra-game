@@ -123,5 +123,6 @@ lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
 lights_and_shadows/positional_shadow/soft_shadow_filter_quality=0
 shading/overrides/force_lambert_over_burley.mobile=false
 camera/depth_of_field/depth_of_field_bokeh_quality=0
-anti_aliasing/quality/msaa_2d=1
+anti_aliasing/quality/msaa_2d=2
 environment/defaults/default_clear_color=Color(0.273873, 0.273873, 0.273873, 0.643137)
+anti_aliasing/quality/screen_space_aa=1

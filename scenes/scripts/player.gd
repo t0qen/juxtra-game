@@ -139,7 +139,9 @@ func _ready() -> void:
 		
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	#Engine.time_scale = 0.1
-	get_inputs() # first get inputs	
+	
+	
+	get_inputs() # first gedzsxqt inputs	
 	_update_state(delta) # update the behavior of current state
 	
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
@@ -273,19 +275,17 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 		STATE.IDLE: 
 			if direction: # if left or right is pressed, start walking
 				_set_state(STATE.RUN)
-				
 			can_jump()
-				
+			print("ykyky")
 			if !is_on_floor() && !jumping: # if not on floor, fall down and fly TODO
+				
 				_set_state(STATE.FLY)
 				
 		STATE.WAIT:
 				
 			if direction: # ef left or right is pressed, start walking
 				_set_state(STATE.RUN)
-				
 			can_jump()
-				
 			if !is_on_floor() && !jumping: # if not on floor, fall down and fly (TODO !jumping)
 				_set_state(STATE.FLY)
 			

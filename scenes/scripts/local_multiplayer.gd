@@ -9,8 +9,8 @@ var tab_timer_finished : bool = false
 @onready var player_2_spawn: Marker2D = $"Spawn/Player 2 spawn"
 @onready var player_1_spawn: Marker2D = $"Spawn/Player 1 spawn"
 @onready var camera_spawn: Marker2D = $Spawn/Camera_spawn
-@onready var player_1_score_text: Label = $Player1Score
-@onready var player_2_score_text: Label = $Player2Score
+@onready var player_1_score_text: Label = $UI/Player1Score
+@onready var player_2_score_text: Label = $UI/Player2Score
 
 # Goal camera effect
 @export var goal_intensity : float = 0.7
@@ -59,6 +59,7 @@ func _process(delta: float) -> void:
 		player_2_score_text.hide()
 		player_1.player_1_text.hide()
 		player_2.player_2_text.hide()
+	
 			
 func spawn_camera():
 	current_camera = camera.instantiate()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://ux1l01a7iemk"]
+[gd_scene load_steps=69 format=3 uid="uid://ux1l01a7iemk"]
 
 [ext_resource type="Script" uid="uid://e4s2rjoh7grb" path="res://scenes/scripts/player.gd" id="1_0xtnp"]
 [ext_resource type="Texture2D" uid="uid://bpepcd1d1ev3v" path="res://assets/players/player_1_text.png" id="2_dqkch"]
@@ -501,18 +501,28 @@ animations = [{
 radius = 7.0
 height = 20.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1n1i0"]
-size = Vector2(2.00003, 12)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qlg0r"]
+size = Vector2(16, 8)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dqkch"]
 radius = 18.0
 height = 48.0
 
+[sub_resource type="Gradient" id="Gradient_qlg0r"]
+offsets = PackedFloat32Array(0, 0.0829787, 0.434043)
+colors = PackedColorArray(0.885106, 0.885106, 0.885106, 1, 0.659491, 0.659491, 0.659491, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tuyoq"]
+gradient = SubResource("Gradient_qlg0r")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "before_dash_timer", "sprites")]
 top_level = true
 collision_mask = 15
+slide_on_ceiling = false
 platform_on_leave = 2
-platform_floor_layers = 4294967289
+platform_floor_layers = 4294901768
 script = ExtResource("1_0xtnp")
 base_speed = 175
 air_speed = 220
@@ -551,10 +561,9 @@ shape = SubResource("CapsuleShape2D_fcguk")
 debug_color = Color(0.766486, 0.37665, 0.632263, 0.572549)
 
 [node name="Floor_hitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
-rotation = 1.5708
-shape = SubResource("RectangleShape2D_1n1i0")
-debug_color = Color(0.784602, 0.334636, 0.705903, 0.42)
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_qlg0r")
+debug_color = Color(0.816979, 0.322887, 0.633157, 0.42)
 
 [node name="Area" type="Area2D" parent="."]
 
@@ -590,6 +599,17 @@ one_shot = true
 process_callback = 0
 wait_time = 2.5
 one_shot = true
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, -14)
+energy = 0.1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 2
+shadow_filter_smooth = 10.0
+shadow_item_cull_mask = 3
+texture = SubResource("GradientTexture2D_tuyoq")
+texture_scale = 6.0
 
 [connection signal="area_entered" from="Area" to="." method="_on_area_area_entered"]
 [connection signal="area_exited" from="Area" to="." method="_on_area_area_exited"]
