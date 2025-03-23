@@ -1,11 +1,13 @@
-[gd_scene load_steps=31 format=4 uid="uid://bi3ja6q2d0edq"]
+[gd_scene load_steps=35 format=4 uid="uid://bi3ja6q2d0edq"]
 
 [ext_resource type="Script" uid="uid://bkipvw42ochei" path="res://scenes/scripts/local_multiplayer.gd" id="1_p8ruy"]
 [ext_resource type="Texture2D" uid="uid://bdkfqpm45vsng" path="res://assets/levels/tileset/clouds.png" id="2_evb6e"]
 [ext_resource type="Texture2D" uid="uid://r8nku622d1jt" path="res://assets/levels/tileset/shadows.png" id="3_0kpru"]
 [ext_resource type="Texture2D" uid="uid://dyu4wu4qev4c5" path="res://assets/levels/tileset/custom.png" id="4_28ewj"]
 [ext_resource type="PackedScene" uid="uid://beenxjvyp6tpg" path="res://scenes/goal.tscn" id="5_3q71m"]
+[ext_resource type="LabelSettings" uid="uid://bpp5j7r27avit" path="res://assets/fonts/pixel_config_1.tres" id="6_evb6e"]
 [ext_resource type="FontFile" uid="uid://crkgj2c3hvkwh" path="res://assets/fonts/Bytesized-Regular.ttf" id="6_p8ruy"]
+[ext_resource type="FontFile" uid="uid://d376lcg3fxjn7" path="res://assets/fonts/tiny5-Regular.otf" id="8_0kpru"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3aild"]
 texture = ExtResource("2_evb6e")
@@ -466,19 +468,32 @@ texture = ExtResource("3_0kpru")
 [sub_resource type="TileSet" id="TileSet_14g55"]
 sources/0 = SubResource("TileSetAtlasSource_lw72l")
 
-[sub_resource type="LabelSettings" id="LabelSettings_0kpru"]
-font = ExtResource("6_p8ruy")
-font_size = 32
-shadow_size = 0
-
 [sub_resource type="LabelSettings" id="LabelSettings_p8ruy"]
 font = ExtResource("6_p8ruy")
 font_size = 32
+font_color = Color(0.831373, 0.831373, 0.831373, 1)
+outline_color = Color(0.184314, 0.184314, 0.180392, 1)
 shadow_size = 0
 
-[node name="Local Multiplayer" type="Node2D" node_paths=PackedStringArray("tab_timer")]
+[sub_resource type="LabelSettings" id="LabelSettings_28ewj"]
+font = ExtResource("8_0kpru")
+font_size = 18
+font_color = Color(0.654902, 0.576471, 0.435294, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0kpru"]
+font = ExtResource("8_0kpru")
+font_size = 36
+font_color = Color(0.136512, 0.469742, 0.57694, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0kpru"]
+size = Vector2(528, 53)
+
+[node name="Local Multiplayer" type="Node2D" node_paths=PackedStringArray("tab_timer", "score_timer", "intro_text_timer")]
+position = Vector2(-1, 0)
 script = ExtResource("1_p8ruy")
 tab_timer = NodePath("Timers/TabTimer")
+score_timer = NodePath("Timers/ShowScore")
+intro_text_timer = NodePath("Timers/Text_intro")
 
 [node name="Level" type="Node2D" parent="."]
 
@@ -539,24 +554,55 @@ position = Vector2(0, -145)
 [node name="UI" type="Node" parent="."]
 
 [node name="Player1Score" type="Label" parent="UI"]
+visibility_layer = 2
 texture_filter = 1
-offset_left = -255.0
-offset_top = -175.0
-offset_right = -215.0
-offset_bottom = -135.0
+offset_left = -220.0
+offset_top = -44.0
+offset_right = -177.0
+offset_bottom = -4.0
 size_flags_horizontal = 4
 text = "1"
-label_settings = SubResource("LabelSettings_0kpru")
+label_settings = ExtResource("6_evb6e")
 
 [node name="Player2Score" type="Label" parent="UI"]
+visibility_layer = 2
 texture_filter = 1
-offset_left = 202.0
-offset_top = -176.0
-offset_right = 257.0
-offset_bottom = -93.0
+offset_left = 122.0
+offset_top = -44.0
+offset_right = 224.0
+offset_bottom = 39.0
 text = "1
 "
 label_settings = SubResource("LabelSettings_p8ruy")
+horizontal_alignment = 2
+
+[node name="Version" type="Label" parent="UI"]
+offset_left = -243.0
+offset_top = 50.0
+offset_right = 247.0
+offset_bottom = 90.0
+text = "© t0qen                                                                                                  v0.2.5"
+label_settings = SubResource("LabelSettings_28ewj")
+
+[node name="Intro_text" type="Label" parent="UI"]
+texture_filter = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -618.0
+offset_top = -192.0
+offset_right = 497.0
+offset_bottom = -192.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+text = "\"Your free, 2d, multiplayer and physics-based ball game.\"
+It's a cute 2d game with a colorful retro style, 
+where you have to shoot a bouncing ball into the enemy goal.
+To do this, you use an advanced movement system to move very quickly in the air. 
+You can play 1v1 against your friends on the same keyboard. "
+label_settings = SubResource("LabelSettings_0kpru")
 horizontal_alignment = 1
 
 [node name="Timers" type="Node" parent="."]
@@ -566,10 +612,28 @@ process_callback = 0
 wait_time = 2.0
 one_shot = true
 
+[node name="ShowScore" type="Timer" parent="Timers"]
+process_callback = 0
+wait_time = 3.0
+one_shot = true
+
+[node name="Text_intro" type="Timer" parent="Timers"]
+wait_time = 45.0
+one_shot = true
+
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.513233, 0.513233, 0.513233, 1)
+color = Color(0.572988, 0.572988, 0.572988, 1)
+
+[node name="Propulsion_zone" type="Area2D" parent="." groups=["propulsion"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Propulsion_zone"]
+position = Vector2(0, -26.5)
+shape = SubResource("RectangleShape2D_0kpru")
+debug_color = Color(0.76937, 0.321051, 0.781113, 0.42)
 
 [connection signal="area_entered" from="Goals/Goal2" to="." method="_on_goal_2_area_entered"]
 [connection signal="area_entered" from="Goals/Goal" to="." method="_on_goal_area_entered"]
 [connection signal="body_entered" from="Goals/Goal" to="." method="_on_goal_body_entered"]
 [connection signal="timeout" from="Timers/TabTimer" to="." method="_on_tab_timer_timeout"]
+[connection signal="timeout" from="Timers/ShowScore" to="." method="_on_show_score_timeout"]
+[connection signal="timeout" from="Timers/Text_intro" to="." method="_on_text_intro_timeout"]

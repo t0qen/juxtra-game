@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://vsj867ii6l7t"]
+[gd_scene load_steps=3 format=3 uid="uid://vsj867ii6l7t"]
 
 [ext_resource type="PackedScene" uid="uid://p0d1rd85t620" path="res://scenes/root_ball.tscn" id="1_7s4qf"]
+[ext_resource type="Script" uid="uid://blcg1sardvntn" path="res://scenes/intermediate_ball.gd" id="1_cxlvu"]
 
 [node name="Ball" type="Node2D"]
+top_level = true
+script = ExtResource("1_cxlvu")
 
 [node name="Root ball" parent="." instance=ExtResource("1_7s4qf")]
 light_mask = 2

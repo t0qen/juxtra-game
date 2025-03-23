@@ -5,8 +5,8 @@ class_name Player
 @export_group("Global")
 @export var current_player : int  # wich player this script is for, can be changed by other script via func
 var player_set : bool = false
-@onready var player_1_text: Sprite2D = $Player1Text
-@onready var player_2_text: Sprite2D = $Player2Text
+@onready var player_1_text: Label = $Player1Text
+@onready var player_2_text: Label = $Player2Text
 @export var enable_player_text : bool = false
 
 #region MOVEMENTS
@@ -278,7 +278,6 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			if direction: # if left or right is pressed, start walking
 				_set_state(STATE.RUN)
 			can_jump()
-			print("ykyky")
 			if !is_on_floor() && !jumping: # if not on floor, fall down and fly TODO
 				
 				_set_state(STATE.FLY)

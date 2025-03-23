@@ -1,0 +1,11 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bpp5j7r27avit"]
+
+[ext_resource type="FontFile" uid="uid://crkgj2c3hvkwh" path="res://assets/fonts/Bytesized-Regular.ttf" id="1_8d6e1"]
+
+[resource]
+font = ExtResource("1_8d6e1")
+font_size = 32
+font_color = Color(0.831373, 0.831373, 0.831373, 1)
+outline_color = Color(0.184314, 0.184314, 0.180392, 0)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
