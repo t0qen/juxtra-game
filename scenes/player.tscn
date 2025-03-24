@@ -508,8 +508,8 @@ size = Vector2(16, 8)
 radius = 18.0
 height = 48.0
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_tuyoq"]
-polygon = PackedVector2Array(-4, -10, 6, -10, 6, -16, -7, -17)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_qlg0r"]
+polygon = PackedVector2Array(-3, -10, 3, -10, 6, -12, 6, -16, -6, -16, -6, -12)
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "before_dash_timer", "sprites")]
 top_level = true
@@ -601,8 +601,7 @@ wait_time = 2.5
 one_shot = true
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
-visible = false
-occluder = SubResource("OccluderPolygon2D_tuyoq")
+occluder = SubResource("OccluderPolygon2D_qlg0r")
 occluder_light_mask = 2
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
@@ -613,6 +612,7 @@ shadow_enabled = true
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
 shadow_filter_smooth = 4.0
+shadow_item_cull_mask = 9
 texture = ExtResource("6_tuyoq")
 texture_scale = 2.0
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=4 uid="uid://bi3ja6q2d0edq"]
+[gd_scene load_steps=40 format=4 uid="uid://bi3ja6q2d0edq"]
 
 [ext_resource type="Script" uid="uid://bkipvw42ochei" path="res://scenes/scripts/local_multiplayer.gd" id="1_p8ruy"]
 [ext_resource type="Texture2D" uid="uid://bdkfqpm45vsng" path="res://assets/levels/tileset/clouds.png" id="2_evb6e"]
@@ -8,6 +8,7 @@
 [ext_resource type="LabelSettings" uid="uid://bpp5j7r27avit" path="res://assets/fonts/pixel_config_1.tres" id="6_evb6e"]
 [ext_resource type="FontFile" uid="uid://crkgj2c3hvkwh" path="res://assets/fonts/Bytesized-Regular.ttf" id="6_p8ruy"]
 [ext_resource type="FontFile" uid="uid://d376lcg3fxjn7" path="res://assets/fonts/tiny5-Regular.otf" id="8_0kpru"]
+[ext_resource type="LabelSettings" uid="uid://vbiqrd6ai00c" path="res://assets/fonts/pixel_config_3.tres" id="9_28ewj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3aild"]
 texture = ExtResource("2_evb6e")
@@ -354,7 +355,7 @@ texture = ExtResource("2_evb6e")
 
 [sub_resource type="TileSet" id="TileSet_sqcku"]
 uv_clipping = true
-occlusion_layer_0/light_mask = 1
+occlusion_layer_0/light_mask = 8
 physics_layer_0/collision_layer = 8
 physics_layer_0/collision_mask = 3
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_p8ruy")
@@ -468,6 +469,38 @@ texture = ExtResource("3_0kpru")
 [sub_resource type="TileSet" id="TileSet_14g55"]
 sources/0 = SubResource("TileSetAtlasSource_lw72l")
 
+[sub_resource type="Gradient" id="Gradient_28ewj"]
+offsets = PackedFloat32Array(0.002, 0.228495, 0.607527, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.528712, 0.528712, 0.528712, 1, 0.124393, 0.124393, 0.124393, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3q71m"]
+gradient = SubResource("Gradient_28ewj")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.25, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_28ewj"]
+gradient = SubResource("Gradient_28ewj")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.75, 0.5)
+fill_to = Vector2(0, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_3q71m"]
+offsets = PackedFloat32Array(0, 0.0860215, 0.443548, 0.521505)
+colors = PackedColorArray(1, 1, 1, 1, 0.360825, 0.360825, 0.360825, 1, 0.0645921, 0.0645921, 0.0645921, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mecpo"]
+gradient = SubResource("Gradient_3q71m")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.5, 0.25)
+fill_to = Vector2(0.53, 0.9)
+
 [sub_resource type="LabelSettings" id="LabelSettings_p8ruy"]
 font = ExtResource("6_p8ruy")
 font_size = 32
@@ -480,16 +513,10 @@ font = ExtResource("8_0kpru")
 font_size = 18
 font_color = Color(0.654902, 0.576471, 0.435294, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_0kpru"]
-font = ExtResource("8_0kpru")
-font_size = 36
-font_color = Color(0.136512, 0.469742, 0.57694, 1)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0kpru"]
 size = Vector2(528, 53)
 
 [node name="Local Multiplayer" type="Node2D" node_paths=PackedStringArray("tab_timer", "score_timer", "intro_text_timer")]
-position = Vector2(-1, 0)
 script = ExtResource("1_p8ruy")
 tab_timer = NodePath("Timers/TabTimer")
 score_timer = NodePath("Timers/ShowScore")
@@ -537,7 +564,35 @@ scale = Vector2(1.67703, 1.16968)
 position = Vector2(-550, -132)
 scale = Vector2(1.68, 1.24)
 
+[node name="Light_goal" type="PointLight2D" parent="Goals"]
+position = Vector2(-264, -136)
+energy = 0.6
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 2
+shadow_filter_smooth = 0.5
+shadow_item_cull_mask = 8
+texture = SubResource("GradientTexture2D_3q71m")
+
+[node name="Light_goal_2" type="PointLight2D" parent="Goals"]
+position = Vector2(264, -136)
+energy = 0.6
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 2
+shadow_filter_smooth = 0.5
+shadow_item_cull_mask = 8
+texture = SubResource("GradientTexture2D_28ewj")
+
 [node name="Spawn" type="Node2D" parent="."]
+
+[node name="Light_spawn_ball" type="PointLight2D" parent="Spawn"]
+visible = false
+position = Vector2(0, -272)
+energy = 0.5
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 2
+shadow_filter_smooth = 0.5
+shadow_item_cull_mask = 0
+texture = SubResource("GradientTexture2D_mecpo")
 
 [node name="RespawnPoint" type="Marker2D" parent="Spawn"]
 position = Vector2(0, -419)
@@ -590,10 +645,10 @@ anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -618.0
-offset_top = -192.0
-offset_right = 497.0
-offset_bottom = -192.0
+offset_left = -619.0
+offset_top = -208.0
+offset_right = 496.0
+offset_bottom = -208.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
@@ -601,8 +656,9 @@ text = "\"Your free, 2d, multiplayer and physics-based ball game.\"
 It's a cute 2d game with a colorful retro style, 
 where you have to shoot a bouncing ball into the enemy goal.
 To do this, you use an advanced movement system to move very quickly in the air. 
-You can play 1v1 against your friends on the same keyboard. "
-label_settings = SubResource("LabelSettings_0kpru")
+You can play 1v1 against your friends on the same keyboard. 
+WASD / ZQSD to move player 1 and arrow keys for player 2"
+label_settings = ExtResource("9_28ewj")
 horizontal_alignment = 1
 
 [node name="Timers" type="Node" parent="."]

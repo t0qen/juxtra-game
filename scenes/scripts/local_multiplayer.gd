@@ -61,10 +61,6 @@ func _process(delta: float) -> void:
 		player_1_score_text.hide()
 		player_1.player_1_text.hide()
 		player_2.player_2_text.hide()
-	
-	if score_timer_finished:
-		hide_score()
-		score_timer_finished = false
 		
 func spawn_camera():
 	current_camera = camera.instantiate()
@@ -146,7 +142,7 @@ func _on_tab_timer_timeout() -> void:
 	tab_timer_finished = true
 
 func _on_show_score_timeout() -> void:
-	score_timer_finished = true
+	hide_score()
 
 func _on_text_intro_timeout() -> void:
 	intro_text.hide()

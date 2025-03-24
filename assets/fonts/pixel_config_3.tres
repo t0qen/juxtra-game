@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://vbiqrd6ai00c"]
+
+[ext_resource type="FontFile" uid="uid://d376lcg3fxjn7" path="res://assets/fonts/tiny5-Regular.otf" id="1_vfgkb"]
+
+[resource]
+font = ExtResource("1_vfgkb")
+font_size = 36
+font_color = Color(0.136512, 0.469742, 0.57694, 1)
