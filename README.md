@@ -1,7 +1,7 @@
 > [!TIP]
 > **⚡ v0.2 is out !** Play directly in your browser without downloading anythings !
 >
-> - (link comming soon)
+> - https://t0qen.itch.io/juxtra
 > 
 > It's recommended to read these texts bellow to learn a bit about this game.
 
@@ -32,7 +32,8 @@ todo : add link to every sections here
 
 ## 📸 Previews
 
-
+![Screenshot 1](https://github.com/user-attachments/assets/24353c1f-31be-4077-af08-4cb15408a823)
+![Screenshot 2](https://github.com/user-attachments/assets/b76c451a-55e6-44fd-80c0-c014c95ed4ab)
 
 
 ## 📜 How to play
@@ -43,7 +44,7 @@ You can press tab button on your keyboard to show score.
 > [!TIP]
 > **You can play in your browser without downloading any files by clicking on the link bellow. (recommended)**
 >
-> - (link comming soon)
+> - https://t0qen.itch.io/juxtra
 >
 > Else you can download the game and run it on your machine without any internet connection.
 > The weak point of that last method is that you need to reinstall the game if you want to play with the latest version.
