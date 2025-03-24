@@ -31,6 +31,8 @@ todo : add link to every sections here
 - ...
 
 ## 📸 Previews
+See a video here : https://youtu.be/9pEGZnUsyik
+
 
 ![Screenshot 1](https://github.com/user-attachments/assets/24353c1f-31be-4077-af08-4cb15408a823)
 ![Screenshot 2](https://github.com/user-attachments/assets/b76c451a-55e6-44fd-80c0-c014c95ed4ab)
