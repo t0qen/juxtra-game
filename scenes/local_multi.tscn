@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=4 uid="uid://bi3ja6q2d0edq"]
+[gd_scene load_steps=41 format=4 uid="uid://bi3ja6q2d0edq"]
 
 [ext_resource type="Script" uid="uid://bkipvw42ochei" path="res://scenes/scripts/local_multiplayer.gd" id="1_p8ruy"]
 [ext_resource type="Texture2D" uid="uid://bdkfqpm45vsng" path="res://assets/levels/tileset/clouds.png" id="2_evb6e"]
@@ -504,7 +504,7 @@ fill_to = Vector2(0.53, 0.9)
 [sub_resource type="LabelSettings" id="LabelSettings_p8ruy"]
 font = ExtResource("6_p8ruy")
 font_size = 32
-font_color = Color(0.831373, 0.831373, 0.831373, 1)
+font_color = Color(0.393297, 0.792359, 0.932652, 1)
 outline_color = Color(0.184314, 0.184314, 0.180392, 1)
 shadow_size = 0
 
@@ -513,14 +513,21 @@ font = ExtResource("8_0kpru")
 font_size = 18
 font_color = Color(0.654902, 0.576471, 0.435294, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_3q71m"]
+font = ExtResource("8_0kpru")
+font_size = 36
+font_color = Color(0.136512, 0.469742, 0.57694, 1)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0kpru"]
 size = Vector2(528, 53)
 
-[node name="Local Multiplayer" type="Node2D" node_paths=PackedStringArray("tab_timer", "score_timer", "intro_text_timer")]
+[node name="Local Multiplayer" type="Node2D" node_paths=PackedStringArray("tab_timer", "score_timer", "intro_text_timer", "light_effect_goals_timer", "light_effect_timer_ball")]
 script = ExtResource("1_p8ruy")
 tab_timer = NodePath("Timers/TabTimer")
 score_timer = NodePath("Timers/ShowScore")
 intro_text_timer = NodePath("Timers/Text_intro")
+light_effect_goals_timer = NodePath("Timers/Light_effect_goals")
+light_effect_timer_ball = NodePath("Timers/Light_effects_spawn_ball")
 
 [node name="Level" type="Node2D" parent="."]
 
@@ -565,9 +572,9 @@ position = Vector2(-550, -132)
 scale = Vector2(1.68, 1.24)
 
 [node name="Light_goal" type="PointLight2D" parent="Goals"]
-visible = false
 position = Vector2(-264, -136)
-energy = 0.6
+enabled = false
+energy = 0.2
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
 shadow_filter_smooth = 0.5
@@ -575,9 +582,9 @@ shadow_item_cull_mask = 8
 texture = SubResource("GradientTexture2D_3q71m")
 
 [node name="Light_goal_2" type="PointLight2D" parent="Goals"]
-visible = false
 position = Vector2(264, -136)
-energy = 0.6
+enabled = false
+energy = 0.2
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
 shadow_filter_smooth = 0.5
@@ -587,9 +594,9 @@ texture = SubResource("GradientTexture2D_28ewj")
 [node name="Spawn" type="Node2D" parent="."]
 
 [node name="Light_spawn_ball" type="PointLight2D" parent="Spawn"]
-visible = false
 position = Vector2(0, -272)
-energy = 0.5
+enabled = false
+energy = 0.1
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
 shadow_filter_smooth = 0.5
@@ -647,21 +654,30 @@ anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -619.0
-offset_top = -208.0
-offset_right = 496.0
-offset_bottom = -208.0
+offset_left = -592.0
+offset_top = -219.0
+offset_right = 523.0
+offset_bottom = -219.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.45, 0.45)
 text = "\"Your free, 2d, multiplayer and physics-based ball game.\"
 It's a cute 2d game with a colorful retro style, 
 where you have to shoot a bouncing ball into the enemy goal.
 To do this, you use an advanced movement system to move very quickly in the air. 
 You can play 1v1 against your friends on the same keyboard. 
-WASD / ZQSD to move player 1 and arrow keys for player 2"
+"
 label_settings = ExtResource("9_28ewj")
 horizontal_alignment = 1
+
+[node name="Movements" type="Label" parent="UI"]
+offset_left = -199.0
+offset_top = -120.0
+offset_right = 595.0
+offset_bottom = -84.0
+scale = Vector2(0.5, 0.5)
+text = "WASD / ZQSD to move player 1 and arrow keys for player 2"
+label_settings = SubResource("LabelSettings_3q71m")
 
 [node name="Timers" type="Node" parent="."]
 
@@ -679,8 +695,15 @@ one_shot = true
 wait_time = 45.0
 one_shot = true
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.572988, 0.572988, 0.572988, 1)
+[node name="Light_effect_goals" type="Timer" parent="Timers"]
+process_callback = 0
+wait_time = 0.5
+one_shot = true
+
+[node name="Light_effects_spawn_ball" type="Timer" parent="Timers"]
+process_callback = 0
+wait_time = 0.75
+one_shot = true
 
 [node name="Propulsion_zone" type="Area2D" parent="." groups=["propulsion"]]
 
@@ -689,9 +712,14 @@ position = Vector2(0, -26.5)
 shape = SubResource("RectangleShape2D_0kpru")
 debug_color = Color(0.76937, 0.321051, 0.781113, 0.42)
 
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.572988, 0.572988, 0.572988, 1)
+
 [connection signal="area_entered" from="Goals/Goal2" to="." method="_on_goal_2_area_entered"]
 [connection signal="area_entered" from="Goals/Goal" to="." method="_on_goal_area_entered"]
 [connection signal="body_entered" from="Goals/Goal" to="." method="_on_goal_body_entered"]
 [connection signal="timeout" from="Timers/TabTimer" to="." method="_on_tab_timer_timeout"]
 [connection signal="timeout" from="Timers/ShowScore" to="." method="_on_show_score_timeout"]
 [connection signal="timeout" from="Timers/Text_intro" to="." method="_on_text_intro_timeout"]
+[connection signal="timeout" from="Timers/Light_effect_goals" to="." method="_on_light_effect_goals_timeout"]
+[connection signal="timeout" from="Timers/Light_effects_spawn_ball" to="." method="_on_light_effects_spawn_ball_timeout"]

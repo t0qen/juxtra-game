@@ -8,6 +8,8 @@ var tab_timer_finished : bool = false
 @export var score_timer : Timer
 var score_timer_finished : bool = false
 @export var intro_text_timer : Timer
+@export var light_effect_goals_timer : Timer
+@export var light_effect_timer_ball : Timer
 
 @onready var respawn_ball_point = $Spawn/RespawnPoint
 @onready var player_2_spawn: Marker2D = $"Spawn/Player 2 spawn"
@@ -16,6 +18,10 @@ var score_timer_finished : bool = false
 @onready var player_1_score_text: Label = $UI/Player1Score
 @onready var player_2_score_text: Label = $UI/Player2Score
 @onready var intro_text: Label = $UI/Intro_text
+@onready var light_goal: PointLight2D = $Goals/Light_goal
+@onready var light_goal_2: PointLight2D = $Goals/Light_goal_2
+@onready var light_spawn_ball: PointLight2D = $Spawn/Light_spawn_ball
+@onready var movements_text: Label = $UI/Movements
 
 # Goal camera effect
 @export var goal_intensity : float = 0.7
@@ -69,6 +75,8 @@ func spawn_camera():
 	
 	
 func spawn_ball():
+	light_spawn_ball.enabled = true
+	light_effect_timer_ball.start()
 	current_ball = ball.instantiate()
 	current_ball.global_position = respawn_ball_point.global_position
 	add_child(current_ball)
@@ -76,25 +84,27 @@ func spawn_ball():
 func _on_goal_2_area_entered(area: Area2D) -> void:
 	if area.is_in_group("ball"):
 		print("ball in right goal")
-		current_ball.queue_free()
-		respawn_players()
-		spawn_ball()
 		player_1.camera_shake(goal_intensity, goal_duration, goal_direction)
 		player_1_score = player_1_score+1
 		show_score()
 		score_timer.start()
+		current_ball.queue_free()
+		light_goal_2.enabled = true
+		
+		light_effect_goals_timer.start()
 		
 func _on_goal_area_entered(area: Area2D) -> void:
 	if area.is_in_group("ball"):
 		print("ball in left goal")
-		current_ball.queue_free()
-		respawn_players()
-		spawn_ball()
 		player_1.camera_shake(goal_intensity, goal_duration, goal_direction)
 		player_2_score = player_2_score+1
 		show_score()
 		score_timer.start()
-
+		current_ball.queue_free()
+		light_goal.enabled = true
+		
+		light_effect_goals_timer.start()
+		
 func set_game_mode(mode : game_mode):
 	current_game_mode = mode
 	
@@ -146,3 +156,14 @@ func _on_show_score_timeout() -> void:
 
 func _on_text_intro_timeout() -> void:
 	intro_text.hide()
+	movements_text.hide()
+	
+func _on_light_effects_spawn_ball_timeout() -> void:
+	light_spawn_ball.enabled = false
+
+func _on_light_effect_goals_timeout() -> void:
+	light_goal.enabled = false
+	light_goal_2.enabled = false
+	respawn_players()
+	spawn_ball()
+	
