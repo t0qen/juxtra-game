@@ -46,6 +46,18 @@ enum JUMP {
 var current_jump = JUMP.JUMP # store the current what jump player is actually perform
 #endregion
 
+#region DASH
+# - DASH
+@export_group("Dash")
+enum DASH {
+	NO,
+	DASH,
+	DASH_2
+}
+var current_dash = DASH.DASH
+
+#endregion
+
 #region CAMERA
 # - CAMERA
 @export_group("Camera")
@@ -97,7 +109,8 @@ enum STATE { # each states of player
 	JUMP_3, # 5
 	WAIT, # 6
 	SLEEP, # 7
-	DASH # 8
+	DASH, # 8
+	DASH_2
 }
 @export var current_state : STATE = STATE.WAIT # where the current state of player will be stored, can stored to first state
 
@@ -217,21 +230,22 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			current_jump = JUMP.JUMP_3
 			perform_jump(1.25)	
 			
+		STATE.DASH:
+			current_dash = DASH.DASH
+			perform_dash()
+			pass
+			
+		STATE.DASH_2:
+			current_dash = DASH.DASH_2
+			perform_dash()
+			pass
+			
 		STATE.FLY: 
 			exit_fall = false # reset exit fall
 			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
 			current_speed = air_speed # set air speed
 			play_animation("fly")
-			
-		STATE.DASH: # TODO
-			play_animation("before_dash")
-			before_dash_finish = false
-			before_dash_timer.start()
-			while before_dash_finish != true:
-				print("PRESS INPUTS")
-			#velocity = vector2().normalized() × speed
-			
-			
+
 func _exit_state() -> void: # exit transition, nothing really important
 	match current_state:
 		STATE.WAIT:
@@ -260,11 +274,20 @@ func _exit_state() -> void: # exit transition, nothing really important
 			
 		STATE.DASH:
 			pass
+		
+		STATE.DASH_2:
+			pass
 #endregion
 
 #region UPDATE STATE
 func _update_state(delta: float) -> void:  # every behavior of each states updated every physics process
 	match current_state:
+		STATE.DASH:
+			pass
+			
+		STATE.DASH_2:
+			pass
+			
 		STATE.JUMP: 
 			jump_update(delta)
 		
@@ -300,7 +323,7 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 				_set_state(STATE.FLY)		
 			
 		STATE.RUN:
-			x_move() # move on x axis
+			x_move() # move on x axisJUMP
 			
 			if !direction: # if player doesn't move anymore 
 				_set_state(STATE.WAIT)
@@ -309,8 +332,6 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 				
 			if !is_on_floor() && !jumping: #  # if not on floor, fall down TODO
 				_set_state(STATE.FLY)
-			
-			#move_and_slide() # move
 			
 		STATE.FLY: 
 			x_move() # move on x axis
@@ -327,11 +348,7 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 					apply_gravity(get_current_gravity() * propulsion_down_force, delta)
 				else:
 					apply_gravity(get_current_gravity(), delta) # else apply gravity
-				 
-			#move_and_slide() # move
-			
-		STATE.DASH: # jump action, come with inputs system
-			pass
+
 #endregion
 #endregion
 
@@ -354,6 +371,9 @@ func set_camera(object):
 func reset_jump():
 	current_jump = JUMP.NO
 	
+func reset_dash():
+	current_dash = DASH.NO
+	
 func perform_jump(coef: float): # func to do a jump
 	exit_fall = false # reset exit fall
 	stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
@@ -363,6 +383,14 @@ func perform_jump(coef: float): # func to do a jump
 	velocity.y = jump_velocity * coef # apply jump
 	jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
 
+func perform_dash():
+	play_animation("before_dash")
+	before_dash_finish = false
+	before_dash_timer.start()
+	while before_dash_finish != true:
+		print("PRESS INPUTS")
+	#velocity = vector2().normalized() × speed
+	
 func jump_update(delta): # basic func wich control jump int state update 
 	x_move() # move on x axis with inputs
 	can_jump() # jump action, come with inputs system
@@ -377,8 +405,6 @@ func jump_update(delta): # basic func wich control jump int state update
 			apply_gravity(get_current_gravity() * propulsion_down_force, delta)
 		else:
 			apply_gravity(get_current_gravity(), delta) # else apply gravity
-			
-	#move_and_slide() # move
 
 func can_jump(): # TODO
 	if !want_to_jump:
@@ -453,7 +479,14 @@ func play_animation(animation: String): # play animation
 				sprites.play("dash_2")
 					
 func can_dash(): # TODO
-	pass
+	if !want_to_dash:
+		return false
+	else:
+		if current_dash == DASH.NO:
+			_set_state(STATE.DASH)
+		elif current_dash == DASH.DASH:
+			_set_state(STATE.DASH_2)
+
 				
 func get_current_gravity() -> float: # return gravity
 	return jump_gravity if velocity.y < 0.0 else fall_gravity # if player's velocity < 0, it means that player is jumping so return jump gravity

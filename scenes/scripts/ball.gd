@@ -8,19 +8,15 @@ var is_on_area_propulsion = false
 
 func _physics_process(delta: float) -> void:
 	if abs(linear_velocity.y) > max_speed:
-		
 		linear_velocity = linear_velocity.normalized() * max_speed
-
 		
 	if linear_velocity.length() < stop_threshold && is_on_area_propulsion:
-		print("TRUUUUUUUUUUE")
 		apply_central_impulse(Vector2.UP * propulsion_force)
 	
 
 func _on_ball_area_area_entered(area: Area2D) -> void:
 	if area.is_in_group("propulsion"):
 		is_on_area_propulsion = true
-
 
 func _on_ball_area_area_exited(area: Area2D) -> void:
 	if area.is_in_group("propulsion"):

@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c8qw1gilu5mue" path="res://assets/levels/lights/circle_light_1.tres" id="3_2pyro"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4mlqk"]
-friction = 0.5
+rough = true
 bounce = 10.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vfq42"]
@@ -24,7 +24,7 @@ mass = 0.1
 physics_material_override = SubResource("PhysicsMaterial_4mlqk")
 gravity_scale = 2.0
 center_of_mass_mode = 1
-inertia = 5.0
+inertia = 1.0
 contact_monitor = true
 max_contacts_reported = 100
 script = ExtResource("1_hje8c")
