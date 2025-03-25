@@ -596,7 +596,7 @@ texture = SubResource("GradientTexture2D_28ewj")
 [node name="Light_spawn_ball" type="PointLight2D" parent="Spawn"]
 position = Vector2(0, -272)
 enabled = false
-energy = 0.1
+energy = 0.2
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
 shadow_filter_smooth = 0.5

@@ -5,11 +5,11 @@
 [ext_resource type="Texture2D" uid="uid://c8qw1gilu5mue" path="res://assets/levels/lights/circle_light_1.tres" id="3_2pyro"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4mlqk"]
-friction = 0.0
-bounce = 2.0
+friction = 0.5
+bounce = 10.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vfq42"]
-radius = 27.0
+radius = 28.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cxlvu"]
 radius = 35.0
@@ -20,13 +20,13 @@ polygon = PackedVector2Array(-12, -28, -12, -20, -20, -20, -20, -12, -28, -12, -
 [node name="Ball" type="RigidBody2D"]
 collision_layer = 2
 collision_mask = 9
-mass = 0.75
+mass = 0.1
 physics_material_override = SubResource("PhysicsMaterial_4mlqk")
 gravity_scale = 2.0
-lock_rotation = true
+center_of_mass_mode = 1
+inertia = 5.0
 contact_monitor = true
 max_contacts_reported = 100
-constant_force = Vector2(0, -0.5)
 script = ExtResource("1_hje8c")
 
 [node name="Sprite" type="Sprite2D" parent="."]
