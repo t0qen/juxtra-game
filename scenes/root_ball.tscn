@@ -18,6 +18,7 @@ radius = 35.0
 polygon = PackedVector2Array(-12, -28, -12, -20, -20, -20, -20, -12, -28, -12, -28, 12, -20, 12, -20, 20, -12, 20, -12, 28, 12, 28, 12, 20, 20, 20, 20, 12, 28, 12, 28, -12, 20, -12, 20, -20, 12, -20, 12, -28)
 
 [node name="Ball" type="RigidBody2D"]
+disable_mode = 1
 collision_layer = 2
 collision_mask = 9
 mass = 0.1
@@ -25,6 +26,7 @@ physics_material_override = SubResource("PhysicsMaterial_4mlqk")
 gravity_scale = 2.0
 center_of_mass_mode = 1
 inertia = 1.0
+can_sleep = false
 contact_monitor = true
 max_contacts_reported = 100
 script = ExtResource("1_hje8c")
@@ -36,7 +38,7 @@ texture = ExtResource("2_2pyro")
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_vfq42")
-debug_color = Color(0.439216, 0.580392, 0.423529, 0.329412)
+debug_color = Color(0.774837, 0.356876, 0.670667, 0.329412)
 
 [node name="Ball_area" type="Area2D" parent="." groups=["ball"]]
 
