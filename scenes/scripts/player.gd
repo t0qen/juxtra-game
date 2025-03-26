@@ -54,8 +54,8 @@ enum DASH {
 	DASH,
 	DASH_2
 }
-var current_dash = DASH.DASH
-
+var current_dash = DASH.NO
+var dash_direction : Vector2 = Vector2.UP
 #endregion
 
 #region CAMERA
@@ -87,11 +87,11 @@ var camera_set = false
 @export_group("Nodes")
 # - TIMERS
 @export_subgroup("Timers")
+@export var dash_timer_levitation : Timer
 @export var exit_idle_timer : Timer # cooldown before switch to idle to sleep state
 @export var exit_fall_timer : Timer # cooldown to play fall animation before enter state wait
 @export var exit_wait_timer : Timer # cooldown before switch to wait to idle state 
 @export var jump_bug_timer : Timer # little delay after apply jump to prevent bug
-@export var before_dash_timer : Timer
 
 # - OTHERS
 @export_subgroup("Others")
@@ -119,6 +119,7 @@ var jumping : bool = false # bool to know if player is jumping
 var exit_wait : bool = false # bool to store the end of timer
 var exit_idle : bool = false # same for idle
 var exit_fall : bool = false # same for fall
+var dash_levitation : bool = false
 var before_dash_finish : bool = false
 #endregion
 
@@ -126,7 +127,6 @@ var before_dash_finish : bool = false
 var want_to_jump : bool = false # a bool to know if player want to jump
 var direction : int = 0 # the direction of player, may a Vector2 ? consider jump as direction ? TODO
 var want_to_dash : bool = false # same for dash 
-var dash_dir : Vector2 # dash direction
 var propulsion_down : bool = false # a bool to know if player want to be propulsed down
 
 #endregion
@@ -152,8 +152,7 @@ func _ready() -> void:
 		
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	#Engine.time_scale = 0.1
-	
-	
+	can_dash()
 	get_inputs() # first gedzsxqt inputs	
 	_update_state(delta) # update the behavior of current state
 	move_and_slide()
@@ -164,15 +163,11 @@ func get_inputs(): # essential function to get player inputs, depend on wich pla
 		direction = Input.get_axis("move_left_1", "move_right_1") # int to get axis : -1 / 0 / 1
 		want_to_dash = Input.is_action_just_pressed("dash_1")
 		propulsion_down = Input.is_action_pressed("down_1")
-		dash_dir.x = Input.get_axis("move_left_1", "move_right_1")
-		dash_dir.y = Input.get_axis("jump_1", "down_1")
 	elif current_player == 2:
 		want_to_jump = Input.is_action_just_pressed("jump_2") # bool to jump
 		direction = Input.get_axis("move_left_2", "move_right_2") # int to get axis : -1 / 0 / 1
 		want_to_dash = Input.is_action_just_pressed("dash_2")
 		propulsion_down = Input.is_action_pressed("down_2")
-		dash_dir.x = Input.get_axis("move_left_2", "move_right_2")
-		dash_dir.y = Input.get_axis("jump_2", "down_2")
 	else:
 		print("Error l. 147 : Unknow player")
 #endregion	
@@ -189,12 +184,14 @@ func _set_state(new_state: STATE) -> void: # simple function to change player's 
 func _enter_state() -> void: # enter transition, basiclly we play animations
 	match current_state:
 		STATE.IDLE:
+			
 			play_animation("idle")
 			exit_idle_timer.start() # start timer, after end, set exit_idle to true
 			
 		STATE.WAIT:
 			
 			reset_jump()
+			reset_dash()
 			if !exit_fall: # if player wasn't falling before
 				play_animation("wait") # play basic animation
 			else: # if player was landng before, after jump or fly, play first exit fall animation
@@ -208,6 +205,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 
 		STATE.RUN: 
 			reset_jump()
+			reset_dash()
 			exit_fall = false # reset exit fall
 			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
 			current_speed = base_speed # set on ground speed
@@ -283,10 +281,10 @@ func _exit_state() -> void: # exit transition, nothing really important
 func _update_state(delta: float) -> void:  # every behavior of each states updated every physics process
 	match current_state:
 		STATE.DASH:
-			pass
+			dash_update()
 			
 		STATE.DASH_2:
-			pass
+			dash_update()
 			
 		STATE.JUMP: 
 			jump_update(delta)
@@ -361,7 +359,6 @@ func stop_camera_shake():
 	
 func camera_shake(intensity : float, duration : float, direction : Vector2):
 	if enable_camera_effects:
-		print("Camera shake")
 		camera.shake(intensity, duration, direction)
 	
 func set_camera(object):
@@ -382,14 +379,6 @@ func perform_jump(coef: float): # func to do a jump
 	play_animation("jump")
 	velocity.y = jump_velocity * coef # apply jump
 	jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
-
-func perform_dash():
-	play_animation("before_dash")
-	before_dash_finish = false
-	before_dash_timer.start()
-	while before_dash_finish != true:
-		print("PRESS INPUTS")
-	#velocity = vector2().normalized() × speed
 	
 func jump_update(delta): # basic func wich control jump int state update 
 	x_move() # move on x axis with inputs
@@ -477,7 +466,33 @@ func play_animation(animation: String): # play animation
 				sprites.play("before_dash_2")
 			"dash":
 				sprites.play("dash_2")
-					
+
+func dash_update():
+	print("UPDATE DASH")
+	can_jump()
+	can_dash()
+	if dash_levitation:
+		print("switch dash")
+		_set_state(STATE.WAIT)
+	if is_on_floor():
+		print("switch dash")
+		_set_state(STATE.WAIT)
+		
+func get_dash_inputs():
+	if current_player == 1:
+		dash_direction.x = Input.get_axis("move_left_1", "move_right_1")
+		dash_direction.y = Input.get_axis("jump_1", "down_1")
+		#dash_direction = Input.get_vector("move_left_1", "move_right_1", "jump_1", "down_1")
+	elif current_player == 2:
+		dash_direction.x = Input.get_axis("move_left_2", "move_right_2")
+		dash_direction.y = Input.get_axis("jump_2", "down_2")
+		#dash_direction = Input.get_vector("move_left_2", "move_right_2", "jump_2", "down_2")
+	print(dash_direction)
+	if dash_direction == Vector2.ZERO:
+		return false
+	else:
+		return dash_direction 
+	
 func can_dash(): # TODO
 	if !want_to_dash:
 		return false
@@ -486,8 +501,25 @@ func can_dash(): # TODO
 			_set_state(STATE.DASH)
 		elif current_dash == DASH.DASH:
 			_set_state(STATE.DASH_2)
+			
 
-				
+func perform_dash():
+	play_animation("before_dash")
+	print("DASH")
+	var current_dir = get_dash_inputs()
+	print("getting inputs")
+	while !current_dir:
+		current_dir = get_dash_inputs()
+		await get_tree().create_timer(0.05).timeout
+	print("propulse player")
+	play_animation("dash")
+	velocity.y = current_dir.y*500
+	velocity.x = current_dir.x*1500
+	move_and_slide()
+	print("DELAY")
+	dash_levitation = false
+	dash_timer_levitation.start()
+	
 func get_current_gravity() -> float: # return gravity
 	return jump_gravity if velocity.y < 0.0 else fall_gravity # if player's velocity < 0, it means that player is jumping so return jump gravity
 
@@ -523,8 +555,8 @@ func _on_exit_fall_timeout() -> void: # called when this timer is finish, it las
 	
 func _on_jump_bug_timeout() -> void: # prevent bugs
 	jumping = false
-	
-func _on_before_dash_timeout() -> void:
-	before_dash_finish = true
+
+func _on_dash_timer_levitation_timeout() -> void:
+	dash_levitation = true
 #endregion
 #endregion

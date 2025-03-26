@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://ux1l01a7iemk"]
+[gd_scene load_steps=69 format=3 uid="uid://ux1l01a7iemk"]
 
 [ext_resource type="Script" uid="uid://e4s2rjoh7grb" path="res://scenes/scripts/player.gd" id="1_0xtnp"]
 [ext_resource type="LabelSettings" uid="uid://dx4bh28wguv82" path="res://assets/fonts/pixel_config_2.tres" id="2_qlg0r"]
@@ -6,20 +6,24 @@
 [ext_resource type="Texture2D" uid="uid://5il8xp6hdywr" path="res://assets/players/player1.png" id="5_ryfuf"]
 [ext_resource type="Texture2D" uid="uid://c8qw1gilu5mue" path="res://assets/levels/lights/circle_light_1.tres" id="6_tuyoq"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qn5qx"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_qlg0r"]
 atlas = ExtResource("5_ryfuf")
-region = Rect2(192, 160, 32, 32)
+region = Rect2(160, 288, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dx6o1"]
 region = Rect2(224, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
+atlas = ExtResource("5_ry10l")
+region = Rect2(128, 128, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_085vx"]
 atlas = ExtResource("5_ryfuf")
 region = Rect2(224, 160, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qhqgy"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjrip"]
 atlas = ExtResource("5_ry10l")
-region = Rect2(192, 64, 32, 32)
+region = Rect2(32, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8m7ct"]
 atlas = ExtResource("5_ryfuf")
@@ -237,7 +241,7 @@ region = Rect2(128, 0, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qn5qx")
+"texture": SubResource("AtlasTexture_qlg0r")
 }],
 "loop": true,
 "name": &"before_dash_1",
@@ -246,6 +250,9 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dx6o1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tuyoq")
 }],
 "loop": true,
 "name": &"before_dash_2",
@@ -261,7 +268,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qhqgy")
+"texture": SubResource("AtlasTexture_fjrip")
 }],
 "loop": true,
 "name": &"dash_2",
@@ -511,7 +518,7 @@ height = 48.0
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_qlg0r"]
 polygon = PackedVector2Array(-3, -10, 3, -10, 6, -12, 6, -16, -6, -16, -6, -12)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "before_dash_timer", "sprites")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("dash_timer_levitation", "exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "sprites")]
 top_level = true
 collision_mask = 15
 slide_on_ceiling = false
@@ -520,11 +527,11 @@ platform_floor_layers = 4294901768
 script = ExtResource("1_0xtnp")
 base_speed = 175
 air_speed = 220
+dash_timer_levitation = NodePath("Timers/Dash_timer_levitation")
 exit_idle_timer = NodePath("Timers/Exit_idle")
 exit_fall_timer = NodePath("Timers/Exit_fall")
 exit_wait_timer = NodePath("Timers/Exit_wait")
 jump_bug_timer = NodePath("Timers/Jump_bug")
-before_dash_timer = NodePath("Timers/Before_dash")
 sprites = NodePath("Sprites")
 
 [node name="Player1Text" type="Label" parent="."]
@@ -595,12 +602,13 @@ process_callback = 0
 wait_time = 0.1
 one_shot = true
 
-[node name="Before_dash" type="Timer" parent="Timers"]
+[node name="Dash_timer_levitation" type="Timer" parent="Timers"]
 process_callback = 0
-wait_time = 2.5
+wait_time = 1.5
 one_shot = true
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+visible = false
 occluder = SubResource("OccluderPolygon2D_qlg0r")
 occluder_light_mask = 2
 
@@ -622,4 +630,4 @@ texture_scale = 2.0
 [connection signal="timeout" from="Timers/Exit_fall" to="." method="_on_exit_fall_timeout"]
 [connection signal="timeout" from="Timers/Exit_wait" to="." method="_on_exit_wait_timeout"]
 [connection signal="timeout" from="Timers/Jump_bug" to="." method="_on_jump_bug_timeout"]
-[connection signal="timeout" from="Timers/Before_dash" to="." method="_on_before_dash_timeout"]
+[connection signal="timeout" from="Timers/Dash_timer_levitation" to="." method="_on_dash_timer_levitation_timeout"]
