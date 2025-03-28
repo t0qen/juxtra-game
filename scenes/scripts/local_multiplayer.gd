@@ -1,8 +1,15 @@
 extends Node2D
+
+#region VARIABLES
+
+# - GAME MODE
 enum game_mode {
 	LOCAL,
 	MULTI
 }
+var current_game_mode : game_mode
+
+# - TIMERS
 @export var tab_timer : Timer
 var tab_timer_finished : bool = false
 @export var score_timer : Timer
@@ -11,6 +18,16 @@ var score_timer_finished : bool = false
 @export var light_effect_goals_timer : Timer
 @export var light_effect_timer_ball : Timer
 
+# - IMPORTED SCENES
+var ball = preload("res://scenes/ball.tscn")
+var player = preload("res://scenes/player.tscn")
+var camera = preload("res://scenes/camera.tscn")
+var current_ball = null
+var current_camera = null
+var player_1 = null
+var player_2 = null
+
+# - NODES FROM SCENES
 @onready var respawn_ball_point = $Spawn/RespawnPoint
 @onready var player_2_spawn: Marker2D = $"Spawn/Player 2 spawn"
 @onready var player_1_spawn: Marker2D = $"Spawn/Player 1 spawn"
@@ -23,27 +40,22 @@ var score_timer_finished : bool = false
 @onready var light_spawn_ball: PointLight2D = $Spawn/Light_spawn_ball
 @onready var movements_text: Label = $UI/Movements
 
-# Goal camera effect
+# - CAMERA EFFECTS
+# Goals
 @export var goal_intensity : float = 0.7
 @export var goal_duration : float = 1.5
 @export var goal_direction : Vector2 = Vector2(1, 0)
 
-var current_game_mode : game_mode
-var ball = preload("res://scenes/ball.tscn")
-var player = preload("res://scenes/player.tscn")
-var camera = preload("res://scenes/camera.tscn")
-var current_ball = null
-var current_camera = null
-var player_1
-var player_2
+# - SCORES
 var player_1_score : int = 0
 var player_2_score : int = 0
+#endregion
 
 func _ready() -> void:
 	hide_score()
-	
 	spawn_ball()
 	spawn_camera()
+	
 	if current_game_mode == game_mode.LOCAL:
 		initalize_local()
 	elif current_game_mode == game_mode.MULTI:
@@ -52,6 +64,7 @@ func _ready() -> void:
 		print("error no initialize game mode : no game mode")	
 	
 	intro_text_timer.start()
+	
 	player_1.player_1_text.hide()
 	player_2.player_2_text.hide()
 	
@@ -67,12 +80,36 @@ func _process(delta: float) -> void:
 		player_1_score_text.hide()
 		player_1.player_1_text.hide()
 		player_2.player_2_text.hide()
+	
+# - GAME MODES / INITIALISATIONS 
+func set_game_mode(mode : game_mode):
+	current_game_mode = mode
+
+func initalize_local():
+	initialize_local_players()
+
+func initialize_multi():
+	pass
 		
+func initialize_local_players():
+	# Initialize player 1
+	player_1 = player.instantiate()
+	player_1.set_camera(current_camera)
+	player_1.set_player_1()
+	player_1.global_position = player_1_spawn.global_position
+	add_child(player_1)
+	
+	# Initialize player 2
+	player_2 = player.instantiate()
+	player_2.set_camera(current_camera)
+	player_2.set_player_2()
+	player_2.global_position = player_2_spawn.global_position
+	add_child(player_2)
+	
 func spawn_camera():
 	current_camera = camera.instantiate()
 	current_camera.global_position = camera_spawn.global_position
 	add_child(current_camera)
-	
 	
 func spawn_ball():
 	light_spawn_ball.enabled = true
@@ -80,6 +117,7 @@ func spawn_ball():
 	current_ball = ball.instantiate()
 	current_ball.global_position = respawn_ball_point.global_position
 	add_child(current_ball)
+
 
 func _on_goal_2_area_entered(area: Area2D) -> void:
 	if area.is_in_group("ball"):
@@ -105,9 +143,6 @@ func _on_goal_area_entered(area: Area2D) -> void:
 		
 		light_effect_goals_timer.start()
 		
-func set_game_mode(mode : game_mode):
-	current_game_mode = mode
-	
 func update_score():
 	player_1_score_text.text = str(player_1_score)
 	player_2_score_text.text = str(player_2_score)
@@ -120,34 +155,13 @@ func hide_score():
 	player_1_score_text.hide()
 	player_2_score_text.hide()
 	
-func initialize_local_players():
-	print("initialize player 1")
-	player_1 = player.instantiate()
-	player_1.set_camera(current_camera)
-	player_1.set_player_1()
-	player_1.global_position = player_1_spawn.global_position
-	add_child(player_1)
-	
-	print("initialize player 2")
-	player_2 = player.instantiate()
-	player_2.set_camera(current_camera)
-	player_2.set_player_2()
-	player_2.global_position = player_2_spawn.global_position
-	add_child(player_2)
-	
-func initalize_local():
-	initialize_local_players()
-
-func initialize_multi():
-	pass
-
 func respawn_players():
 	player_1.global_position = player_1_spawn.global_position
 	player_1.sprites.flip_h = false
 	player_2.global_position = player_2_spawn.global_position
 	player_2.sprites.flip_h = true
 
-
+# - TIMERS
 func _on_tab_timer_timeout() -> void:
 	tab_timer_finished = true
 

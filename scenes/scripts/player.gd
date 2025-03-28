@@ -1,7 +1,7 @@
 extends CharacterBody2D
 class_name Player
-#zsa
-#region VARIABLES  -
+
+#region VARIABLES  
 @export_group("Global")
 @export var current_player : int  # wich player this script is for, can be changed by other script via func
 var player_set : bool = false
