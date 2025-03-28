@@ -559,7 +559,8 @@ texture_filter = 1
 position = Vector2(0, -32)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_wb510")
-animation = &"dash_2"
+animation = &"before_dash_1"
+frame_progress = 0.149096
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -12)

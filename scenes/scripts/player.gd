@@ -515,7 +515,6 @@ func perform_dash():
 	play_animation("dash")
 	velocity.y = current_dir.y*500
 	velocity.x = current_dir.x*1500
-	move_and_slide()
 	print("DELAY")
 	dash_levitation = false
 	dash_timer_levitation.start()
