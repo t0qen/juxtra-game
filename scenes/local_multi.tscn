@@ -1,8 +1,8 @@
 [gd_scene load_steps=41 format=4 uid="uid://bi3ja6q2d0edq"]
 
 [ext_resource type="Script" uid="uid://bkipvw42ochei" path="res://scenes/scripts/local_multiplayer.gd" id="1_p8ruy"]
-[ext_resource type="Texture2D" path="res://assets/levels/tileset/clouds.png" id="2_evb6e"]
-[ext_resource type="Texture2D" path="res://assets/levels/tileset/shadows.png" id="3_0kpru"]
+[ext_resource type="Texture2D" uid="uid://bdkfqpm45vsng" path="res://assets/levels/tileset/clouds.png" id="2_evb6e"]
+[ext_resource type="Texture2D" uid="uid://r8nku622d1jt" path="res://assets/levels/tileset/shadows.png" id="3_0kpru"]
 [ext_resource type="Texture2D" uid="uid://dyu4wu4qev4c5" path="res://assets/levels/tileset/custom.png" id="4_28ewj"]
 [ext_resource type="PackedScene" uid="uid://beenxjvyp6tpg" path="res://scenes/goal.tscn" id="5_3q71m"]
 [ext_resource type="LabelSettings" uid="uid://bpp5j7r27avit" path="res://assets/fonts/pixel_config_1.tres" id="6_evb6e"]
@@ -607,10 +607,10 @@ texture = SubResource("GradientTexture2D_mecpo")
 position = Vector2(0, -419)
 
 [node name="Player 1 spawn" type="Marker2D" parent="Spawn"]
-position = Vector2(-288, -32)
+position = Vector2(-128, 0)
 
 [node name="Player 2 spawn" type="Marker2D" parent="Spawn"]
-position = Vector2(288, -32)
+position = Vector2(129, 1)
 
 [node name="Camera_spawn" type="Marker2D" parent="Spawn"]
 position = Vector2(0, -145)

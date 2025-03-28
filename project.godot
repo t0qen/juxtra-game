@@ -112,6 +112,7 @@ tab={
 [physics]
 
 2d/default_gravity=100.0
+2d/default_linear_damp=0.1
 
 [rendering]
 

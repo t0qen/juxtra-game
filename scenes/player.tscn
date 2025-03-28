@@ -4,7 +4,7 @@
 [ext_resource type="LabelSettings" uid="uid://dx4bh28wguv82" path="res://assets/fonts/pixel_config_2.tres" id="2_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://brwkshkxnswr5" path="res://assets/players/player2.png" id="5_ry10l"]
 [ext_resource type="Texture2D" uid="uid://5il8xp6hdywr" path="res://assets/players/player1.png" id="5_ryfuf"]
-[ext_resource type="Texture2D" path="res://assets/levels/lights/circle_light_1.tres" id="6_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://c8qw1gilu5mue" path="res://assets/circle_light_1.tres" id="6_tuyoq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qlg0r"]
 atlas = ExtResource("5_ryfuf")

@@ -10,8 +10,8 @@ func _physics_process(delta: float) -> void:
 	if abs(linear_velocity.y) > max_speed:
 		linear_velocity = linear_velocity.normalized() * max_speed
 		
-	if linear_velocity.length() < stop_threshold && is_on_area_propulsion:
-		apply_central_impulse(Vector2.UP * propulsion_force)
+	#if linear_velocity.length() < stop_threshold && is_on_area_propulsion:
+		#apply_central_impulse(Vector2.UP * propulsion_force)
 	
 
 func _on_ball_area_area_entered(area: Area2D) -> void:

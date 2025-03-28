@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://dpaqd6t3peivi" path="res://scenes/scripts/ball.gd" id="1_hje8c"]
 [ext_resource type="Texture2D" uid="uid://gqamadderlwg" path="res://assets/levels/objects/ball.png" id="2_2pyro"]
-[ext_resource type="Texture2D" path="res://assets/levels/lights/circle_light_1.tres" id="3_2pyro"]
+[ext_resource type="Texture2D" uid="uid://c8qw1gilu5mue" path="res://assets/circle_light_1.tres" id="3_2pyro"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4mlqk"]
-rough = true
-bounce = 0.8
+friction = 0.5
+bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vfq42"]
 radius = 28.0
@@ -23,14 +23,12 @@ collision_layer = 2
 collision_mask = 9
 mass = 0.1
 physics_material_override = SubResource("PhysicsMaterial_4mlqk")
-gravity_scale = 2.0
 center_of_mass_mode = 1
 inertia = 1.0
 can_sleep = false
 contact_monitor = true
 max_contacts_reported = 100
 linear_damp_mode = 1
-angular_damp_mode = 1
 script = ExtResource("1_hje8c")
 
 [node name="Sprite" type="Sprite2D" parent="."]
