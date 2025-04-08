@@ -1,0 +1,111 @@
+[gd_scene load_steps=10 format=3 uid="uid://djd1mq3ot48xw"]
+
+[ext_resource type="Script" uid="uid://cfseqshiju1j5" path="res://data/scripts/multiplayer_level.gd" id="1_lpglf"]
+[ext_resource type="PackedScene" uid="uid://dyvd2cue15rb6" path="res://data/scenes/camera.tscn" id="2_i4smc"]
+[ext_resource type="PackedScene" uid="uid://pqwlje75yaq6" path="res://data/scenes/player.tscn" id="2_tyoci"]
+
+[sub_resource type="TileSet" id="TileSet_5bmcu"]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 6
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tyoci"]
+friction = 0.0
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_kd03d"]
+a = Vector2(-579, 323)
+b = Vector2(576, 328)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ciff6"]
+a = Vector2(578, 328)
+b = Vector2(579, -333)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_5bmcu"]
+a = Vector2(-577, 326)
+b = Vector2(-577, -326)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_dvgjj"]
+a = Vector2(579, -329)
+b = Vector2(-579, -319)
+
+[node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
+position = Vector2(0, -62)
+script = ExtResource("1_lpglf")
+after_goal_timer = NodePath("timers/after_goal")
+player_1_spawn = NodePath("markers/player_1_spawn")
+player_2_spawn = NodePath("markers/player_2_spawn")
+ball_spawn = NodePath("markers/ball_spawn")
+player_1 = NodePath("players/player_1")
+player_2 = NodePath("players/player_2")
+camera = NodePath("camera")
+
+[node name="level" type="Node2D" parent="."]
+
+[node name="map" type="TileMapLayer" parent="level"]
+tile_set = SubResource("TileSet_5bmcu")
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="light_effects" type="Node2D" parent="."]
+
+[node name="markers" type="Node2D" parent="."]
+
+[node name="player_1_spawn" type="Marker2D" parent="markers"]
+position = Vector2(-64, 0)
+
+[node name="player_2_spawn" type="Marker2D" parent="markers"]
+position = Vector2(64, 0)
+
+[node name="ball_spawn" type="Marker2D" parent="markers"]
+position = Vector2(0, -64)
+
+[node name="players" type="Node2D" parent="."]
+
+[node name="player_1" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
+position = Vector2(-64, 0)
+platform_on_leave = 2
+current_player = 1
+camera = NodePath("../../camera")
+
+[node name="player_2" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
+position = Vector2(64, 0)
+current_player = 2
+camera = NodePath("../../camera")
+
+[node name="goals" type="Node2D" parent="."]
+
+[node name="goal_1" type="Area2D" parent="goals"]
+
+[node name="hitbox" type="CollisionShape2D" parent="goals/goal_1"]
+
+[node name="goal_2" type="Area2D" parent="goals"]
+
+[node name="hitbox" type="CollisionShape2D" parent="goals/goal_2"]
+
+[node name="timers" type="Node2D" parent="."]
+
+[node name="after_goal" type="Timer" parent="timers"]
+wait_time = 3.0
+one_shot = true
+
+[node name="camera" parent="." instance=ExtResource("2_i4smc")]
+zoom = Vector2(0.5, 0.5)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_mask = 6
+physics_material_override = SubResource("PhysicsMaterial_tyoci")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("SegmentShape2D_kd03d")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("SegmentShape2D_ciff6")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("SegmentShape2D_5bmcu")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("SegmentShape2D_dvgjj")
+
+[connection signal="area_entered" from="goals/goal_1" to="." method="_on_goal_1_area_entered"]
+[connection signal="area_entered" from="goals/goal_2" to="." method="_on_goal_2_area_entered"]
+[connection signal="timeout" from="timers/after_goal" to="." method="_on_after_goal_timeout"]

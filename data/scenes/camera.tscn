@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyvd2cue15rb6"]
+
+[ext_resource type="Script" uid="uid://cax8hgl5bpdu3" path="res://data/scripts/camera.gd" id="1_hwait"]
+
+[node name="camera" type="Camera2D"]
+ignore_rotation = false
+script = ExtResource("1_hwait")

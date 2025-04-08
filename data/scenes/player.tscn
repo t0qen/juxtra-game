@@ -1,0 +1,69 @@
+[gd_scene load_steps=5 format=3 uid="uid://pqwlje75yaq6"]
+
+[ext_resource type="Script" uid="uid://1gg2l1ekrokj" path="res://data/scripts/player.gd" id="1_glcv3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_glcv3"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_glcv3"]
+radius = 13.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q3att"]
+radius = 8.0
+height = 22.0
+
+[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "sprites")]
+collision_layer = 2
+collision_mask = 11
+script = ExtResource("1_glcv3")
+gravity = 900
+base_speed = 400
+air_speed = 400
+jump_time_to_peak = 0.4
+jump_time_to_fall = 0.2
+push_force = 0.5
+exit_idle_timer = NodePath("timers/exit_idle")
+exit_fall_timer = NodePath("timers/exit_fall")
+exit_wait_timer = NodePath("timers/exit_wait")
+jump_bug_timer = NodePath("timers/jump_bug")
+sprites = NodePath("sprites")
+
+[node name="sprites" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_glcv3")
+
+[node name="area" type="Area2D" parent="."]
+position = Vector2(0, 1)
+
+[node name="hitbox" type="CollisionShape2D" parent="area"]
+position = Vector2(0, -1)
+shape = SubResource("CapsuleShape2D_glcv3")
+debug_color = Color(0.332806, 0.598795, 0.487301, 0.42)
+
+[node name="hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_q3att")
+debug_color = Color(0.538728, 0.423956, 0.963859, 0.42)
+
+[node name="timers" type="Node2D" parent="."]
+
+[node name="exit_idle" type="Timer" parent="timers"]
+process_callback = 0
+wait_time = 5.0
+one_shot = true
+
+[node name="exit_fall" type="Timer" parent="timers"]
+process_callback = 0
+one_shot = true
+
+[node name="exit_wait" type="Timer" parent="timers"]
+process_callback = 0
+wait_time = 2.0
+one_shot = true
+
+[node name="jump_bug" type="Timer" parent="timers"]
+process_callback = 0
+wait_time = 0.1
+
+[connection signal="area_entered" from="area" to="." method="_on_area_area_entered"]
+[connection signal="timeout" from="timers/exit_idle" to="." method="_on_exit_idle_timeout"]
+[connection signal="timeout" from="timers/exit_fall" to="." method="_on_exit_fall_timeout"]
+[connection signal="timeout" from="timers/exit_wait" to="." method="_on_exit_wait_timeout"]
+[connection signal="timeout" from="timers/jump_bug" to="." method="_on_jump_bug_timeout"]
