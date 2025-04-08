@@ -7,25 +7,22 @@
 [sub_resource type="TileSet" id="TileSet_5bmcu"]
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 6
+physics_layer_0/collision_priority = 3.0
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tyoci"]
 friction = 0.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_kd03d"]
-a = Vector2(-579, 323)
-b = Vector2(576, 328)
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tyoci"]
+distance = -319.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_ciff6"]
-a = Vector2(578, 328)
-b = Vector2(579, -333)
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5bmcu"]
+distance = -594.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_5bmcu"]
-a = Vector2(-577, 326)
-b = Vector2(-577, -326)
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kd03d"]
+distance = -636.0
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_dvgjj"]
-a = Vector2(579, -329)
-b = Vector2(-579, -319)
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ciff6"]
+distance = -322.0
 
 [node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
 position = Vector2(0, -62)
@@ -95,16 +92,19 @@ collision_mask = 6
 physics_material_override = SubResource("PhysicsMaterial_tyoci")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("SegmentShape2D_kd03d")
+shape = SubResource("WorldBoundaryShape2D_tyoci")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("SegmentShape2D_ciff6")
+rotation = -1.5708
+shape = SubResource("WorldBoundaryShape2D_5bmcu")
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("SegmentShape2D_5bmcu")
+rotation = 1.5708
+shape = SubResource("WorldBoundaryShape2D_kd03d")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("SegmentShape2D_dvgjj")
+rotation = 3.14159
+shape = SubResource("WorldBoundaryShape2D_ciff6")
 
 [connection signal="area_entered" from="goals/goal_1" to="." method="_on_goal_1_area_entered"]
 [connection signal="area_entered" from="goals/goal_2" to="." method="_on_goal_2_area_entered"]

@@ -3,7 +3,7 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k3ts2"]
 friction = 0.0
 rough = true
-bounce = 100.0
+bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_k3ts2"]
 radius = 27.074
@@ -16,9 +16,9 @@ radius = 40.3113
 [node name="root_ball" type="RigidBody2D" parent="." groups=["ball"]]
 collision_layer = 8
 collision_mask = 7
-mass = 0.001
+collision_priority = 10.0
 physics_material_override = SubResource("PhysicsMaterial_k3ts2")
-gravity_scale = 0.6
+gravity_scale = 0.3
 inertia = 0.01
 linear_damp_mode = 1
 angular_damp_mode = 1

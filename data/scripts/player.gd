@@ -22,12 +22,8 @@ var current_speed : float = base_speed # store the current speed
 @export var jump_time_to_peak : float = 0.25 # time to peak
 @export var jump_time_to_fall : float = 0.15 # time to fall
 
-# maths
-var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
-var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
-var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
-
 # cutsom per jumps forces
+@export_subgroup("Jump forces")
 @export var jump_1_force : float = 1.5
 @export var jump_2_force : float = 2.0
 @export var jump_3_force : float = 1.75
@@ -44,14 +40,20 @@ enum JUMP { # all jumps
 }
 var current_jump = JUMP.JUMP # store the current what jump player is actually perform
 
+# jump math, will be calculated every frame
+var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
+var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
+var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
+	
 # - DASH
 @export_group("Dash")
-# TODO
+@export var dash_speed : int = 1600 # speed of a dash
 #endregion
 
 @export_group("Custom collisions")
 # - CUTSOM COLLOSIONS
 @export var push_force : float = 50
+@export var push_speed_divid : float = 100
 
 #region CAMERA
 # - CAMERA
@@ -119,19 +121,26 @@ func _ready() -> void:
 	else:
 		sprites.flip_h = true # flip player 2 sprite 
 		
+
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	#Engine.time_scale = 0.1
+	
+	# jump maths, calculated every frame, for debug only
+	jump_velocity = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
+	jump_gravity = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
+	fall_gravity = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
 	
 	get_inputs() # get players inputs	
 	_update_state(delta) # update the behavior of current state
 
-	
 	move_and_slide()
 	
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
 		if c.get_collider() is RigidBody2D:
-			c.get_collider().apply_central_impulse(-c.get_normal() * push_force)
+			print("NOMRAL : ", -c.get_normal() * push_force)
+			print("AFTER : ", -c.get_normal() * (push_force * (current_speed / push_speed_divid)))
+			c.get_collider().apply_central_impulse(-c.get_normal() * (push_force * (current_speed / push_speed_divid)))
 
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
 	if current_player == 1: # if current player is 1 get input with player's 1 inputs
