@@ -14,6 +14,7 @@ height = 22.0
 [node name="player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "sprites")]
 collision_layer = 2
 collision_mask = 11
+platform_on_leave = 2
 script = ExtResource("1_glcv3")
 gravity = 900
 base_speed = 400
@@ -21,10 +22,7 @@ air_speed = 400
 jump_height = 150.0
 jump_time_to_peak = 0.5
 jump_time_to_fall = 0.3
-jump_1_force = 1.0
-jump_2_force = 1.0
-jump_3_force = 1.0
-jump_4_force = 1.0
+max_jumps = 8
 push_force = 100.0
 push_speed_divid = 200.0
 exit_idle_timer = NodePath("timers/exit_idle")
@@ -67,6 +65,7 @@ one_shot = true
 [node name="jump_bug" type="Timer" parent="timers"]
 process_callback = 0
 wait_time = 0.1
+one_shot = true
 
 [connection signal="area_entered" from="area" to="." method="_on_area_area_entered"]
 [connection signal="timeout" from="timers/exit_idle" to="." method="_on_exit_idle_timeout"]

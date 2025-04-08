@@ -21,24 +21,9 @@ var current_speed : float = base_speed # store the current speed
 @export var jump_height : float = 50.0 # height of player's jump
 @export var jump_time_to_peak : float = 0.25 # time to peak
 @export var jump_time_to_fall : float = 0.15 # time to fall
-
-# cutsom per jumps forces
-@export_subgroup("Jump forces")
-@export var jump_1_force : float = 1.5
-@export var jump_2_force : float = 2.0
-@export var jump_3_force : float = 1.75
-@export var jump_4_force : float = 1.25
-@export var jump_5_force : float = 1.0
-
-enum JUMP { # all jumps
-	NO,
-	JUMP,
-	JUMP_2,
-	JUMP_3,
-	JUMP_4,
-	JUMP_5
-}
-var current_jump = JUMP.JUMP # store the current what jump player is actually perform
+@export var max_jumps : int = 6
+var jumps_count : int = 0
+@export var different_animation_jump : Array = [7, 8]
 
 # jump math, will be calculated every frame
 var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
@@ -86,12 +71,8 @@ enum STATE { # each states of player
 	RUN, # 1 
 	FLY, # 2
 	JUMP, # 3
-	JUMP_2, # 4
-	JUMP_3, # 5
 	WAIT, # 6
 	SLEEP, # 7
-	JUMP_4, # 8
-	JUMP_5, # 9
 	LOCKED # 10 "stop" state is a state where player can't do any movements
 }
 @export var current_state : STATE = STATE.WAIT # where the current state of player will be stored, can stored to first state
@@ -129,11 +110,13 @@ func _physics_process(delta: float) -> void: # each frame we call this function 
 	jump_velocity = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
 	jump_gravity = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
 	fall_gravity = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
-	
+
 	get_inputs() # get players inputs	
 	_update_state(delta) # update the behavior of current state
-
 	move_and_slide()
+	
+	#print("STATE : ", current_state)
+	#print("jumps_count : ", jumps_count)
 	
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
@@ -143,22 +126,31 @@ func _physics_process(delta: float) -> void: # each frame we call this function 
 			c.get_collider().apply_central_impulse(-c.get_normal() * (push_force * (current_speed / push_speed_divid)))
 
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
-	if current_player == 1: # if current player is 1 get input with player's 1 inputs
-		want_to_jump = Input.is_action_just_pressed("jump_1") # bool to jump
-		direction = Input.get_axis("move_left_1", "move_right_1") # int to get axis : -1 / 0 / 1
-		want_to_dash = Input.is_action_just_pressed("dash_1")
-	elif current_player == 2:
-		want_to_jump = Input.is_action_just_pressed("jump_2") # bool to jump
-		direction = Input.get_axis("move_left_2", "move_right_2") # int to get axis : -1 / 0 / 1
-		want_to_dash = Input.is_action_just_pressed("dash_2")
-	else:
-		print("Error l. 147 : Unknow player")
+	#if current_player == 1: # if current player is 1 get input with player's 1 inputs
+		#want_to_jump = Input.is_action_just_pressed("jump_1") # bool to jump
+		#direction = Input.get_axis("move_left_1", "move_right_1") 
+		#want_to_dash = Input.is_action_just_pressed("dash_1")
+	#elif current_player == 2:
+		#want_to_jump = Input.is_action_just_pressed("jump_2")
+		#direction = Input.get_axis("move_left_2", "move_right_2") # int to get axis : -1 / 0 / 1
+		#want_to_dash = Input.is_action_just_pressed("dash_2")
+	#else:
+		#print("Error l. 147 : Unknow player")
+		
+	want_to_jump = Input.is_action_just_pressed("jump_" + str(current_player)) # bool to jump
+	direction = Input.get_axis("move_left_" + str(current_player), "move_right_" + str(current_player)) # int to get axis : -1 / 0 / 1
+	want_to_dash = Input.is_action_just_pressed("dash_" + str(current_player))
 #endregion
 
 #region STATE FUNCTIONS
-func _set_state(new_state: STATE) -> void: # simple function to change player's state
-	if current_state == new_state: # don't change if the requested state is the same that the current
-		return
+func _set_state(new_state: STATE, force : bool = false) -> void: # simple function to change player's state
+	# the "force" parameter is here due to a bug with jumps
+	# when player did jumps in air, _set_state(STATE.JUMP) is called multiple time without pass to any other state
+	# so that player can multiple jump we call _set_state(STATE.JUMP, true) and we bypass the verification below 
+	if !force:
+		if current_state == new_state: # don't change if the requested state is the same that the current
+			return
+			
 	_exit_state() # exit transition, for example if we exit fall state it means that player is on ground
 	current_state = new_state # setnew state
 	_enter_state() # enter transition, for example jump : propulse player
@@ -191,28 +183,8 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			play_animation("run")
 			
 		STATE.JUMP: 
-			current_jump = JUMP.JUMP
-			perform_jump(jump_1_force)
-			
-		STATE.JUMP_2: 
 			sprites.stop() # stop current jump animation to restart it
-			current_jump = JUMP.JUMP_2
-			perform_jump(jump_2_force)
-			
-		STATE.JUMP_3: 
-			sprites.stop() # stop current jump animation to restart it
-			current_jump = JUMP.JUMP_3
-			perform_jump(jump_3_force)
-		
-		STATE.JUMP_4:
-			sprites.stop() # stop current jump animation to restart it
-			current_jump = JUMP.JUMP_4
-			perform_jump(jump_4_force)
-			
-		STATE.JUMP_5:
-			sprites.stop() # stop current jump animation to restart it
-			current_jump = JUMP.JUMP_5
-			perform_jump(jump_5_force)
+			perform_jump()
 			
 		STATE.FLY: 
 			exit_fall = false # reset exit fall
@@ -237,18 +209,6 @@ func _exit_state() -> void: # exit transition, nothing really important
 		STATE.JUMP:
 			exit_fall = true # say that player just land,to play land animaton also called exit_fall 
 			
-		STATE.JUMP_2:
-			exit_fall = true
-			
-		STATE.JUMP_3:
-			exit_fall = true
-		
-		STATE.JUMP_4:
-			exit_fall = true
-			
-		STATE.JUMP_5:
-			exit_fall = true
-			
 		STATE.FLY: 
 			exit_fall = true 
 
@@ -263,18 +223,6 @@ func _exit_state() -> void: # exit transition, nothing really important
 func _update_state(delta: float) -> void:  # every behavior of each states updated every physics process
 	match current_state:
 		STATE.JUMP: 
-			jump_update(delta) # update jump
-		
-		STATE.JUMP_2: 
-			jump_update(delta) # update jump
-			
-		STATE.JUMP_3: 
-			jump_update(delta) # update jump
-				
-		STATE.JUMP_4: 
-			jump_update(delta) # update jump
-		
-		STATE.JUMP_5: 
 			jump_update(delta) # update jump
 			
 		STATE.IDLE: 
@@ -331,18 +279,25 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 #region JUMP
 
 func reset_jump(): # reset jump
-	current_jump = JUMP.NO
-
-func perform_jump(coef: float): # func to do a jump
+	jumps_count = 0
+		
+func perform_jump(coef: float = 1.0): # func to do a jump
 	exit_fall = false # reset exit fall
 	stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
 	current_speed = air_speed # set in air speed
 	jumping = true # set this variable to true to prevent some bug on other functions TODO
-	play_animation("jump")
+
+	for n in different_animation_jump: # for specific jump defined in "different_animation_jump" we play a special animation
+		if n == jumps_count:
+			play_animation("jump_roll")
+		else:
+			play_animation("jump")
+	
 	velocity.y = jump_velocity * coef # apply jump
 	jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
 	
 func jump_update(delta): # basic func wich control jump in state update 
+	#print("YES 2")
 	x_move() # move on x axis with inputs
 	can_jump() # jump action, come with inputs system
 	if is_on_floor() && !jumping: # if player is on ground after his jump; var jumping is set to false after propulsion and after timer, without it, some bugs
@@ -357,28 +312,13 @@ func jump_update(delta): # basic func wich control jump in state update
 func can_jump(): # func to verify if the player can jump
 	if !want_to_jump: # first verify if player press jump button
 		return false
-	else: # if true so :
-		if current_jump == JUMP.JUMP_5: # if player has already did 5 jumps, he can't do an other jump
-			return false
+	else:
+		if jumps_count < max_jumps: 
+			jumps_count += 1 # add 1 to jump count
+			_set_state(STATE.JUMP, true) # go to _set_state func to know why there is a "true" in parameter
 		else:
-			# set jump depending on wich current jump 
-			if current_jump == JUMP.NO:
-				_set_state(STATE.JUMP)
-				
-			elif current_jump == JUMP.JUMP:
-				_set_state(STATE.JUMP_2)
-				
-			elif current_jump == JUMP.JUMP_2:
-				_set_state(STATE.JUMP_3)
-				
-			elif current_jump == JUMP.JUMP_3:
-				_set_state(STATE.JUMP_4)
-				
-			elif current_jump == JUMP.JUMP_4:
-				_set_state(STATE.JUMP_5)
-				
-			else:
-				print("error line 364")			
+			return false
+
 #endregion
 func get_current_gravity() -> float: # return gravity
 	return jump_gravity if velocity.y < 0.0 else fall_gravity # if player's velocity < 0, it means that player is jumping so return jump gravity
@@ -414,40 +354,45 @@ func x_move(): # simple func to move player on x axis
 	flip_sprites() # flip player's sprite with his direction
 	
 func play_animation(animation: String): # play animation
-	if current_player == 1: # aniamtions with player's 1 skin
-		match animation:
-			"jump":
-				sprites.play("jump_1")
-			"run":
-				sprites.play("run_1")
-			"idle":
-				sprites.play("idle_1")
-			"fly":
-				sprites.play("fly_1")
-			"wait":
-				sprites.play("wait_1")
-			"sleep":
-				sprites.play("sleep_1")
-			"exit_fall":
-				sprites.play("exit_fall_1")
+	sprites.play(animation + "_" + str(current_player))
+	#if current_player == 1: # aniamtions with player's 1 skin
+		#match animation:
+			#"jump":
+				#sprites.play("jump_1")
+			#"run":
+				#sprites.play("run_1")
+			#"idle":
+				#sprites.play("idle_1")
+			#"fly":
+				#sprites.play("fly_1")
+			#"wait":
+				#sprites.play("wait_1")
+			#"sleep":
+				#sprites.play("sleep_1")
+			#"exit_fall":
+				#sprites.play("exit_fall_1")
+			#"jump_roll":
+				#sprites.play("jump_roll_1")
+				#
+	#elif current_player == 2: # aniamtions with player's 2 skin
+		#match animation: 
+			#"jump":
+				#sprites.play("jump_2")
+			#"run":
+				#sprites.play("run_2")
+			#"idle":
+				#sprites.play("idle_2")
+			#"fly":
+				#sprites.play("fly_2")	
+			#"wait":
+				#sprites.play("wait_2")
+			#"sleep":
+				#sprites.play("sleep_2")
+			#"exit_fall":
+				#sprites.play("exit_fall_2")
+			#"jump_roll":
+				#sprites.play("jump_roll_2")
 				
-	elif current_player == 2: # aniamtions with player's 2 skin
-		match animation: 
-			"jump":
-				sprites.play("jump_2")
-			"run":
-				sprites.play("run_2")
-			"idle":
-				sprites.play("idle_2")
-			"fly":
-				sprites.play("fly_2")	
-			"wait":
-				sprites.play("wait_2")
-			"sleep":
-				sprites.play("sleep_2")
-			"exit_fall":
-				sprites.play("exit_fall_2")
-
 func _push_away_rigid_bodies(): # cutsom collision script, more customizable, from https://gist.github.com/majikayogames/cf013c3091e9a313e322889332eca109
 	for i in get_slide_collision_count():
 		var c := get_slide_collision(i)

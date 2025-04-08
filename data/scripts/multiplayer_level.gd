@@ -1,14 +1,6 @@
 extends Node2D
 
 #region VARIABLES
-
-# - GAME MODE
-enum GAME_MODE { # differents game mode of this map
-	LOCAL, 
-	ONLINE
-}
-var current_game_mode : GAME_MODE # store the current game mode wich is set by root.gd
-
 # - UI
 @export var enable_ui : bool = false # disable/enable ui for debug
 
@@ -62,24 +54,7 @@ func _ready() -> void:
 
 	spawn_ball()
 
-	if current_game_mode == GAME_MODE.LOCAL:
-		initalize_local()
-	elif current_game_mode == GAME_MODE.ONLINE:
-		initialize_online()
-	else:
-		print("error on initialize game mode : no game mode")	
-		
 func _process(delta: float) -> void:
-	pass
-	
-# - GAME MODES / INITIALISATIONS / INSTANCIATE
-func set_game_mode(game_mode : GAME_MODE):  # func called by root.gd to set the game mode
-	current_game_mode = game_mode
-
-func initalize_local():
-	pass
-	
-func initialize_online(): # nothing there, come with the online multiplayer
 	pass
 	
 func spawn_ball(): # instanciate ball scene
