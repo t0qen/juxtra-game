@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://djd1mq3ot48xw"]
+[gd_scene load_steps=12 format=3 uid="uid://djd1mq3ot48xw"]
 
 [ext_resource type="Script" uid="uid://cfseqshiju1j5" path="res://data/scripts/multiplayer_level.gd" id="1_lpglf"]
 [ext_resource type="PackedScene" uid="uid://dyvd2cue15rb6" path="res://data/scenes/camera.tscn" id="2_i4smc"]
@@ -8,6 +8,12 @@
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 6
 physics_layer_0/collision_priority = 3.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tyoci"]
+size = Vector2(64, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5bmcu"]
+size = Vector2(64, 192)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tyoci"]
 friction = 0.0
@@ -24,10 +30,11 @@ distance = -636.0
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ciff6"]
 distance = -322.0
 
-[node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
+[node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "before_after_goal_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
 position = Vector2(0, -62)
 script = ExtResource("1_lpglf")
 after_goal_timer = NodePath("timers/after_goal")
+before_after_goal_timer = NodePath("timers/before_after_goal")
 player_1_spawn = NodePath("markers/player_1_spawn")
 player_2_spawn = NodePath("markers/player_2_spawn")
 ball_spawn = NodePath("markers/ball_spawn")
@@ -59,7 +66,6 @@ position = Vector2(0, -64)
 
 [node name="player_1" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
 position = Vector2(-64, 0)
-platform_on_leave = 2
 current_player = 1
 camera = NodePath("../../camera")
 
@@ -73,15 +79,23 @@ camera = NodePath("../../camera")
 [node name="goal_1" type="Area2D" parent="goals"]
 
 [node name="hitbox" type="CollisionShape2D" parent="goals/goal_1"]
+position = Vector2(480, 30)
+shape = SubResource("RectangleShape2D_tyoci")
 
 [node name="goal_2" type="Area2D" parent="goals"]
 
 [node name="hitbox" type="CollisionShape2D" parent="goals/goal_2"]
+position = Vector2(-544, 30)
+shape = SubResource("RectangleShape2D_5bmcu")
 
 [node name="timers" type="Node2D" parent="."]
 
 [node name="after_goal" type="Timer" parent="timers"]
 wait_time = 3.0
+one_shot = true
+
+[node name="before_after_goal" type="Timer" parent="timers"]
+process_callback = 0
 one_shot = true
 
 [node name="camera" parent="." instance=ExtResource("2_i4smc")]
@@ -109,3 +123,4 @@ shape = SubResource("WorldBoundaryShape2D_ciff6")
 [connection signal="area_entered" from="goals/goal_1" to="." method="_on_goal_1_area_entered"]
 [connection signal="area_entered" from="goals/goal_2" to="." method="_on_goal_2_area_entered"]
 [connection signal="timeout" from="timers/after_goal" to="." method="_on_after_goal_timeout"]
+[connection signal="timeout" from="timers/before_after_goal" to="." method="_on_before_after_goal_timeout"]

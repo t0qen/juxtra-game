@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bxc4wjg31b3av"]
+[gd_scene load_steps=5 format=3 uid="uid://bxc4wjg31b3av"]
+
+[ext_resource type="Script" uid="uid://84vrvqbb0ohj" path="res://data/scripts/ball.gd" id="1_4wqu7"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k3ts2"]
 friction = 0.0
@@ -21,8 +23,8 @@ physics_material_override = SubResource("PhysicsMaterial_k3ts2")
 gravity_scale = 0.3
 inertia = 0.01
 linear_damp_mode = 1
-linear_damp = 0.1
 angular_damp_mode = 1
+script = ExtResource("1_4wqu7")
 
 [node name="hitbox" type="CollisionShape2D" parent="root_ball"]
 shape = SubResource("CircleShape2D_k3ts2")

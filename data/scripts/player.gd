@@ -230,8 +230,7 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			if direction: # if left or right is pressed, start walking
 				_set_state(STATE.RUN)
 			
-			if !is_on_floor() && !jumping: # if not on floor, fall down and fly TODO
-				
+			if !is_on_floor() && !jumping:
 				_set_state(STATE.FLY)
 				
 		STATE.WAIT:
@@ -272,7 +271,8 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 
 		STATE.LOCKED:
 			print("player is locked !")
-#endregion
+			velocity = Vector2.ZERO
+#endregionunlock_player
 #endregion
 
 #region OTHER
@@ -436,6 +436,14 @@ func _on_jump_bug_timeout() -> void: # prevent bugs
 
 # - OTHERS
 func _on_area_area_entered(area: Area2D) -> void: # start a camera shake if player touch the ball
-	pass
+	if area.is_in_group("ball"): # if player touchs the ball
+		var ball = area.get_parent() # get the ball node (rigid body)
+		# modify it groups to know wich player has touch it for the last time
+		if current_player == 1:
+			ball.add_to_group("player_1") 
+			ball.remove_from_group("player_2")
+		elif current_player == 2:
+			ball.add_to_group("player_2") 
+			ball.remove_from_group("player_1")
 #endregion
 #endregion

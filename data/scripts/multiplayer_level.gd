@@ -1,6 +1,23 @@
 extends Node2D
 
 #region VARIABLES
+# - GLOBAL
+enum PLAYERS { # list players, will be useful for scores
+	PLAYER_1, 
+	PLAYER_2, 
+	NOBODY
+}
+
+enum GOALS {  # same, but for goal
+	GOAL_1, 
+	GOAL_2
+	}
+	
+enum WAY_TO_SCORE { # how player has scored
+	VOLUNTARY,
+	UNVOLUNTARY
+	}
+
 # - UI
 @export var enable_ui : bool = false # disable/enable ui for debug
 
@@ -12,6 +29,7 @@ extends Node2D
 # timers
 @export_subgroup("Timers")
 @export var after_goal_timer : Timer
+@export var before_after_goal_timer : Timer # a timer for the time just before "after_goal_timer"
 # lights
 @export_subgroup("Lights")
 # respawn points
@@ -41,6 +59,10 @@ var current_ball = null # store preloaded ball
 # - SCORES
 var player_1_score : int = 0 # store player 1 score
 var player_2_score : int = 0 # same for player 2
+var current_winner_player = PLAYERS # wich players has really win the game, depends on wich player has touch the ball for the last time
+var last_touch_ball = PLAYERS # wich player s has touch the ball for the last time
+var current_goal = GOALS # in wich goal the ball is 
+var current_way_to_score = WAY_TO_SCORE # how player has scored
 #endregion
 
 func _ready() -> void:
@@ -74,30 +96,63 @@ func update_score():
 # - GOALS / SCORES
 func _on_goal_1_area_entered(area: Area2D) -> void: # player 2 scores
 	if area.is_in_group("ball"): # verify if it's the ball that is in the goal
-		player_2_score = player_2_score + 1
+		manage_scores()
 		current_ball.queue_free() # delete the current ball
-		# lock players
-		player_1.lock_player() 
-		player_2.lock_player()
-		respawn_players()
-		after_goal_timer.start() # start the a timer after restarting the game 
-		
+		before_after_goal_timer.start()
+		current_goal = GOALS.GOAL_1
+		# print GOAL 
 		
 func _on_goal_2_area_entered(area: Area2D) -> void: # player 1 scores
 	if area.is_in_group("ball"): # verify if it's the ball that is in the goal
-		player_1_score = player_1_score + 1
+		manage_scores()
 		current_ball.queue_free() # delete the current ball
-		# lock players
-		player_1.lock_player()
-		player_2.lock_player()
-		respawn_players()
-		after_goal_timer.start() # start the a timer after restarting the game 
-		
+		before_after_goal_timer.start()
+		current_goal = GOALS.GOAL_2
+		# print GOAL 
 
-
+func manage_scores():
+	# check wich player touch the balls for the last time
+	if current_ball.is_in_group("player_1"):
+		last_touch_ball = PLAYERS.PLAYER_1
+	elif current_ball.is_in_group("player_2"):
+		last_touch_ball = PLAYERS.PLAYER_2
+	else:
+		last_touch_ball = PLAYERS.NOBODY # this will probably never be used because ball can't go to a goal without a player touch
+	
+	# determine wich player wins
+	if last_touch_ball == PLAYERS.PLAYER_1 && current_goal == GOALS.GOAL_2: # player 1 has scored in the enemy goal, +4 for him
+		current_winner_player = PLAYERS.PLAYER_1
+		current_way_to_score = WAY_TO_SCORE.VOLUNTARY
+		player_1_score += 4
+	elif last_touch_ball == PLAYERS.PLAYER_2 && current_goal == GOALS.GOAL_1: # player 2 has scored in the enemy goal, +4 for him
+		current_winner_player = PLAYERS.PLAYER_2
+		current_way_to_score = WAY_TO_SCORE.VOLUNTARY
+		player_2_score += 4
+	elif last_touch_ball == PLAYERS.PLAYER_1 && current_goal == GOALS.GOAL_1: # player 1 has scored in him own goal
+		current_winner_player = PLAYERS.PLAYER_2
+		current_way_to_score = WAY_TO_SCORE.UNVOLUNTARY
+		player_2_score += 1
+	elif last_touch_ball == PLAYERS.PLAYER_2 && current_goal == GOALS.GOAL_2: # player 1 has scored in him own goal
+		current_winner_player = PLAYERS.PLAYER_1
+		current_way_to_score = WAY_TO_SCORE.UNVOLUNTARY
+		player_1_score += 1
+	
+	# TODO
+	
 # - TIMERS
 func _on_after_goal_timeout() -> void:
 	# unlock players
+	player_1.show()
+	player_2.show()
 	player_1.unlock_player()
 	player_2.unlock_player()
 	spawn_ball()
+
+func _on_before_after_goal_timeout() -> void:
+	# lock players
+	player_1.hide()
+	player_2.hide()
+	player_1.lock_player()
+	player_2.lock_player()
+	respawn_players()
+	after_goal_timer.start() # start the a timer after restarting the game 

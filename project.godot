@@ -31,6 +31,8 @@ folder_colors={
 [global_group]
 
 ball=""
+player_1=""
+player_2=""
 
 [input]
 
