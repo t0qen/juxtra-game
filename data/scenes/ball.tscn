@@ -11,7 +11,7 @@ bounce = 1.0
 radius = 27.074
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4wqu7"]
-radius = 40.3113
+radius = 28.0179
 
 [node name="ball" type="Node2D"]
 

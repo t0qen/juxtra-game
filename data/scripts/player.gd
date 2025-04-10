@@ -18,7 +18,7 @@ var current_speed : float = base_speed # store the current speed
 
 # - JUMP
 @export_subgroup("Jump")
-@export var jump_height : float = 50.0 # height of player's jump
+@export var jump_height : float = 150 # height of player's jump
 @export var jump_time_to_peak : float = 0.25 # time to peak
 @export var jump_time_to_fall : float = 0.15 # time to fall
 @export var max_jumps : int = 6
@@ -33,6 +33,8 @@ var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_fall * jump_tim
 # - DASH
 @export_group("Dash")
 @export var dash_speed : int = 1600 # speed of a dash
+var is_able_to_dash : bool = true
+var is_dashing : bool = false
 #endregion
 
 @export_group("Custom collisions")
@@ -44,8 +46,35 @@ var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_fall * jump_tim
 # - CAMERA
 @export_group("Camera")
 @export var enable_camera_effects : bool = true
-@export_subgroup("Presets")
-# TODO
+@export_subgroup("Presets") # presets for camera shakes
+# trauma : float = 0.5, changed_decay : float = 0.8, changed_max_offset : Vector2 = Vector2(50, 50), changed_max_roll : float = 0.1
+
+enum SHAKE_PRESETS { # list all presets
+	TOUCH_THE_BALL,
+	JUMP,
+	DASH
+}
+# presets proprieties
+
+@export var EFFECT_TOUCH_THE_BALL = {
+	"TRAUMA": 0.5,
+	"DECAY": 0.8,
+	"MAX_OFFSET": Vector2(50, 50),
+	"MAX_ROLL": 0.1,
+}
+@export var EFFECT_JUMP = {
+	"TRAUMA": 0.5,
+	"DECAY": 0.8,
+	"MAX_OFFSET": Vector2(50, 50),
+	"MAX_ROLL": 0.1,
+}
+@export var EFFECT_DASH = {
+	"TRAUMA": 0.5,
+	"DECAY": 0.8,
+	"MAX_OFFSET": Vector2(50, 50),
+	"MAX_ROLL": 0.1,
+}
+	
 
 #endregion
 
@@ -57,7 +86,8 @@ var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_fall * jump_tim
 @export var exit_fall_timer : Timer # cooldown to play fall animation before enter state wait, same duration of the animation
 @export var exit_wait_timer : Timer # cooldown before switch to wait to idle state 
 @export var jump_bug_timer : Timer # little delay after apply jump to prevent bug
-
+@export var dash_time_timer : Timer
+@export var dash_delay_timer : Timer
 # - OTHERS
 @export_subgroup("Others")
 @export var camera : Camera2D # store camera
@@ -88,6 +118,7 @@ var before_dash_finish : bool = false
 
 #region INPUTS
 var want_to_jump : bool = false # a bool to know if player want to jump
+var want_to_long_jump : bool = false
 var direction : int = 0 # the direction of player, may a Vector2 ? consider jump as direction ? TODO
 var want_to_dash : bool = false # same for dash 
 var propulsion_down : bool = false # a bool to know if player want to be propulsed down
@@ -101,16 +132,18 @@ func _ready() -> void:
 		pass # nothing to do for now
 	else:
 		sprites.flip_h = true # flip player 2 sprite 
-		
+	
+	
 
 func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
 	#Engine.time_scale = 0.1
-	
+	dash()
+	if current_player == 1:
+		print("WANT : ", want_to_dash)
+		print("ABLE : ", is_able_to_dash)
 	# jump maths, calculated every frame, for debug only
-	jump_velocity = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
-	jump_gravity = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
-	fall_gravity = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
-
+	jump_math()
+	
 	get_inputs() # get players inputs	
 	_update_state(delta) # update the behavior of current state
 	move_and_slide()
@@ -139,7 +172,8 @@ func get_inputs(): # essential function to get player inputs, depend on wich pla
 		
 	want_to_jump = Input.is_action_just_pressed("jump_" + str(current_player)) # bool to jump
 	direction = Input.get_axis("move_left_" + str(current_player), "move_right_" + str(current_player)) # int to get axis : -1 / 0 / 1
-	want_to_dash = Input.is_action_just_pressed("dash_" + str(current_player))
+	want_to_dash = Input.is_action_pressed("dash_" + str(current_player))
+	
 #endregion
 
 #region STATE FUNCTIONS
@@ -270,14 +304,12 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 				apply_gravity(get_current_gravity(), delta) # else apply gravity
 
 		STATE.LOCKED:
-			print("player is locked !")
 			velocity = Vector2.ZERO
 #endregionunlock_player
 #endregion
 
 #region OTHER
 #region JUMP
-
 func reset_jump(): # reset jump
 	jumps_count = 0
 		
@@ -292,6 +324,8 @@ func perform_jump(coef: float = 1.0): # func to do a jump
 			play_animation("jump_roll")
 		else:
 			play_animation("jump")
+	
+	camera_shake(SHAKE_PRESETS.JUMP)
 	
 	velocity.y = jump_velocity * coef # apply jump
 	jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
@@ -320,12 +354,36 @@ func can_jump(): # func to verify if the player can jump
 			return false
 
 #endregion
+
+func dash():
+	if !want_to_dash:
+		return false
+	else:
+		if !is_able_to_dash:
+			return false
+		else:
+			is_able_to_dash = false
+			is_dashing = true
+			current_speed = dash_speed
+			dash_time_timer.start()
+			dash_delay_timer.start()
+	
+func camera_shake(preset: SHAKE_PRESETS):
+	camera.reset_trauma()
+	match preset:
+		SHAKE_PRESETS.TOUCH_THE_BALL:
+			camera.start_shake(EFFECT_TOUCH_THE_BALL["TRAUMA"], EFFECT_TOUCH_THE_BALL["DECAY"], EFFECT_TOUCH_THE_BALL["MAX_OFFSET"], EFFECT_TOUCH_THE_BALL["MAX_ROLL"])
+		SHAKE_PRESETS.JUMP:
+			camera.start_shake(EFFECT_JUMP["TRAUMA"], EFFECT_JUMP["DECAY"], EFFECT_JUMP["MAX_OFFSET"], EFFECT_JUMP["MAX_ROLL"])
+		SHAKE_PRESETS.DASH:
+			camera.start_shake(EFFECT_DASH["TRAUMA"], EFFECT_DASH["DECAY"], EFFECT_DASH["MAX_OFFSET"], EFFECT_DASH["MAX_ROLL"])
+			
 func get_current_gravity() -> float: # return gravity
 	return jump_gravity if velocity.y < 0.0 else fall_gravity # if player's velocity < 0, it means that player is jumping so return jump gravity
 
 func apply_gravity(current_gravity : float, delta : float ): # apply gravity
-	velocity.y += current_gravity * delta	
-
+	velocity.y += current_gravity * delta
+	
 func lock_player(): # func called generaly from different scripts to prevent player moving
 	_set_state(STATE.LOCKED)
 	
@@ -352,6 +410,11 @@ func flip_sprites(): # simple func to automaticlly flip player sprite with the p
 func x_move(): # simple func to move player on x axis
 	velocity.x = direction * current_speed 
 	flip_sprites() # flip player's sprite with his direction
+	
+func jump_math():
+	jump_velocity = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
+	jump_gravity = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
+	fall_gravity = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
 	
 func play_animation(animation: String): # play animation
 	sprites.play(animation + "_" + str(current_player))
@@ -392,27 +455,6 @@ func play_animation(animation: String): # play animation
 				#sprites.play("exit_fall_2")
 			#"jump_roll":
 				#sprites.play("jump_roll_2")
-				
-func _push_away_rigid_bodies(): # cutsom collision script, more customizable, from https://gist.github.com/majikayogames/cf013c3091e9a313e322889332eca109
-	for i in get_slide_collision_count():
-		var c := get_slide_collision(i)
-		if c.get_collider() is RigidBody2D:
-			var push_dir = -c.get_normal()
-			# How much velocity the object needs to increase to match player velocity in the push direction
-			var velocity_diff_in_push_dir = self.velocity.dot(push_dir) - c.get_collider().linear_velocity.dot(push_dir)
-			# Only count velocity towards push dir, away from character
-			velocity_diff_in_push_dir = max(0., velocity_diff_in_push_dir)
-			# Objects with more mass than us should be harder to push. But doesn't really make sense to push faster than we are going
-			const MY_APPROX_MASS_KG = 50.0
-			var mass_ratio = min(1., MY_APPROX_MASS_KG / c.get_collider().mass)
-			# Optional add: Don't push object at all if it's 4x heavier or more
-			if mass_ratio < 0.25:
-				continue
-			# Don't push object from above/below
-			push_dir.y = 0
-			# 5.0 is a magic number, adjust to your needs
-			var push_force = mass_ratio * 5.0
-			c.get_collider().apply_impulse(push_dir * velocity_diff_in_push_dir * push_force, c.get_position() - c.get_collider().global_position)
 			
 #region SIGNALS
 # - TIMERS
@@ -426,17 +468,25 @@ func _on_exit_idle_timeout() -> void: # called when idle timer is finished
 
 func _on_exit_wait_timeout() -> void: # same for wait state
 	_set_state(STATE.IDLE)
-	
+
 func _on_exit_fall_timeout() -> void: # called when this timer is finish, it lasts 1.5s, the time to play exit fall animation
 	exit_fall = false # set exit fall to false
 	play_animation("wait") # play wait animation after
 	
 func _on_jump_bug_timeout() -> void: # prevent bugs
 	jumping = false
+	
+func _on_dash_time_timeout() -> void:
+	is_dashing = false
 
+func _on_dash_delay_timeout() -> void:
+	is_able_to_dash = true
+	
 # - OTHERS
 func _on_area_area_entered(area: Area2D) -> void: # start a camera shake if player touch the ball
 	if area.is_in_group("ball"): # if player touchs the ball
+		print("touch ball")
+		camera_shake(SHAKE_PRESETS.TOUCH_THE_BALL)
 		var ball = area.get_parent() # get the ball node (rigid body)
 		# modify it groups to know wich player has touch it for the last time
 		if current_player == 1:

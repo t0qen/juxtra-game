@@ -35,3 +35,6 @@ func start_shake(trauma : float = 0.5, changed_decay : float = 0.8, changed_max_
 	max_offset = changed_max_offset
 	max_roll = changed_max_roll
 	add_trauma(trauma) # finally start the shake
+
+func reset_trauma():
+	trauma = 0

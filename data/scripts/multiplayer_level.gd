@@ -49,7 +49,22 @@ var ball = preload("res://data/scenes/ball.tscn") # preload ball scene so we ca
 var current_ball = null # store preloaded ball
 
 # - CAMERA EFFECTS
-@export_group("Camera effects")
+@export_group("Camera shakes presets") # some presets for camera shakes, like in player.gd
+
+@export var EFFECT_SCORES = {
+	"TRAUMA": 0.5,
+	"DECAY": 0.8,
+	"MAX_OFFSET": Vector2(50, 50),
+	"MAX_ROLL": 0.1,
+}
+
+@export var EFFECT_RESTARTING = {
+	"TRAUMA": 0.5,
+	"DECAY": 0.8,
+	"MAX_OFFSET": Vector2(50, 50),
+	"MAX_ROLL": 0.1,
+}
+
 # Goals
 @export_subgroup("Goal")
 @export var camera_goal_intensity : float = 0.7

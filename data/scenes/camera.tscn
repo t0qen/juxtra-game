@@ -4,4 +4,6 @@
 
 [node name="camera" type="Camera2D"]
 ignore_rotation = false
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
 script = ExtResource("1_hwait")

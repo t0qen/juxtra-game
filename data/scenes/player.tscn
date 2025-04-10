@@ -11,7 +11,7 @@ radius = 13.0
 radius = 8.0
 height = 22.0
 
-[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "sprites")]
+[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "dash_time_timer", "dash_delay_timer", "sprites")]
 collision_layer = 2
 collision_mask = 11
 platform_on_leave = 2
@@ -19,16 +19,29 @@ script = ExtResource("1_glcv3")
 gravity = 900
 base_speed = 400
 air_speed = 400
-jump_height = 150.0
 jump_time_to_peak = 0.5
 jump_time_to_fall = 0.3
 max_jumps = 8
-push_force = 100.0
+push_force = 75.0
 push_speed_divid = 200.0
+EFFECT_TOUCH_THE_BALL = {
+"DECAY": 0.8,
+"MAX_OFFSET": Vector2(15, 15),
+"MAX_ROLL": 0.0,
+"TRAUMA": 0.4
+}
+EFFECT_JUMP = {
+"DECAY": 0.9,
+"MAX_OFFSET": Vector2(0, 50),
+"MAX_ROLL": 0.0,
+"TRAUMA": 0.4
+}
 exit_idle_timer = NodePath("timers/exit_idle")
 exit_fall_timer = NodePath("timers/exit_fall")
 exit_wait_timer = NodePath("timers/exit_wait")
 jump_bug_timer = NodePath("timers/jump_bug")
+dash_time_timer = NodePath("timers/dash_time")
+dash_delay_timer = NodePath("timers/dash_delay")
 sprites = NodePath("sprites")
 
 [node name="sprites" type="AnimatedSprite2D" parent="."]
@@ -67,8 +80,19 @@ process_callback = 0
 wait_time = 0.1
 one_shot = true
 
+[node name="dash_time" type="Timer" parent="timers"]
+process_callback = 0
+one_shot = true
+
+[node name="dash_delay" type="Timer" parent="timers"]
+process_callback = 0
+wait_time = 3.0
+one_shot = true
+
 [connection signal="area_entered" from="area" to="." method="_on_area_area_entered"]
 [connection signal="timeout" from="timers/exit_idle" to="." method="_on_exit_idle_timeout"]
 [connection signal="timeout" from="timers/exit_fall" to="." method="_on_exit_fall_timeout"]
 [connection signal="timeout" from="timers/exit_wait" to="." method="_on_exit_wait_timeout"]
 [connection signal="timeout" from="timers/jump_bug" to="." method="_on_jump_bug_timeout"]
+[connection signal="timeout" from="timers/dash_time" to="." method="_on_dash_time_timeout"]
+[connection signal="timeout" from="timers/dash_delay" to="." method="_on_dash_delay_timeout"]

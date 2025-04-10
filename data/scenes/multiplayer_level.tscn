@@ -10,28 +10,27 @@ physics_layer_0/collision_mask = 6
 physics_layer_0/collision_priority = 3.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tyoci"]
-size = Vector2(64, 192)
+size = Vector2(16, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5bmcu"]
-size = Vector2(64, 192)
+size = Vector2(16.5, 32)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tyoci"]
 friction = 0.0
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tyoci"]
-distance = -319.0
+distance = -320.0
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5bmcu"]
-distance = -594.0
+distance = -592.0
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kd03d"]
-distance = -636.0
+distance = -576.0
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ciff6"]
-distance = -322.0
+distance = -320.0
 
 [node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "before_after_goal_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
-position = Vector2(0, -62)
 script = ExtResource("1_lpglf")
 after_goal_timer = NodePath("timers/after_goal")
 before_after_goal_timer = NodePath("timers/before_after_goal")
@@ -79,13 +78,13 @@ camera = NodePath("../../camera")
 [node name="goal_1" type="Area2D" parent="goals"]
 
 [node name="hitbox" type="CollisionShape2D" parent="goals/goal_1"]
-position = Vector2(480, 30)
+position = Vector2(496, 0)
 shape = SubResource("RectangleShape2D_tyoci")
 
 [node name="goal_2" type="Area2D" parent="goals"]
 
 [node name="hitbox" type="CollisionShape2D" parent="goals/goal_2"]
-position = Vector2(-544, 30)
+position = Vector2(-496, 0)
 shape = SubResource("RectangleShape2D_5bmcu")
 
 [node name="timers" type="Node2D" parent="."]
