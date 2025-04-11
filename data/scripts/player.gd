@@ -11,11 +11,11 @@ enum PLAYER {
 
 #region MOVEMENTS
 @export_group("Movements")
-@export var SPEED : Dictionary = {"GROUND": 400, "AIR": 400}
+@export var SPEED : Dictionary = {"GROUND": 400, "AIR": 400, "DASH": 4000}
 @export var PUSH_FORCE : Dictionary = {"SOFT": 25, "NORMAL": 75, "HARD": 200}
 var current_push_force = PUSH_FORCE["NORMAL"]
-@export_range(0, 50.0, 0.5) var friction : float = 0.1
-@export_range(0, 50.0, 0.5) var acceleration : float = 0.25
+@export var friction : float = 0.1
+@export var acceleration : float = 0.25
 
 # - RUN
 @export_subgroup("Run")
@@ -48,7 +48,6 @@ var is_dashing : bool = false
 # - CUTSOM COLLOSIONS
 @export var push_force : float = 50
 @export var push_speed_divid : float = 100
-
 #region CAMERA
 # - CAMERA
 @export_group("Camera")
@@ -136,6 +135,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void: 
 	get_inputs() # get players inputs	
+	can_dash()
 	_update_state(delta) # update the behavior of current state
 	
 	move_and_slide()
@@ -143,12 +143,12 @@ func _physics_process(delta: float) -> void:
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
 		if c.get_collider() is RigidBody2D:
-			c.get_collider().apply_central_impulse(-c.get_normal() * 500)
+			c.get_collider().apply_central_impulse(-c.get_normal() * current_push_force)
 
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
 	want_to_jump = Input.is_action_just_pressed("jump_" + str(current_player)) # bool to jump
 	direction = Input.get_axis("move_left_" + str(current_player), "move_right_" + str(current_player)) # int to get axis : -1 / 0 / 1
-	want_to_dash = Input.is_action_pressed("dash_" + str(current_player))
+	want_to_dash = Input.is_action_just_pressed("dash_" + str(current_player))
 #endregion
 
 #region STATE FUNCTIONS
@@ -210,10 +210,16 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			play_animation("fly")
 
 		STATE.DASH:
-			pass
+			velocity = Vector2(0, 0)
+			current_push_force = PUSH_FORCE["HARD"]
+			dash_time_timer.start()
 
 func _exit_state() -> void: # exit transition, nothing really important
 	match current_state:
+		STATE.DASH:
+			is_able_to_dash = false
+			dash_delay_timer.start()
+			
 		STATE.WAIT:
 			pass
 			
@@ -247,6 +253,9 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 					_set_state(STATE.WAIT) # set wait; we play exit fall animation
 			else:
 				apply_gravity(delta) # else apply gravity
+			
+		STATE.DASH:
+			velocity.x = direction * 4000
 			
 		STATE.IDLE: 
 			can_jump()
@@ -322,8 +331,14 @@ func apply_gravity(delta : float) -> void: # apply gravity
 	velocity.y += current_gravity * delta
 
 func can_dash() -> void:
-	pass
-	
+	if !want_to_dash:
+		return
+	else:
+		if is_able_to_dash:
+			_set_state(STATE.DASH)
+		else:
+			return
+			
 func can_run() -> void:
 	if direction: # if left or right is pressed, start walking
 		_set_state(STATE.RUN)
@@ -332,9 +347,9 @@ func can_fly() -> void:
 	if !is_on_floor() && !jumping: # if not on floor, fall down and fly (TODO !jumping)
 		_set_state(STATE.FLY)
 
-func move_horizontally(speed: float = 400) -> void: # simple func to move player on x axis
+func move_horizontally(speed: float = 400, current_acceleration: float = acceleration): # simple func to move player on x axis
 	#velocity.x = lerp(velocity.x, direction * speed, acceleration)
-	velocity.x = move_toward(velocity.x, direction * speed, acceleration)
+	velocity.x = move_toward(velocity.x, direction * speed, current_acceleration)
 	if velocity.x > 0: 
 		sprites.flip_h = false
 	elif velocity.x < 0:
@@ -401,7 +416,9 @@ func _on_jump_bug_timeout() -> void: # prevent bugs
 	jumping = false
 	
 func _on_dash_time_timeout() -> void:
-	is_dashing = false
+	velocity.x = 0
+	current_push_force = PUSH_FORCE["NORMAL"]
+	_set_state(STATE.WAIT)
 
 func _on_dash_delay_timeout() -> void:
 	is_able_to_dash = true

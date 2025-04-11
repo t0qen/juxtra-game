@@ -22,14 +22,20 @@ SPEED = {
 "AIR": 600,
 "GROUND": 600
 }
+PUSH_FORCE = {
+"HARD": 300,
+"NORMAL": 75,
+"SOFT": 25
+}
 friction = 20.0
 acceleration = 30.0
 base_speed = 400
 air_speed = 400
+jump_height = 100.0
 jump_time_to_peak = 0.5
 jump_time_to_fall = 0.3
 max_jumps = 8
-push_force = 75.0
+push_force = 25.0
 push_speed_divid = 200.0
 EFFECT_TOUCH_THE_BALL = {
 "DECAY": 0.8,
@@ -89,6 +95,7 @@ one_shot = true
 
 [node name="dash_time" type="Timer" parent="timers"]
 process_callback = 0
+wait_time = 0.05
 one_shot = true
 
 [node name="dash_delay" type="Timer" parent="timers"]
