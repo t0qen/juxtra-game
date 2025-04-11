@@ -13,10 +13,17 @@ height = 22.0
 
 [node name="player" type="CharacterBody2D" node_paths=PackedStringArray("exit_idle_timer", "exit_fall_timer", "exit_wait_timer", "jump_bug_timer", "dash_time_timer", "dash_delay_timer", "sprites")]
 collision_layer = 2
-collision_mask = 11
+collision_mask = 15
 platform_on_leave = 2
+platform_floor_layers = 4294967291
 script = ExtResource("1_glcv3")
-gravity = 900
+current_player = 1
+SPEED = {
+"AIR": 600,
+"GROUND": 600
+}
+friction = 20.0
+acceleration = 30.0
 base_speed = 400
 air_speed = 400
 jump_time_to_peak = 0.5

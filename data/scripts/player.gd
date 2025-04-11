@@ -3,12 +3,19 @@ extends CharacterBody2D
 
 #region VARIABLES  
 @export_group("Global")
-@export var current_player : int  # wich player this script is for, can be changed by other script via func
-var player_set : bool = false # a var that is true if current_player is set, player's script don't start if this var isn't true
+enum PLAYER {
+	PLAYER_1,
+	PLAYER_2
+}
+@export var current_player : PLAYER
 
 #region MOVEMENTS
 @export_group("Movements")
-@export var gravity : int = 10000000 # default gravity 
+@export var SPEED : Dictionary = {"GROUND": 400, "AIR": 400}
+@export var PUSH_FORCE : Dictionary = {"SOFT": 25, "NORMAL": 75, "HARD": 200}
+var current_push_force = PUSH_FORCE["NORMAL"]
+@export_range(0, 50.0, 0.5) var friction : float = 0.1
+@export_range(0, 50.0, 0.5) var acceleration : float = 0.25
 
 # - RUN
 @export_subgroup("Run")
@@ -103,85 +110,53 @@ enum STATE { # each states of player
 	JUMP, # 3
 	WAIT, # 6
 	SLEEP, # 7
-	LOCKED # 10 "stop" state is a state where player can't do any movements
+	DASH
 }
-@export var current_state : STATE = STATE.WAIT # where the current state of player will be stored, can stored to first state
-
+var current_state : STATE = STATE.WAIT
 # - OTHERS
 var jumping : bool = false # bool to know if player is jumping
 var exit_wait : bool = false # bool to store the end of timer
 var exit_idle : bool = false # same for idle
 var exit_fall : bool = false # same for fall
-var dash_levitation : bool = false
-var before_dash_finish : bool = false
 #endregion
 
 #region INPUTS
 var want_to_jump : bool = false # a bool to know if player want to jump
-var want_to_long_jump : bool = false
 var direction : int = 0 # the direction of player, may a Vector2 ? consider jump as direction ? TODO
 var want_to_dash : bool = false # same for dash 
-var propulsion_down : bool = false # a bool to know if player want to be propulsed down
 
 #endregion
 #endregion
 
 #region GLOBAL FUNCTIONS
 func _ready() -> void: 
-	if current_player == 1:
-		pass # nothing to do for now
-	else:
-		sprites.flip_h = true # flip player 2 sprite 
-	
-	
+	jump_velocity = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
+	jump_gravity = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
+	fall_gravity = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
 
-func _physics_process(delta: float) -> void: # each frame we call this function to update player state, for example if he's not on ground we set his state to fall, etc
-	#Engine.time_scale = 0.1
-	dash()
-	if current_player == 1:
-		print("WANT : ", want_to_dash)
-		print("ABLE : ", is_able_to_dash)
-	# jump maths, calculated every frame, for debug only
-	jump_math()
-	
+func _physics_process(delta: float) -> void: 
 	get_inputs() # get players inputs	
 	_update_state(delta) # update the behavior of current state
-	move_and_slide()
 	
-	#print("STATE : ", current_state)
-	#print("jumps_count : ", jumps_count)
+	move_and_slide()
 	
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
 		if c.get_collider() is RigidBody2D:
-			print("NOMRAL : ", -c.get_normal() * push_force)
-			print("AFTER : ", -c.get_normal() * (push_force * (current_speed / push_speed_divid)))
-			c.get_collider().apply_central_impulse(-c.get_normal() * (push_force * (current_speed / push_speed_divid)))
+			c.get_collider().apply_central_impulse(-c.get_normal() * 500)
 
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
-	#if current_player == 1: # if current player is 1 get input with player's 1 inputs
-		#want_to_jump = Input.is_action_just_pressed("jump_1") # bool to jump
-		#direction = Input.get_axis("move_left_1", "move_right_1") 
-		#want_to_dash = Input.is_action_just_pressed("dash_1")
-	#elif current_player == 2:
-		#want_to_jump = Input.is_action_just_pressed("jump_2")
-		#direction = Input.get_axis("move_left_2", "move_right_2") # int to get axis : -1 / 0 / 1
-		#want_to_dash = Input.is_action_just_pressed("dash_2")
-	#else:
-		#print("Error l. 147 : Unknow player")
-		
 	want_to_jump = Input.is_action_just_pressed("jump_" + str(current_player)) # bool to jump
 	direction = Input.get_axis("move_left_" + str(current_player), "move_right_" + str(current_player)) # int to get axis : -1 / 0 / 1
 	want_to_dash = Input.is_action_pressed("dash_" + str(current_player))
-	
 #endregion
 
 #region STATE FUNCTIONS
-func _set_state(new_state: STATE, force : bool = false) -> void: # simple function to change player's state
+func _set_state(new_state: STATE, restart : bool = false) -> void: # simple function to change player's state
 	# the "force" parameter is here due to a bug with jumps
 	# when player did jumps in air, _set_state(STATE.JUMP) is called multiple time without pass to any other state
 	# so that player can multiple jump we call _set_state(STATE.JUMP, true) and we bypass the verification below 
-	if !force:
+	if !restart:
 		if current_state == new_state: # don't change if the requested state is the same that the current
 			return
 			
@@ -213,21 +188,29 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			reset_jump()
 			exit_fall = false # reset exit fall
 			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
-			current_speed = base_speed # set on ground speed
 			play_animation("run")
 			
 		STATE.JUMP: 
 			sprites.stop() # stop current jump animation to restart it
-			perform_jump()
+			exit_fall = false # reset exit fall
+			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
+			jumping = true # set this variable to true to prevent some bug on other functions TODO
+			if jumps_count == 1:
+				play_animation("jump_roll")
+			else:
+				play_animation("jump")
+	
+			camera_shake(SHAKE_PRESETS.JUMP)
+			velocity.y = jump_velocity # apply jump
+			jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
 			
 		STATE.FLY: 
 			exit_fall = false # reset exit fall
 			stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
-			current_speed = air_speed # set air speed
 			play_animation("fly")
-			
-		STATE.LOCKED:
-			play_animation("wait") # play wait animation to prevent animation bugs
+
+		STATE.DASH:
+			pass
 
 func _exit_state() -> void: # exit transition, nothing really important
 	match current_state:
@@ -249,62 +232,56 @@ func _exit_state() -> void: # exit transition, nothing really important
 		STATE.SLEEP:
 			pass
 			
-		STATE.LOCKED:
-			pass
 #endregion
 
 #region UPDATE STATE
 func _update_state(delta: float) -> void:  # every behavior of each states updated every physics process
 	match current_state:
 		STATE.JUMP: 
-			jump_update(delta) # update jump
+			move_horizontally(SPEED["AIR"]) # move on x axis with inputs
+			can_jump() # jump action, come with inputs system
+			if is_on_floor() && !jumping: # if player is on ground after his jump; var jumping is set to false after propulsion and after timer, without it, some bugs
+				if direction:
+					_set_state(STATE.RUN)
+				else:
+					_set_state(STATE.WAIT) # set wait; we play exit fall animation
+			else:
+				apply_gravity(delta) # else apply gravity
 			
 		STATE.IDLE: 
-			can_jump() # verify if player can jump
-			if direction: # if left or right is pressed, start walking
-				_set_state(STATE.RUN)
-			
-			if !is_on_floor() && !jumping:
-				_set_state(STATE.FLY)
+			can_jump()
+			can_run()
+			can_fly()
 				
 		STATE.WAIT:
-			can_jump() # verify if player can jump
-			if direction: # ef left or right is pressed, start walking
-				_set_state(STATE.RUN)
-			
-			if !is_on_floor() && !jumping: # if not on floor, fall down and fly (TODO !jumping)
-				_set_state(STATE.FLY)
+			#velocity.x = lerp(velocity.x, 0.0, friction)
+			velocity = velocity.move_toward(Vector2.ZERO, friction)
+			can_jump() 
+			can_run()
+			can_fly()
 
 		STATE.SLEEP:
-			can_jump() # verify if player can jump
-			if direction: # if left or right is pressed, start walking
-				_set_state(STATE.RUN)
-				
-			if !is_on_floor() && !jumping: # if not on floor, fall down TODO
-				_set_state(STATE.FLY)		
+			can_jump() 
+			can_run()
+			can_fly()	
 
 		STATE.RUN:
-			x_move() # move on x axis
+			move_horizontally(SPEED["GROUND"]) # move on x axis
 			can_jump() # verify if player can jump
 			if !direction: # if player doesn't move anymore 
 				_set_state(STATE.WAIT)
-
-			if !is_on_floor() && !jumping: #  # if not on floor, fall down TODO
-				_set_state(STATE.FLY)
+			can_fly()
 			
 		STATE.FLY: 
-			x_move() # move on x axis
+			move_horizontally(SPEED["AIR"]) # move on x axis
 			can_jump()  # verify if player can jump
 			if is_on_floor(): # if player comes back on floor
-				if direction: # if he want to move
+				if direction:
 					_set_state(STATE.RUN)
-				else: # else
-					_set_state(STATE.WAIT)
+				else:
+					_set_state(STATE.WAIT) # set wait; we play exit fall animation
 			else:
-				apply_gravity(get_current_gravity(), delta) # else apply gravity
-
-		STATE.LOCKED:
-			velocity = Vector2.ZERO
+				apply_gravity(delta) # else apply gravity
 #endregionunlock_player
 #endregion
 
@@ -312,36 +289,6 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 #region JUMP
 func reset_jump(): # reset jump
 	jumps_count = 0
-		
-func perform_jump(coef: float = 1.0): # func to do a jump
-	exit_fall = false # reset exit fall
-	stop_idle_timers() # we stop all idle timers, MAY NOT IMPORTANT ? TODO
-	current_speed = air_speed # set in air speed
-	jumping = true # set this variable to true to prevent some bug on other functions TODO
-
-	for n in different_animation_jump: # for specific jump defined in "different_animation_jump" we play a special animation
-		if n == jumps_count:
-			play_animation("jump_roll")
-		else:
-			play_animation("jump")
-	
-	camera_shake(SHAKE_PRESETS.JUMP)
-	
-	velocity.y = jump_velocity * coef # apply jump
-	jump_bug_timer.start() # this timer is here to prevent bug if STATE.JUMP begin to soon
-	
-func jump_update(delta): # basic func wich control jump in state update 
-	#print("YES 2")
-	x_move() # move on x axis with inputs
-	can_jump() # jump action, come with inputs system
-	if is_on_floor() && !jumping: # if player is on ground after his jump; var jumping is set to false after propulsion and after timer, without it, some bugs
-		if direction: # if he want to run
-			_set_state(STATE.RUN) # run
-		else: # else
-			_set_state(STATE.WAIT) # set wait; we play exit fall animation
-			
-	else:
-		apply_gravity(get_current_gravity(), delta) # else apply gravity
 
 func can_jump(): # func to verify if the player can jump
 	if !want_to_jump: # first verify if player press jump button
@@ -355,20 +302,8 @@ func can_jump(): # func to verify if the player can jump
 
 #endregion
 
-func dash():
-	if !want_to_dash:
-		return false
-	else:
-		if !is_able_to_dash:
-			return false
-		else:
-			is_able_to_dash = false
-			is_dashing = true
-			current_speed = dash_speed
-			dash_time_timer.start()
-			dash_delay_timer.start()
 	
-func camera_shake(preset: SHAKE_PRESETS):
+func camera_shake(preset: SHAKE_PRESETS) -> void:
 	camera.reset_trauma()
 	match preset:
 		SHAKE_PRESETS.TOUCH_THE_BALL:
@@ -377,46 +312,35 @@ func camera_shake(preset: SHAKE_PRESETS):
 			camera.start_shake(EFFECT_JUMP["TRAUMA"], EFFECT_JUMP["DECAY"], EFFECT_JUMP["MAX_OFFSET"], EFFECT_JUMP["MAX_ROLL"])
 		SHAKE_PRESETS.DASH:
 			camera.start_shake(EFFECT_DASH["TRAUMA"], EFFECT_DASH["DECAY"], EFFECT_DASH["MAX_OFFSET"], EFFECT_DASH["MAX_ROLL"])
-			
-func get_current_gravity() -> float: # return gravity
-	return jump_gravity if velocity.y < 0.0 else fall_gravity # if player's velocity < 0, it means that player is jumping so return jump gravity
 
-func apply_gravity(current_gravity : float, delta : float ): # apply gravity
+func apply_gravity(delta : float) -> void: # apply gravity
+	var current_gravity : float
+	if velocity.y < 0.0:
+		current_gravity = jump_gravity
+	else:
+		current_gravity = fall_gravity
 	velocity.y += current_gravity * delta
-	
-func lock_player(): # func called generaly from different scripts to prevent player moving
-	_set_state(STATE.LOCKED)
-	
-func unlock_player(): # func to unlock player after lock_player()
-	_set_state(STATE.WAIT)
-	
-func set_player_1(): # we can choose for player 1 or player 2 when multiplayer, so keyboard will change
-	print("PLAYER 1 initialized")
-	current_player = 1
-	player_set = true
-	
-func set_player_2(): # same for player 2
-	print("PLAYER 2 initialized")
-	current_player = 2
-	player_set = true
 
-func flip_sprites(): # simple func to automaticlly flip player sprite with the player's x velocity
+func can_dash() -> void:
+	pass
+	
+func can_run() -> void:
+	if direction: # if left or right is pressed, start walking
+		_set_state(STATE.RUN)
+		
+func can_fly() -> void:
+	if !is_on_floor() && !jumping: # if not on floor, fall down and fly (TODO !jumping)
+		_set_state(STATE.FLY)
+
+func move_horizontally(speed: float = 400) -> void: # simple func to move player on x axis
+	#velocity.x = lerp(velocity.x, direction * speed, acceleration)
+	velocity.x = move_toward(velocity.x, direction * speed, acceleration)
 	if velocity.x > 0: 
 		sprites.flip_h = false
-		
 	elif velocity.x < 0:
 		sprites.flip_h = true
-
-func x_move(): # simple func to move player on x axis
-	velocity.x = direction * current_speed 
-	flip_sprites() # flip player's sprite with his direction
 	
-func jump_math():
-	jump_velocity = ((2.0 * jump_height) / jump_time_to_peak) * -1.0 
-	jump_gravity = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
-	fall_gravity = ((-2.0 * jump_height) / (jump_time_to_fall * jump_time_to_fall)) * -1.0
-	
-func play_animation(animation: String): # play animation
+func play_animation(animation: String) -> void: # play animation
 	sprites.play(animation + "_" + str(current_player))
 	#if current_player == 1: # aniamtions with player's 1 skin
 		#match animation:
@@ -453,12 +377,12 @@ func play_animation(animation: String): # play animation
 				#sprites.play("sleep_2")
 			#"exit_fall":
 				#sprites.play("exit_fall_2")
-			#"jump_roll":
+			#"jump_roll":velocity = velocity.move_toward(Vector2.ZERO, friction)
 				#sprites.play("jump_roll_2")
 			
 #region SIGNALS
 # - TIMERS
-func stop_idle_timers(): # must be call on every movments states, stop all current timer
+func stop_idle_timers() -> void: # must be call on every movments states, stop all current timer
 	exit_fall_timer.stop()
 	exit_idle_timer.stop()
 	exit_wait_timer.stop()

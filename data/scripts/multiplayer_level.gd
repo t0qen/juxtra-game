@@ -157,17 +157,13 @@ func manage_scores():
 # - TIMERS
 func _on_after_goal_timeout() -> void:
 	# unlock players
+	respawn_players()
 	player_1.show()
 	player_2.show()
-	player_1.unlock_player()
-	player_2.unlock_player()
 	spawn_ball()
 
 func _on_before_after_goal_timeout() -> void:
 	# lock players
 	player_1.hide()
 	player_2.hide()
-	player_1.lock_player()
-	player_2.lock_player()
-	respawn_players()
 	after_goal_timer.start() # start the a timer after restarting the game 

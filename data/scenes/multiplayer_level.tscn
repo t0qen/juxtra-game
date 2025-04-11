@@ -65,12 +65,11 @@ position = Vector2(0, -64)
 
 [node name="player_1" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
 position = Vector2(-64, 0)
-current_player = 1
+current_player = 0
 camera = NodePath("../../camera")
 
 [node name="player_2" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
 position = Vector2(64, 0)
-current_player = 2
 camera = NodePath("../../camera")
 
 [node name="goals" type="Node2D" parent="."]
