@@ -24,8 +24,8 @@ SPEED = {
 }
 PUSH_FORCE = {
 "HARD": 300,
-"NORMAL": 75,
-"SOFT": 25
+"NORMAL": 300,
+"SOFT": 300
 }
 friction = 20.0
 acceleration = 30.0
@@ -61,10 +61,8 @@ sprites = NodePath("sprites")
 sprite_frames = SubResource("SpriteFrames_glcv3")
 
 [node name="area" type="Area2D" parent="."]
-position = Vector2(0, 1)
 
 [node name="hitbox" type="CollisionShape2D" parent="area"]
-position = Vector2(0, -1)
 shape = SubResource("CapsuleShape2D_glcv3")
 debug_color = Color(0.332806, 0.598795, 0.487301, 0.42)
 

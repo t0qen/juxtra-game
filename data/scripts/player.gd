@@ -12,7 +12,7 @@ enum PLAYER {
 #region MOVEMENTS
 @export_group("Movements")
 @export var SPEED : Dictionary = {"GROUND": 400, "AIR": 400, "DASH": 4000}
-@export var PUSH_FORCE : Dictionary = {"SOFT": 25, "NORMAL": 75, "HARD": 200}
+@export var PUSH_FORCE : Dictionary = {"SOFT": 800, "NORMAL": 800, "HARD": 200}
 var current_push_force = PUSH_FORCE["NORMAL"]
 @export var friction : float = 0.1
 @export var acceleration : float = 0.25
