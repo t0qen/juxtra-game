@@ -22,13 +22,8 @@ SPEED = {
 "AIR": 600,
 "GROUND": 600
 }
-PUSH_FORCE = {
-"HARD": 300,
-"NORMAL": 300,
-"SOFT": 300
-}
 friction = 20.0
-acceleration = 30.0
+acceleration = 50.0
 base_speed = 400
 air_speed = 400
 jump_height = 100.0
@@ -37,6 +32,7 @@ jump_time_to_fall = 0.3
 max_jumps = 8
 push_force = 25.0
 push_speed_divid = 200.0
+enable_camera_effects = false
 EFFECT_TOUCH_THE_BALL = {
 "DECAY": 0.8,
 "MAX_OFFSET": Vector2(15, 15),

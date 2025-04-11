@@ -12,7 +12,7 @@ enum PLAYER {
 #region MOVEMENTS
 @export_group("Movements")
 @export var SPEED : Dictionary = {"GROUND": 400, "AIR": 400, "DASH": 4000}
-@export var PUSH_FORCE : Dictionary = {"SOFT": 800, "NORMAL": 800, "HARD": 200}
+@export var PUSH_FORCE : Dictionary = {"SOFT": 25, "NORMAL": 150, "HARD": 300}
 var current_push_force = PUSH_FORCE["NORMAL"]
 @export var friction : float = 0.1
 @export var acceleration : float = 0.25
@@ -143,12 +143,13 @@ func _physics_process(delta: float) -> void:
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
 		if c.get_collider() is RigidBody2D:
+			print(current_push_force)
 			c.get_collider().apply_central_impulse(-c.get_normal() * current_push_force)
 
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
 	want_to_jump = Input.is_action_just_pressed("jump_" + str(current_player)) # bool to jump
 	direction = Input.get_axis("move_left_" + str(current_player), "move_right_" + str(current_player)) # int to get axis : -1 / 0 / 1
-	want_to_dash = Input.is_action_just_pressed("dash_" + str(current_player))
+	want_to_dash = Input.is_action_pressed("dash_" + str(current_player))
 #endregion
 
 #region STATE FUNCTIONS
@@ -313,14 +314,15 @@ func can_jump(): # func to verify if the player can jump
 
 	
 func camera_shake(preset: SHAKE_PRESETS) -> void:
-	camera.reset_trauma()
-	match preset:
-		SHAKE_PRESETS.TOUCH_THE_BALL:
-			camera.start_shake(EFFECT_TOUCH_THE_BALL["TRAUMA"], EFFECT_TOUCH_THE_BALL["DECAY"], EFFECT_TOUCH_THE_BALL["MAX_OFFSET"], EFFECT_TOUCH_THE_BALL["MAX_ROLL"])
-		SHAKE_PRESETS.JUMP:
-			camera.start_shake(EFFECT_JUMP["TRAUMA"], EFFECT_JUMP["DECAY"], EFFECT_JUMP["MAX_OFFSET"], EFFECT_JUMP["MAX_ROLL"])
-		SHAKE_PRESETS.DASH:
-			camera.start_shake(EFFECT_DASH["TRAUMA"], EFFECT_DASH["DECAY"], EFFECT_DASH["MAX_OFFSET"], EFFECT_DASH["MAX_ROLL"])
+	if enable_camera_effects:
+		camera.reset_trauma()
+		match preset:
+			SHAKE_PRESETS.TOUCH_THE_BALL:
+				camera.start_shake(EFFECT_TOUCH_THE_BALL["TRAUMA"], EFFECT_TOUCH_THE_BALL["DECAY"], EFFECT_TOUCH_THE_BALL["MAX_OFFSET"], EFFECT_TOUCH_THE_BALL["MAX_ROLL"])
+			SHAKE_PRESETS.JUMP:
+				camera.start_shake(EFFECT_JUMP["TRAUMA"], EFFECT_JUMP["DECAY"], EFFECT_JUMP["MAX_OFFSET"], EFFECT_JUMP["MAX_ROLL"])
+			SHAKE_PRESETS.DASH:
+				camera.start_shake(EFFECT_DASH["TRAUMA"], EFFECT_DASH["DECAY"], EFFECT_DASH["MAX_OFFSET"], EFFECT_DASH["MAX_ROLL"])
 
 func apply_gravity(delta : float) -> void: # apply gravity
 	var current_gravity : float

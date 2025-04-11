@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://djd1mq3ot48xw"]
+[gd_scene load_steps=12 format=3 uid="uid://djd1mq3ot48xw"]
 
 [ext_resource type="Script" uid="uid://cfseqshiju1j5" path="res://data/scripts/multiplayer_level.gd" id="1_lpglf"]
 [ext_resource type="PackedScene" uid="uid://dyvd2cue15rb6" path="res://data/scenes/camera.tscn" id="2_i4smc"]
@@ -30,12 +30,6 @@ distance = -576.0
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ciff6"]
 distance = -320.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kd03d"]
-size = Vector2(90.5, 223)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ciff6"]
-size = Vector2(46, 56.5)
-
 [node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "before_after_goal_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
 script = ExtResource("1_lpglf")
 after_goal_timer = NodePath("timers/after_goal")
@@ -59,10 +53,10 @@ tile_set = SubResource("TileSet_5bmcu")
 [node name="markers" type="Node2D" parent="."]
 
 [node name="player_1_spawn" type="Marker2D" parent="markers"]
-position = Vector2(-64, 0)
+position = Vector2(-64, 304)
 
 [node name="player_2_spawn" type="Marker2D" parent="markers"]
-position = Vector2(64, 0)
+position = Vector2(64, 304)
 
 [node name="ball_spawn" type="Marker2D" parent="markers"]
 position = Vector2(0, -64)
@@ -70,12 +64,12 @@ position = Vector2(0, -64)
 [node name="players" type="Node2D" parent="."]
 
 [node name="player_1" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
-position = Vector2(-64, 0)
+position = Vector2(-64, 304)
 current_player = 0
 camera = NodePath("../../camera")
 
 [node name="player_2" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
-position = Vector2(64, 0)
+position = Vector2(64, 304)
 camera = NodePath("../../camera")
 
 [node name="goals" type="Node2D" parent="."]
@@ -123,30 +117,6 @@ shape = SubResource("WorldBoundaryShape2D_kd03d")
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
 rotation = 3.14159
 shape = SubResource("WorldBoundaryShape2D_ciff6")
-
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
-collision_layer = 8
-collision_mask = 6
-mass = 3.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-position = Vector2(-272.25, -8.5)
-shape = SubResource("RectangleShape2D_kd03d")
-
-[node name="PinJoint2D" type="PinJoint2D" parent="."]
-position = Vector2(-272, -104)
-node_a = NodePath("../RigidBody2D")
-node_b = NodePath("../StaticBody2D2")
-bias = 0.9
-angular_limit_enabled = true
-angular_limit_lower = 1.54113
-angular_limit_upper = -2.78555
-
-[node name="StaticBody2D2" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
-position = Vector2(-272, -123)
-shape = SubResource("RectangleShape2D_ciff6")
 
 [connection signal="area_entered" from="goals/goal_1" to="." method="_on_goal_1_area_entered"]
 [connection signal="area_entered" from="goals/goal_2" to="." method="_on_goal_2_area_entered"]
