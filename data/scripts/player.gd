@@ -173,6 +173,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			exit_idle_timer.start() # start timer, after end, set exit_idle to true
 			
 		STATE.WAIT:
+			#is_able_to_dash = true
 			reset_jump() # reset jumps, because if state is wait, it means that player is on ground
 			if !exit_fall: # if player wasn't falling before
 				play_animation("wait") # play basic animation
@@ -420,7 +421,10 @@ func _on_jump_bug_timeout() -> void: # prevent bugs
 func _on_dash_time_timeout() -> void:
 	velocity.x = 0
 	current_push_force = PUSH_FORCE["NORMAL"]
-	_set_state(STATE.WAIT)
+	if is_on_floor():
+		_set_state(STATE.WAIT)
+	else:
+		_set_state(STATE.FLY)
 
 func _on_dash_delay_timeout() -> void:
 	is_able_to_dash = true
