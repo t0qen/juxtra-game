@@ -249,12 +249,12 @@ position = Vector2(0, -64)
 [node name="players" type="Node2D" parent="."]
 
 [node name="player_1" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
-position = Vector2(-132, 56)
+position = Vector2(-153, 324)
 current_player = 0
 camera = NodePath("../../camera")
 
 [node name="player_2" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
-position = Vector2(233, 59)
+position = Vector2(141, 324)
 camera = NodePath("../../camera")
 
 [node name="goals" type="Node2D" parent="."]
@@ -274,7 +274,7 @@ shape = SubResource("RectangleShape2D_5bmcu")
 [node name="goal_1_light" type="PointLight2D" parent="goals"]
 position = Vector2(600, -1)
 color = Color(0.0470588, 0.541176, 0.278431, 1)
-energy = 2.8
+energy = 1.5
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
 texture = SubResource("GradientTexture2D_5bmcu")
@@ -283,7 +283,7 @@ texture_scale = 37.0
 [node name="goal_2_light" type="PointLight2D" parent="goals"]
 position = Vector2(-600, 30)
 color = Color(0.87451, 0.223529, 0.223529, 1)
-energy = 2.8
+energy = 1.5
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
 texture = SubResource("GradientTexture2D_kd03d")

@@ -362,6 +362,8 @@ func move_horizontally(speed: float = 400, current_acceleration: float = acceler
 		sprites.flip_h = true
 	
 func play_animation(animation: String) -> void: # play animation
+	if current_player == PLAYER.PLAYER_1:
+		print(animation + "_" + str(current_player))
 	sprites.play(animation + "_" + str(current_player))
 	#if current_player == 1: # aniamtions with player's 1 skin
 		#match animation:

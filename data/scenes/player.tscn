@@ -413,62 +413,62 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 2.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_jsso6")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_08vgp")
 }, {
-"duration": 1.0,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_toouh")
 }, {
-"duration": 1.0,
+"duration": 0.15,
 "texture": SubResource("AtlasTexture_wlg4u")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_iy2d7")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_luwjy")
 }, {
-"duration": 1.0,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_c01vk")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_2c71y")
 }],
 "loop": false,
 "name": &"exit_fall_0",
-"speed": 5.0
+"speed": 1.0
 }, {
 "frames": [{
-"duration": 2.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_ao47m")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_c5pte")
 }, {
-"duration": 1.0,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_1riqv")
 }, {
-"duration": 1.0,
+"duration": 0.15,
 "texture": SubResource("AtlasTexture_6o5vm")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_fpx40")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_v5aej")
 }, {
-"duration": 1.0,
+"duration": 0.2,
 "texture": SubResource("AtlasTexture_l8xpa")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_7hr5f")
 }],
-"loop": true,
+"loop": false,
 "name": &"exit_fall_1",
-"speed": 5.0
+"speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -566,74 +566,74 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_7xgmf")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_lk3x8")
 }, {
-"duration": 1.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_0e8hy")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_rhk7v")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_y78kx")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_5r5vw")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_cfsuo")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_t18ej")
 }, {
-"duration": 1.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_guq1j")
 }, {
-"duration": 1.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_jmbi1")
 }],
 "loop": false,
 "name": &"jump_roll_0",
-"speed": 10.0
+"speed": 1.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_s1gj2")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_wbuqr")
 }, {
-"duration": 1.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_kablj")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_lod2c")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_gvry0")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_0s46l")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_7wolw")
 }, {
-"duration": 1.0,
+"duration": 0.1,
 "texture": SubResource("AtlasTexture_blboo")
 }, {
-"duration": 1.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_wp8be")
 }, {
-"duration": 1.0,
+"duration": 0.05,
 "texture": SubResource("AtlasTexture_3gss2")
 }],
-"loop": true,
+"loop": false,
 "name": &"jump_roll_1",
-"speed": 5.0
+"speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -818,7 +818,7 @@ sprites = NodePath("sprites")
 position = Vector2(0, -24)
 scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_glcv3")
-animation = &"jump_1"
+animation = &"jump_roll_1"
 autoplay = "dash_0"
 
 [node name="area" type="Area2D" parent="."]
@@ -871,7 +871,7 @@ occluder = SubResource("OccluderPolygon2D_7xgmf")
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(0, -6)
 color = Color(0.976471, 0.729412, 0.603922, 1)
-energy = 0.75
+energy = 0.5
 texture = SubResource("GradientTexture2D_lk3x8")
 texture_scale = 2.0
 
