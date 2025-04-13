@@ -98,7 +98,9 @@ func spawn_ball(): # instanciate ball scene
 	current_ball = ball.instantiate()
 	current_ball.global_position = ball_spawn.global_position
 	add_child(current_ball)
-	
+	player_1.ball = current_ball
+	player_2.ball = current_ball
+
 func respawn_players():
 	player_1.global_position = player_1_spawn.global_position 
 	player_2.global_position = player_2_spawn.global_position 
@@ -167,3 +169,6 @@ func _on_before_after_goal_timeout() -> void:
 	player_1.hide()
 	player_2.hide()
 	after_goal_timer.start() # start the a timer after restarting the game 
+
+func play_anim_ball():
+	current_ball.get_child(0).play_anim_fast()

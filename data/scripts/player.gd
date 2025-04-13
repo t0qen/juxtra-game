@@ -123,7 +123,7 @@ var exit_fall : bool = false # same for fall
 var want_to_jump : bool = false # a bool to know if player want to jump
 var direction : int = 0 # the direction of player, may a Vector2 ? consider jump as direction ? TODO
 var want_to_dash : bool = false # same for dash 
-
+var ball
 #endregion
 #endregion
 
@@ -143,13 +143,14 @@ func _physics_process(delta: float) -> void:
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
 		if c.get_collider() is RigidBody2D:
-			print(current_push_force)
+			if current_push_force == PUSH_FORCE["HARD"]:
+				ball.get_child(0).play_anim_fast()
 			c.get_collider().apply_central_impulse(-c.get_normal() * current_push_force)
 
 func get_inputs(): # essential function to get player inputs, depend on wich player is 
 	want_to_jump = Input.is_action_just_pressed("jump_" + str(current_player)) # bool to jump
 	direction = Input.get_axis("move_left_" + str(current_player), "move_right_" + str(current_player)) # int to get axis : -1 / 0 / 1
-	want_to_dash = Input.is_action_pressed("dash_" + str(current_player))
+	want_to_dash = Input.is_action_just_pressed("dash_" + str(current_player))
 #endregion
 
 #region STATE FUNCTIONS
@@ -173,7 +174,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			exit_idle_timer.start() # start timer, after end, set exit_idle to true
 			
 		STATE.WAIT:
-			#is_able_to_dash = true
+			is_able_to_dash = true
 			reset_jump() # reset jumps, because if state is wait, it means that player is on ground
 			if !exit_fall: # if player wasn't falling before
 				play_animation("wait") # play basic animation
@@ -212,6 +213,7 @@ func _enter_state() -> void: # enter transition, basiclly we play animations
 			play_animation("fly")
 
 		STATE.DASH:
+			play_animation("dash")
 			velocity = Vector2(0, 0)
 			current_push_force = PUSH_FORCE["HARD"]
 			dash_time_timer.start()
@@ -257,7 +259,8 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 				apply_gravity(delta) # else apply gravity
 			
 		STATE.DASH:
-			velocity.x = direction * 4000
+			velocity.x = direction * 2000
+			can_jump()
 			
 		STATE.IDLE: 
 			can_jump()
@@ -433,13 +436,14 @@ func _on_dash_delay_timeout() -> void:
 func _on_area_area_entered(area: Area2D) -> void: # start a camera shake if player touch the ball
 	if area.is_in_group("ball"): # if player touchs the ball
 		print("touch ball")
+		play_animation("touche_ball")
 		camera_shake(SHAKE_PRESETS.TOUCH_THE_BALL)
 		var ball = area.get_parent() # get the ball node (rigid body)
 		# modify it groups to know wich player has touch it for the last time
-		if current_player == 1:
+		if current_player == PLAYER.PLAYER_1:
 			ball.add_to_group("player_1") 
 			ball.remove_from_group("player_2")
-		elif current_player == 2:
+		elif current_player == PLAYER.PLAYER_2:
 			ball.add_to_group("player_2") 
 			ball.remove_from_group("player_1")
 #endregion

@@ -1,29 +1,108 @@
-[gd_scene load_steps=5 format=3 uid="uid://bxc4wjg31b3av"]
+[gd_scene load_steps=15 format=3 uid="uid://bxc4wjg31b3av"]
 
 [ext_resource type="Script" uid="uid://84vrvqbb0ohj" path="res://data/scripts/ball.gd" id="1_4wqu7"]
+[ext_resource type="Texture2D" uid="uid://6uwan8xm0rwl" path="res://data/assets/ball.png" id="2_p3r1w"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_k3ts2"]
 friction = 0.0
 rough = true
 bounce = 1.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_5sysg"]
+atlas = ExtResource("2_p3r1w")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5hbrn"]
+atlas = ExtResource("2_p3r1w")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1dkw"]
+atlas = ExtResource("2_p3r1w")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4sjiy"]
+atlas = ExtResource("2_p3r1w")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m8r7h"]
+atlas = ExtResource("2_p3r1w")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p3r1w"]
+atlas = ExtResource("2_p3r1w")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lp7a2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5sysg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5hbrn")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_f1dkw")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_4sjiy")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_m8r7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p3r1w")
+}],
+"loop": false,
+"name": &"fast",
+"speed": 5.0
+}]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_k3ts2"]
-radius = 27.074
+radius = 48.0416
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4wqu7"]
-radius = 28.0179
+radius = 54.0093
+
+[sub_resource type="Gradient" id="Gradient_p3r1w"]
+offsets = PackedFloat32Array(0, 0.0119048, 0.0238095, 0.0297619, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.386905, 0.386905, 0.386905, 1, 0.366387, 0.366387, 0.366387, 1, 0.25245, 0.25245, 0.25245, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5sysg"]
+gradient = SubResource("Gradient_p3r1w")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.737069, 0.331897)
 
 [node name="ball" type="Node2D"]
 
 [node name="root_ball" type="RigidBody2D" parent="." groups=["ball"]]
+top_level = true
+light_mask = 2
 collision_layer = 4
 collision_priority = 10.0
 physics_material_override = SubResource("PhysicsMaterial_k3ts2")
 gravity_scale = 0.2
 inertia = 0.01
-linear_damp_mode = 1
+lock_rotation = true
+continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 5
 angular_damp_mode = 1
 script = ExtResource("1_4wqu7")
+
+[node name="sprites" type="AnimatedSprite2D" parent="root_ball"]
+scale = Vector2(12, 12)
+sprite_frames = SubResource("SpriteFrames_lp7a2")
+animation = &"fast"
+autoplay = "default"
+frame = 3
+frame_progress = 1.0
 
 [node name="hitbox" type="CollisionShape2D" parent="root_ball"]
 shape = SubResource("CircleShape2D_k3ts2")
@@ -34,6 +113,13 @@ debug_color = Color(0.732492, 0.449795, 0.392916, 0.42)
 [node name="hitbox" type="CollisionShape2D" parent="root_ball/area" groups=["ball"]]
 shape = SubResource("CircleShape2D_4wqu7")
 debug_color = Color(0.609772, 0.522184, 0.380033, 0.42)
+
+[node name="PointLight2D" type="PointLight2D" parent="root_ball"]
+show_behind_parent = true
+color = Color(0.760784, 0.533333, 0.960784, 1)
+energy = 0.4
+texture = SubResource("GradientTexture2D_5sysg")
+texture_scale = 14.0
 
 [node name="shadow" type="Node2D" parent="."]
 

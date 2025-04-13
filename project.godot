@@ -18,6 +18,10 @@ run/low_processor_mode=true
 config/icon="uid://bf7vxmit28uha"
 config/windows_native_icon="res://data/ressources/icon.ico"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [file_customization]
 
 folder_colors={

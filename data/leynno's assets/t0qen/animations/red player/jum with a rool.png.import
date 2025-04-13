@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://oq4um2wprwyh"
+path="res://.godot/imported/jum with a rool.png-99070e705da9949beaf8f6866096669b.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://data/leynno's assets/t0qen/animations/red player/jum with a rool.png"
+dest_files=["res://.godot/imported/jum with a rool.png-99070e705da9949beaf8f6866096669b.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1
