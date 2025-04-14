@@ -872,6 +872,10 @@ occluder = SubResource("OccluderPolygon2D_7xgmf")
 position = Vector2(0, -6)
 color = Color(0.976471, 0.729412, 0.603922, 1)
 energy = 0.5
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 2
+shadow_filter_smooth = 1.0
 texture = SubResource("GradientTexture2D_lk3x8")
 texture_scale = 2.0
 

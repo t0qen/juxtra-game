@@ -1,9 +1,11 @@
-[gd_scene load_steps=26 format=4 uid="uid://djd1mq3ot48xw"]
+[gd_scene load_steps=30 format=4 uid="uid://djd1mq3ot48xw"]
 
 [ext_resource type="Script" uid="uid://cfseqshiju1j5" path="res://data/scripts/multiplayer_level.gd" id="1_lpglf"]
 [ext_resource type="Texture2D" uid="uid://bcad7k112u5rt" path="res://data/assets/levels/tiles.png" id="2_5bmcu"]
 [ext_resource type="PackedScene" uid="uid://dyvd2cue15rb6" path="res://data/scenes/camera.tscn" id="2_i4smc"]
+[ext_resource type="Texture2D" uid="uid://dkgdkm6p870l5" path="res://data/assets/levels/background.png" id="2_kd03d"]
 [ext_resource type="PackedScene" uid="uid://pqwlje75yaq6" path="res://data/scenes/player.tscn" id="2_tyoci"]
+[ext_resource type="FontFile" uid="uid://dtn3s3mvxooc6" path="res://data/assets/fonts/Bytesized-Regular.ttf" id="4_ciff6"]
 
 [sub_resource type="Gradient" id="Gradient_5bmcu"]
 offsets = PackedFloat32Array(0.0119048)
@@ -167,11 +169,24 @@ physics_layer_1/collision_layer = 8
 physics_layer_1/collision_mask = 2
 sources/1 = SubResource("TileSetAtlasSource_5bmcu")
 
+[sub_resource type="LabelSettings" id="LabelSettings_dvgjj"]
+font = ExtResource("4_ciff6")
+font_size = 120
+shadow_size = 0
+shadow_color = Color(0.98, 0.98, 0.98, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_knx5i"]
+font = ExtResource("4_ciff6")
+font_size = 120
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 24
+shadow_offset = Vector2(0, 5)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tyoci"]
-size = Vector2(50, 149)
+size = Vector2(9.25, 115.75)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5bmcu"]
-size = Vector2(51.25, 149.5)
+size = Vector2(9, 116)
 
 [sub_resource type="Gradient" id="Gradient_ql84r"]
 offsets = PackedFloat32Array(0, 0.0238095, 0.0416667, 0.589286, 1)
@@ -207,6 +222,7 @@ distance = -320.0
 
 [node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "before_after_goal_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
 script = ExtResource("1_lpglf")
+enable_ui = true
 after_goal_timer = NodePath("timers/after_goal")
 before_after_goal_timer = NodePath("timers/before_after_goal")
 player_1_spawn = NodePath("markers/player_1_spawn")
@@ -216,7 +232,12 @@ player_1 = NodePath("players/player_1")
 player_2 = NodePath("players/player_2")
 camera = NodePath("camera")
 
+[node name="Background" type="Sprite2D" parent="."]
+scale = Vector2(60, 60)
+texture = ExtResource("2_kd03d")
+
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 offset_left = -767.0
 offset_top = -459.0
 offset_right = 1120.0
@@ -232,6 +253,23 @@ tile_map_data = PackedByteArray("AAAKAPn/AQAGAAEAAAAKAPr/AQAGAAEAAAAKAPv/AQAGAAE
 tile_set = SubResource("TileSet_5bmcu")
 
 [node name="UI" type="Node2D" parent="."]
+
+[node name="player_1" type="Label" parent="UI"]
+offset_left = -173.0
+offset_top = -301.0
+offset_right = -113.0
+offset_bottom = -151.0
+size_flags_horizontal = 4
+text = "0"
+label_settings = SubResource("LabelSettings_dvgjj")
+
+[node name="player_2" type="Label" parent="UI"]
+offset_left = 128.0
+offset_top = -301.0
+offset_right = 188.0
+offset_bottom = -151.0
+text = "0"
+label_settings = SubResource("LabelSettings_knx5i")
 
 [node name="light_effects" type="Node2D" parent="."]
 
@@ -262,13 +300,13 @@ camera = NodePath("../../camera")
 [node name="goal_1" type="Area2D" parent="goals"]
 
 [node name="hitbox" type="CollisionShape2D" parent="goals/goal_1"]
-position = Vector2(619, 31)
+position = Vector2(619, 32)
 shape = SubResource("RectangleShape2D_tyoci")
 
 [node name="goal_2" type="Area2D" parent="goals"]
 
 [node name="hitbox" type="CollisionShape2D" parent="goals/goal_2"]
-position = Vector2(-628, 31)
+position = Vector2(-619, 32)
 shape = SubResource("RectangleShape2D_5bmcu")
 
 [node name="goal_1_light" type="PointLight2D" parent="goals"]
@@ -324,7 +362,7 @@ rotation = 3.14159
 shape = SubResource("WorldBoundaryShape2D_ciff6")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.577636, 0.538154, 0.784302, 0.729412)
+color = Color(0.866224, 0.757478, 0.854015, 1)
 
 [connection signal="area_entered" from="goals/goal_1" to="." method="_on_goal_1_area_entered"]
 [connection signal="area_entered" from="goals/goal_2" to="." method="_on_goal_2_area_entered"]

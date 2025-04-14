@@ -362,8 +362,8 @@ func move_horizontally(speed: float = 400, current_acceleration: float = acceler
 		sprites.flip_h = true
 	
 func play_animation(animation: String) -> void: # play animation
-	if current_player == PLAYER.PLAYER_1:
-		print(animation + "_" + str(current_player))
+	#if current_player == PLAYER.PLAYER_1:
+		#print(animation + "_" + str(current_player))
 	sprites.play(animation + "_" + str(current_player))
 	#if current_player == 1: # aniamtions with player's 1 skin
 		#match animation:
@@ -437,7 +437,6 @@ func _on_dash_delay_timeout() -> void:
 # - OTHERS
 func _on_area_area_entered(area: Area2D) -> void: # start a camera shake if player touch the ball
 	if area.is_in_group("ball"): # if player touchs the ball
-		print("touch ball")
 		play_animation("touche_ball")
 		camera_shake(SHAKE_PRESETS.TOUCH_THE_BALL)
 		var ball = area.get_parent() # get the ball node (rigid body)

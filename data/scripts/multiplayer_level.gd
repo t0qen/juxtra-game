@@ -47,7 +47,7 @@ enum WAY_TO_SCORE { # how player has scored
 
 var ball = preload("res://data/scenes/ball.tscn") # preload ball scene so we can queue_free() it 
 var current_ball = null # store preloaded ball
-
+var scoring : bool = false
 # - CAMERA EFFECTS
 @export_group("Camera shakes presets") # some presets for camera shakes, like in player.gd
 
@@ -74,10 +74,10 @@ var current_ball = null # store preloaded ball
 # - SCORES
 var player_1_score : int = 0 # store player 1 score
 var player_2_score : int = 0 # same for player 2
-var current_winner_player = PLAYERS # wich players has really win the game, depends on wich player has touch the ball for the last time
-var last_touch_ball = PLAYERS # wich player s has touch the ball for the last time
-var current_goal = GOALS # in wich goal the ball is 
-var current_way_to_score = WAY_TO_SCORE # how player has scored
+var current_winner_player = PLAYERS.PLAYER_1 # wich players has really win the game, depends on wich player has touch the ball for the last time
+var last_touch_ball = PLAYERS.PLAYER_1 # wich player s has touch the ball for the last time
+var current_goal = GOALS.GOAL_1 # in wich goal the ball is 
+var current_way_to_score = WAY_TO_SCORE.UNVOLUNTARY # how player has scored
 #endregion
 
 func _ready() -> void:
@@ -91,8 +91,10 @@ func _ready() -> void:
 
 	spawn_ball()
 
-func _process(delta: float) -> void:
-	pass
+func _physics_process(delta: float) -> void:
+	if !scoring:
+		var ball_rb = current_ball.get_child(0).global_position
+		$Background.global_position = lerp($Background.global_position, ball_rb, 0.2 * delta)
 	
 func spawn_ball(): # instanciate ball scene
 	current_ball = ball.instantiate()
@@ -106,32 +108,36 @@ func respawn_players():
 	player_2.global_position = player_2_spawn.global_position 
 	
 func update_score():
-	#player_1_score_text.text = str(player_1_score) TODO
-	#player_2_score_text.text = str(player_2_score) TODO
-	pass	
+	$UI/player_1.text = str(player_1_score)
+	$UI/player_2.text = str(player_2_score)
+	#pass
 	
 # - GOALS / SCORES
 func _on_goal_1_area_entered(area: Area2D) -> void: # player 2 scores
 	if area.is_in_group("ball"): # verify if it's the ball that is in the goal
-		manage_scores()
-		current_ball.queue_free() # delete the current ball
-		before_after_goal_timer.start()
-		current_goal = GOALS.GOAL_1
-		# print GOAL 
-		
-func _on_goal_2_area_entered(area: Area2D) -> void: # player 1 scores
-	if area.is_in_group("ball"): # verify if it's the ball that is in the goal
+		scoring = true
 		manage_scores()
 		current_ball.queue_free() # delete the current ball
 		before_after_goal_timer.start()
 		current_goal = GOALS.GOAL_2
 		# print GOAL 
+		
+func _on_goal_2_area_entered(area: Area2D) -> void: # player 1 scores
+	if area.is_in_group("ball"): # verify if it's the ball that is in the goal
+		scoring = true 
+		manage_scores()
+		current_ball.queue_free() # delete the current ball
+		before_after_goal_timer.start()
+		current_goal = GOALS.GOAL_1
+		# print GOAL 
 
 func manage_scores():
 	# check wich player touch the balls for the last time
-	if current_ball.is_in_group("player_1"):
+	if current_ball.get_child(0).is_in_group("player_1"):
+		print("PLAYER 1 LAST TOUCH")
 		last_touch_ball = PLAYERS.PLAYER_1
-	elif current_ball.is_in_group("player_2"):
+	elif current_ball.get_child(0).is_in_group("player_2"):
+		print("PLAYER 2 LAST TOUCH")
 		last_touch_ball = PLAYERS.PLAYER_2
 	else:
 		last_touch_ball = PLAYERS.NOBODY # this will probably never be used because ball can't go to a goal without a player touch
@@ -140,11 +146,11 @@ func manage_scores():
 	if last_touch_ball == PLAYERS.PLAYER_1 && current_goal == GOALS.GOAL_2: # player 1 has scored in the enemy goal, +4 for him
 		current_winner_player = PLAYERS.PLAYER_1
 		current_way_to_score = WAY_TO_SCORE.VOLUNTARY
-		player_1_score += 4
+		player_1_score += 2
 	elif last_touch_ball == PLAYERS.PLAYER_2 && current_goal == GOALS.GOAL_1: # player 2 has scored in the enemy goal, +4 for him
 		current_winner_player = PLAYERS.PLAYER_2
 		current_way_to_score = WAY_TO_SCORE.VOLUNTARY
-		player_2_score += 4
+		player_2_score += 2
 	elif last_touch_ball == PLAYERS.PLAYER_1 && current_goal == GOALS.GOAL_1: # player 1 has scored in him own goal
 		current_winner_player = PLAYERS.PLAYER_2
 		current_way_to_score = WAY_TO_SCORE.UNVOLUNTARY
@@ -154,6 +160,13 @@ func manage_scores():
 		current_way_to_score = WAY_TO_SCORE.UNVOLUNTARY
 		player_1_score += 1
 	
+	# print scores
+	print("CURRENT WINNER : ", current_winner_player)
+	print("PLAYER 1 SCORE : ", player_1_score, "  -  PLAYER 2 SCORE : ", player_2_score)
+	print("WAY TO SCORE : ", current_way_to_score)
+	print("GOAL : ", current_goal)
+	print("LAST TOUCH : ", last_touch_ball)
+	update_score()
 	# TODO
 	
 # - TIMERS
@@ -163,6 +176,7 @@ func _on_after_goal_timeout() -> void:
 	player_1.show()
 	player_2.show()
 	spawn_ball()
+	scoring = false 
 
 func _on_before_after_goal_timeout() -> void:
 	# lock players

@@ -14,6 +14,8 @@ func _physics_process(delta: float) -> void:
 			#is_able = true
 	#else:
 		#$sprites.play("default")
+	
+	#print(get_groups())
 
 func play_anim_fast():
 	$sprites.play("fast")
