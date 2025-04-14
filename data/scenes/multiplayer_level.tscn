@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=4 uid="uid://djd1mq3ot48xw"]
+[gd_scene load_steps=32 format=4 uid="uid://djd1mq3ot48xw"]
 
 [ext_resource type="Script" uid="uid://cfseqshiju1j5" path="res://data/scripts/multiplayer_level.gd" id="1_lpglf"]
 [ext_resource type="Texture2D" uid="uid://bcad7k112u5rt" path="res://data/assets/levels/tiles.png" id="2_5bmcu"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://dkgdkm6p870l5" path="res://data/assets/levels/background.png" id="2_kd03d"]
 [ext_resource type="PackedScene" uid="uid://pqwlje75yaq6" path="res://data/scenes/player.tscn" id="2_tyoci"]
 [ext_resource type="FontFile" uid="uid://dtn3s3mvxooc6" path="res://data/assets/fonts/Bytesized-Regular.ttf" id="4_ciff6"]
+[ext_resource type="Texture2D" uid="uid://c6rabv4jdvjuu" path="res://data/assets/UI/buttons/help.png" id="5_knx5i"]
+[ext_resource type="Texture2D" uid="uid://nvpil8hd5sxv" path="res://data/assets/UI/buttons/lights.png" id="6_rdpnj"]
 
 [sub_resource type="Gradient" id="Gradient_5bmcu"]
 offsets = PackedFloat32Array(0.0119048)
@@ -271,6 +273,39 @@ offset_bottom = -151.0
 text = "0"
 label_settings = SubResource("LabelSettings_knx5i")
 
+[node name="Buttons" type="Node2D" parent="UI"]
+
+[node name="Help" type="Button" parent="UI/Buttons"]
+offset_left = 398.0
+offset_top = -309.0
+offset_right = 434.0
+offset_bottom = -278.0
+scale = Vector2(2, 2)
+focus_mode = 0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+button_pressed = true
+button_mask = 7
+icon = ExtResource("5_knx5i")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="Lights" type="Button" parent="UI/Buttons"]
+offset_left = 404.0
+offset_top = -244.0
+offset_right = 434.0
+offset_bottom = -213.0
+scale = Vector2(2, 2)
+focus_mode = 0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+button_pressed = true
+button_mask = 7
+icon = ExtResource("6_rdpnj")
+flat = true
+icon_alignment = 1
+
 [node name="light_effects" type="Node2D" parent="."]
 
 [node name="markers" type="Node2D" parent="."]
@@ -364,6 +399,12 @@ shape = SubResource("WorldBoundaryShape2D_ciff6")
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.866224, 0.757478, 0.854015, 1)
 
+[connection signal="mouse_entered" from="UI/Buttons/Help" to="." method="_on_help_mouse_entered"]
+[connection signal="mouse_exited" from="UI/Buttons/Help" to="." method="_on_help_mouse_exited"]
+[connection signal="toggled" from="UI/Buttons/Help" to="." method="_on_help_toggled"]
+[connection signal="mouse_entered" from="UI/Buttons/Lights" to="." method="_on_lights_mouse_entered"]
+[connection signal="mouse_exited" from="UI/Buttons/Lights" to="." method="_on_lights_mouse_exited"]
+[connection signal="toggled" from="UI/Buttons/Lights" to="." method="_on_lights_toggled"]
 [connection signal="area_entered" from="goals/goal_1" to="." method="_on_goal_1_area_entered"]
 [connection signal="area_entered" from="goals/goal_2" to="." method="_on_goal_2_area_entered"]
 [connection signal="timeout" from="timers/after_goal" to="." method="_on_after_goal_timeout"]

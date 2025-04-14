@@ -20,7 +20,10 @@ enum WAY_TO_SCORE { # how player has scored
 
 # - UI
 @export var enable_ui : bool = false # disable/enable ui for debug
-
+var on_hover_help = preload("res://data/assets/UI/buttons/on_hover_help.png")
+var normal_help = preload("res://data/assets/UI/buttons/help.png")
+var on_hover_light = preload("res://data/assets/UI/buttons/on_hover_lights.png")
+var normal_light= preload("res://data/assets/UI/buttons/lights.png")
 # - LIGHT EFFECTS
 @export var enable_light_effects : bool = false # disbale/enable light effects
 
@@ -186,3 +189,30 @@ func _on_before_after_goal_timeout() -> void:
 
 func play_anim_ball():
 	current_ball.get_child(0).play_anim_fast()
+
+func _on_help_toggled(toggled_on: bool) -> void:
+	pass
+
+func _on_lights_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		$CanvasModulate.show()
+	else:
+		$CanvasModulate.hide()
+
+
+func _on_help_mouse_entered() -> void:
+	$UI/Buttons/Help.icon = on_hover_help
+	print("MOUSE ENTER")
+
+
+func _on_help_mouse_exited() -> void:
+	$UI/Buttons/Help.icon = normal_help
+	print("MOUSE LEAVE")
+
+func _on_lights_mouse_entered() -> void:
+	$UI/Buttons/Lights.icon = on_hover_light
+	pass
+
+func _on_lights_mouse_exited() -> void:
+	$UI/Buttons/Lights.icon = normal_light
+	pass
