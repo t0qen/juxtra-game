@@ -1,13 +1,14 @@
-[gd_scene load_steps=32 format=4 uid="uid://djd1mq3ot48xw"]
+[gd_scene load_steps=37 format=4 uid="uid://djd1mq3ot48xw"]
 
 [ext_resource type="Script" uid="uid://cfseqshiju1j5" path="res://data/scripts/multiplayer_level.gd" id="1_lpglf"]
 [ext_resource type="Texture2D" uid="uid://bcad7k112u5rt" path="res://data/assets/levels/tiles.png" id="2_5bmcu"]
 [ext_resource type="PackedScene" uid="uid://dyvd2cue15rb6" path="res://data/scenes/camera.tscn" id="2_i4smc"]
 [ext_resource type="Texture2D" uid="uid://dkgdkm6p870l5" path="res://data/assets/levels/background.png" id="2_kd03d"]
 [ext_resource type="PackedScene" uid="uid://pqwlje75yaq6" path="res://data/scenes/player.tscn" id="2_tyoci"]
-[ext_resource type="FontFile" uid="uid://dtn3s3mvxooc6" path="res://data/assets/fonts/Bytesized-Regular.ttf" id="4_ciff6"]
+[ext_resource type="FontFile" uid="uid://bojrdld66q8ug" path="res://data/assets/fonts/CutePixel.ttf" id="4_rdpnj"]
 [ext_resource type="Texture2D" uid="uid://c6rabv4jdvjuu" path="res://data/assets/UI/buttons/help.png" id="5_knx5i"]
 [ext_resource type="Texture2D" uid="uid://nvpil8hd5sxv" path="res://data/assets/UI/buttons/lights.png" id="6_rdpnj"]
+[ext_resource type="Texture2D" uid="uid://4pqnm0l6d70j" path="res://data/ressources/texts/juxtra-game.png" id="7_rdpnj"]
 
 [sub_resource type="Gradient" id="Gradient_5bmcu"]
 offsets = PackedFloat32Array(0.0119048)
@@ -172,23 +173,25 @@ physics_layer_1/collision_mask = 2
 sources/1 = SubResource("TileSetAtlasSource_5bmcu")
 
 [sub_resource type="LabelSettings" id="LabelSettings_dvgjj"]
-font = ExtResource("4_ciff6")
-font_size = 120
+font = ExtResource("4_rdpnj")
+font_size = 82
+font_color = Color(0.493545, 0.493546, 0.493545, 1)
 shadow_size = 0
 shadow_color = Color(0.98, 0.98, 0.98, 0)
 
 [sub_resource type="LabelSettings" id="LabelSettings_knx5i"]
-font = ExtResource("4_ciff6")
-font_size = 120
+font = ExtResource("4_rdpnj")
+font_size = 82
+font_color = Color(0.494118, 0.494118, 0.494118, 1)
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 24
 shadow_offset = Vector2(0, 5)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tyoci"]
-size = Vector2(9.25, 115.75)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ql84r"]
+polygon = PackedVector2Array(-62, -308, -62, -270, -58, -270, -58, -266, -20, -266, -20, -270, -16, -270, -16, -308, -20, -308, -20, -312, -58, -312, -58, -308)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5bmcu"]
-size = Vector2(9, 116)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_wiofu"]
+polygon = PackedVector2Array(16, -308, 16, -270, 20, -270, 20, -266, 58, -266, 58, -270, 62, -270, 62, -308, 58, -308, 58, -312, 20, -312, 20, -308)
 
 [sub_resource type="Gradient" id="Gradient_ql84r"]
 offsets = PackedFloat32Array(0, 0.0238095, 0.0416667, 0.589286, 1)
@@ -205,6 +208,22 @@ gradient = SubResource("Gradient_ql84r")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.7, 0.7)
+
+[sub_resource type="Gradient" id="Gradient_rdpnj"]
+offsets = PackedFloat32Array(0, 0.00595238, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.666667, 0.666667, 0.666667, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_j73fs"]
+gradient = SubResource("Gradient_rdpnj")
+fill = 1
+fill_from = Vector2(0.50431, 0.431034)
+fill_to = Vector2(0.948276, 0.568965)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tyoci"]
+size = Vector2(9.25, 115.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5bmcu"]
+size = Vector2(9, 116)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tyoci"]
 friction = 0.0
@@ -225,6 +244,7 @@ distance = -320.0
 [node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "before_after_goal_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
 script = ExtResource("1_lpglf")
 enable_ui = true
+enable_light_effects = true
 after_goal_timer = NodePath("timers/after_goal")
 before_after_goal_timer = NodePath("timers/before_after_goal")
 player_1_spawn = NodePath("markers/player_1_spawn")
@@ -257,29 +277,31 @@ tile_set = SubResource("TileSet_5bmcu")
 [node name="UI" type="Node2D" parent="."]
 
 [node name="player_1" type="Label" parent="UI"]
-offset_left = -173.0
-offset_top = -301.0
-offset_right = -113.0
-offset_bottom = -151.0
+offset_left = -426.0
+offset_top = 235.0
+offset_right = -366.0
+offset_bottom = 385.0
 size_flags_horizontal = 4
 text = "0"
 label_settings = SubResource("LabelSettings_dvgjj")
+horizontal_alignment = 1
 
 [node name="player_2" type="Label" parent="UI"]
-offset_left = 128.0
-offset_top = -301.0
-offset_right = 188.0
-offset_bottom = -151.0
+offset_left = 345.0
+offset_top = 235.0
+offset_right = 459.0
+offset_bottom = 415.0
 text = "0"
 label_settings = SubResource("LabelSettings_knx5i")
+horizontal_alignment = 1
 
 [node name="Buttons" type="Node2D" parent="UI"]
 
 [node name="Help" type="Button" parent="UI/Buttons"]
-offset_left = 398.0
-offset_top = -309.0
-offset_right = 434.0
-offset_bottom = -278.0
+offset_left = 4.0
+offset_top = -320.0
+offset_right = 40.0
+offset_bottom = -289.0
 scale = Vector2(2, 2)
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -292,10 +314,10 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Lights" type="Button" parent="UI/Buttons"]
-offset_left = 404.0
-offset_top = -244.0
-offset_right = 434.0
-offset_bottom = -213.0
+offset_left = -72.0
+offset_top = -320.0
+offset_right = -39.0
+offset_bottom = -289.0
 scale = Vector2(2, 2)
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -305,8 +327,48 @@ button_mask = 7
 icon = ExtResource("6_rdpnj")
 flat = true
 icon_alignment = 1
+expand_icon = true
+
+[node name="Light_occluder" type="LightOccluder2D" parent="UI/Buttons"]
+occluder = SubResource("OccluderPolygon2D_ql84r")
+
+[node name="Help_occluder" type="LightOccluder2D" parent="UI/Buttons"]
+occluder = SubResource("OccluderPolygon2D_wiofu")
+
+[node name="Help" type="Node2D" parent="UI"]
+visible = false
+
+[node name="Juxtra-game" type="Sprite2D" parent="UI/Help"]
+position = Vector2(0, -192)
+scale = Vector2(4, 4)
+texture = ExtResource("7_rdpnj")
 
 [node name="light_effects" type="Node2D" parent="."]
+
+[node name="goal_1_light" type="PointLight2D" parent="light_effects"]
+position = Vector2(600, -1)
+color = Color(0.0470588, 0.541176, 0.278431, 1)
+energy = 1.5
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 2
+texture = SubResource("GradientTexture2D_5bmcu")
+texture_scale = 37.0
+
+[node name="goal_2_light" type="PointLight2D" parent="light_effects"]
+position = Vector2(-599, 30)
+color = Color(0.87451, 0.223529, 0.223529, 1)
+energy = 1.5
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 2
+texture = SubResource("GradientTexture2D_kd03d")
+texture_scale = 37.0
+
+[node name="buttons" type="PointLight2D" parent="light_effects"]
+visible = false
+position = Vector2(0, -288)
+color = Color(0.712129, 0.712129, 0.712129, 1)
+texture = SubResource("GradientTexture2D_j73fs")
+texture_scale = 3.0
 
 [node name="markers" type="Node2D" parent="."]
 
@@ -343,24 +405,6 @@ shape = SubResource("RectangleShape2D_tyoci")
 [node name="hitbox" type="CollisionShape2D" parent="goals/goal_2"]
 position = Vector2(-619, 32)
 shape = SubResource("RectangleShape2D_5bmcu")
-
-[node name="goal_1_light" type="PointLight2D" parent="goals"]
-position = Vector2(600, -1)
-color = Color(0.0470588, 0.541176, 0.278431, 1)
-energy = 1.5
-shadow_color = Color(0, 0, 0, 1)
-shadow_filter = 2
-texture = SubResource("GradientTexture2D_5bmcu")
-texture_scale = 37.0
-
-[node name="goal_2_light" type="PointLight2D" parent="goals"]
-position = Vector2(-600, 30)
-color = Color(0.87451, 0.223529, 0.223529, 1)
-energy = 1.5
-shadow_color = Color(0, 0, 0, 1)
-shadow_filter = 2
-texture = SubResource("GradientTexture2D_kd03d")
-texture_scale = 37.0
 
 [node name="timers" type="Node2D" parent="."]
 

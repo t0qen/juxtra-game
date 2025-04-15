@@ -123,6 +123,7 @@ var exit_fall : bool = false # same for fall
 var want_to_jump : bool = false # a bool to know if player want to jump
 var direction : int = 0 # the direction of player, may a Vector2 ? consider jump as direction ? TODO
 var want_to_dash : bool = false # same for dash 
+var dash_direction : int = 0
 var ball
 #endregion
 #endregion
@@ -260,6 +261,7 @@ func _update_state(delta: float) -> void:  # every behavior of each states updat
 			
 		STATE.DASH:
 			velocity.x = direction * 2000
+
 			can_jump()
 			
 		STATE.IDLE: 
