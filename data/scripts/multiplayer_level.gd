@@ -75,6 +75,7 @@ var scoring : bool = false
 @export var camera_goal_direction : Vector2 = Vector2(1, 0)
 
 var enable_canvas_modulate : bool = true
+var enable_help : bool = false
 # - SCORES
 var player_1_score : int = 0 # store player 1 score
 var player_2_score : int = 0 # same for player 2
@@ -191,39 +192,30 @@ func _on_before_after_goal_timeout() -> void:
 func play_anim_ball():
 	current_ball.get_child(0).play_anim_fast()
 
-func _on_help_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		$UI/Help.hide()
-	else:
-		$UI/Help.show()
-		
-func _on_lights_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		$CanvasModulate.show()
-	else:
-		$CanvasModulate.hide()
 
 
 func _on_help_mouse_entered() -> void:
 	$UI/Buttons/Help.icon = on_hover_help
-	$UI/Help.show()
+	enable_help = !enable_help
+	if enable_help:
+		$UI/Help.show()
+	else:
+		$UI/Help.hide()
 	print("MOUSE ENTER")
 
 
 func _on_help_mouse_exited() -> void:
 	$UI/Buttons/Help.icon = normal_help
-	$UI/Help.hide()
+	#$UI/Help.hide()
 	print("MOUSE LEAVE")
 
 func _on_lights_mouse_entered() -> void:
 	$UI/Buttons/Lights.icon = on_hover_light
+	enable_canvas_modulate = !enable_canvas_modulate
 	if enable_canvas_modulate:
 		$CanvasModulate.show()
 	else:
 		$CanvasModulate.hide()
-	enable_canvas_modulate = !enable_canvas_modulate
-
-	pass
 
 func _on_lights_mouse_exited() -> void:
 	$UI/Buttons/Lights.icon = normal_light
@@ -232,5 +224,3 @@ func _on_lights_mouse_exited() -> void:
 	#else:
 		#$CanvasModulate.hide()
 	#enable_canvas_modulate = !enable_canvas_modulate
-
-	pass

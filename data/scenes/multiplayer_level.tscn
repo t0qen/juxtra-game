@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=4 uid="uid://djd1mq3ot48xw"]
+[gd_scene load_steps=41 format=4 uid="uid://djd1mq3ot48xw"]
 
 [ext_resource type="Script" uid="uid://cfseqshiju1j5" path="res://data/scripts/multiplayer_level.gd" id="1_lpglf"]
 [ext_resource type="Texture2D" uid="uid://bcad7k112u5rt" path="res://data/assets/levels/tiles.png" id="2_5bmcu"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c6rabv4jdvjuu" path="res://data/assets/UI/buttons/help.png" id="5_knx5i"]
 [ext_resource type="Texture2D" uid="uid://nvpil8hd5sxv" path="res://data/assets/UI/buttons/lights.png" id="6_rdpnj"]
 [ext_resource type="Texture2D" uid="uid://4pqnm0l6d70j" path="res://data/ressources/texts/juxtra-game.png" id="7_rdpnj"]
+[ext_resource type="FontFile" uid="uid://b4f4t26apapbj" path="res://data/assets/decorations/fonts/tiny5-Regular.otf" id="8_j73fs"]
 
 [sub_resource type="Gradient" id="Gradient_5bmcu"]
 offsets = PackedFloat32Array(0.0119048)
@@ -193,6 +194,30 @@ polygon = PackedVector2Array(-62, -308, -62, -270, -58, -270, -58, -266, -20, -2
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_wiofu"]
 polygon = PackedVector2Array(16, -308, 16, -270, 20, -270, 20, -266, 58, -266, 58, -270, 62, -270, 62, -308, 58, -308, 58, -312, 20, -312, 20, -308)
 
+[sub_resource type="LabelSettings" id="LabelSettings_ql84r"]
+font = ExtResource("8_j73fs")
+font_size = 47
+
+[sub_resource type="LabelSettings" id="LabelSettings_j73fs"]
+font = ExtResource("8_j73fs")
+font_size = 24
+font_color = Color(0.984741, 0.578572, 0.542214, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wiofu"]
+font = ExtResource("8_j73fs")
+font_size = 24
+font_color = Color(0.424633, 0.998664, 0.6227, 1)
+
+[sub_resource type="Gradient" id="Gradient_rdpnj"]
+offsets = PackedFloat32Array(0, 0.00595238, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.666667, 0.666667, 0.666667, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_j73fs"]
+gradient = SubResource("Gradient_rdpnj")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.948276, 0.568965)
+
 [sub_resource type="Gradient" id="Gradient_ql84r"]
 offsets = PackedFloat32Array(0, 0.0238095, 0.0416667, 0.589286, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.502163, 0.502163, 0.502163, 1, 0.544872, 0.544872, 0.544872, 1, 0.117147, 0.117147, 0.117147, 1, 0, 0, 0, 1)
@@ -208,16 +233,6 @@ gradient = SubResource("Gradient_ql84r")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.7, 0.7)
-
-[sub_resource type="Gradient" id="Gradient_rdpnj"]
-offsets = PackedFloat32Array(0, 0.00595238, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.666667, 0.666667, 0.666667, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_j73fs"]
-gradient = SubResource("Gradient_rdpnj")
-fill = 1
-fill_from = Vector2(0.50431, 0.431034)
-fill_to = Vector2(0.948276, 0.568965)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tyoci"]
 size = Vector2(9.25, 115.75)
@@ -339,9 +354,61 @@ occluder = SubResource("OccluderPolygon2D_wiofu")
 visible = false
 
 [node name="Juxtra-game" type="Sprite2D" parent="UI/Help"]
-position = Vector2(0, -192)
+position = Vector2(0, -138)
 scale = Vector2(4, 4)
 texture = ExtResource("7_rdpnj")
+
+[node name="Text" type="Label" parent="UI/Help"]
+offset_left = -360.0
+offset_top = -98.0
+offset_right = 595.0
+offset_bottom = 154.0
+scale = Vector2(0.75, 0.75)
+text = "Play against your friend on the same keyboard 
+to this physics-based ball game.
+Score by shooting the bouncy ball into the enemy goal.
+You can shoot the ball by dashing and touch it."
+label_settings = SubResource("LabelSettings_ql84r")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Movements" type="Label" parent="UI/Help"]
+offset_left = -473.0
+offset_top = 116.0
+offset_right = 33.0
+offset_bottom = 169.0
+text = "PLAYER 1:   S / D to move on left / right,
+F to jump, G and S / D to dash on left / right"
+label_settings = SubResource("LabelSettings_j73fs")
+horizontal_alignment = 1
+
+[node name="Movements2" type="Label" parent="UI/Help"]
+offset_left = -33.0
+offset_top = 116.0
+offset_right = 473.0
+offset_bottom = 169.0
+text = "PLAYER 2:   J / K to move on left / right,
+L to jump, M and J / K to dash on left / right"
+label_settings = SubResource("LabelSettings_wiofu")
+horizontal_alignment = 1
+
+[node name="LinkButton" type="LinkButton" parent="UI/Help"]
+offset_left = -171.0
+offset_top = -247.0
+offset_right = 346.0
+offset_bottom = -207.0
+theme_override_fonts/font = ExtResource("8_j73fs")
+theme_override_font_sizes/font_size = 24
+button_mask = 7
+text = "https://github.com/t0qen/juxtra-game"
+uri = "https://github.com/t0qen/juxtra-game"
+
+[node name="help" type="PointLight2D" parent="UI/Help"]
+position = Vector2(0, -44)
+color = Color(0.964613, 0.587187, 0.640733, 1)
+energy = 1.5
+texture = SubResource("GradientTexture2D_j73fs")
+texture_scale = 8.0
 
 [node name="light_effects" type="Node2D" parent="."]
 
@@ -362,13 +429,6 @@ shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 2
 texture = SubResource("GradientTexture2D_kd03d")
 texture_scale = 37.0
-
-[node name="buttons" type="PointLight2D" parent="light_effects"]
-visible = false
-position = Vector2(0, -288)
-color = Color(0.712129, 0.712129, 0.712129, 1)
-texture = SubResource("GradientTexture2D_j73fs")
-texture_scale = 3.0
 
 [node name="markers" type="Node2D" parent="."]
 
@@ -445,10 +505,8 @@ color = Color(0.866224, 0.757478, 0.854015, 1)
 
 [connection signal="mouse_entered" from="UI/Buttons/Help" to="." method="_on_help_mouse_entered"]
 [connection signal="mouse_exited" from="UI/Buttons/Help" to="." method="_on_help_mouse_exited"]
-[connection signal="toggled" from="UI/Buttons/Help" to="." method="_on_help_toggled"]
 [connection signal="mouse_entered" from="UI/Buttons/Lights" to="." method="_on_lights_mouse_entered"]
 [connection signal="mouse_exited" from="UI/Buttons/Lights" to="." method="_on_lights_mouse_exited"]
-[connection signal="toggled" from="UI/Buttons/Lights" to="." method="_on_lights_toggled"]
 [connection signal="area_entered" from="goals/goal_1" to="." method="_on_goal_1_area_entered"]
 [connection signal="area_entered" from="goals/goal_2" to="." method="_on_goal_2_area_entered"]
 [connection signal="timeout" from="timers/after_goal" to="." method="_on_after_goal_timeout"]
