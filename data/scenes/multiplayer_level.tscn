@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=4 uid="uid://djd1mq3ot48xw"]
+[gd_scene load_steps=43 format=4 uid="uid://djd1mq3ot48xw"]
 
 [ext_resource type="Script" uid="uid://cfseqshiju1j5" path="res://data/scripts/multiplayer_level.gd" id="1_lpglf"]
 [ext_resource type="Texture2D" uid="uid://bcad7k112u5rt" path="res://data/assets/levels/tiles.png" id="2_5bmcu"]
@@ -209,14 +209,14 @@ font_size = 24
 font_color = Color(0.424633, 0.998664, 0.6227, 1)
 
 [sub_resource type="Gradient" id="Gradient_rdpnj"]
-offsets = PackedFloat32Array(0, 0.00595238, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.666667, 0.666667, 0.666667, 1, 0, 0, 0, 1)
+offsets = PackedFloat32Array(0, 0.0196078, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.392157, 0.392157, 0.392157, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_j73fs"]
 gradient = SubResource("Gradient_rdpnj")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.948276, 0.568965)
+fill_to = Vector2(0.893162, 0.57265)
 
 [sub_resource type="Gradient" id="Gradient_ql84r"]
 offsets = PackedFloat32Array(0, 0.0238095, 0.0416667, 0.589286, 1)
@@ -233,6 +233,16 @@ gradient = SubResource("Gradient_ql84r")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.7, 0.7)
+
+[sub_resource type="Gradient" id="Gradient_j73fs"]
+offsets = PackedFloat32Array(0, 0.00490196, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.416667, 0.416667, 0.416667, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ql84r"]
+gradient = SubResource("Gradient_j73fs")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.8, 0.3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tyoci"]
 size = Vector2(9.25, 115.75)
@@ -430,13 +440,19 @@ shadow_filter = 2
 texture = SubResource("GradientTexture2D_kd03d")
 texture_scale = 37.0
 
+[node name="buttons" type="PointLight2D" parent="light_effects"]
+position = Vector2(0, -312)
+color = Color(0.964706, 0.588235, 0.639216, 1)
+texture = SubResource("GradientTexture2D_ql84r")
+texture_scale = 4.0
+
 [node name="markers" type="Node2D" parent="."]
 
 [node name="player_1_spawn" type="Marker2D" parent="markers"]
-position = Vector2(-64, 304)
+position = Vector2(-256, 256)
 
 [node name="player_2_spawn" type="Marker2D" parent="markers"]
-position = Vector2(64, 304)
+position = Vector2(256, 256)
 
 [node name="ball_spawn" type="Marker2D" parent="markers"]
 position = Vector2(0, -64)
@@ -444,12 +460,12 @@ position = Vector2(0, -64)
 [node name="players" type="Node2D" parent="."]
 
 [node name="player_1" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
-position = Vector2(-153, 324)
+position = Vector2(-256, 256)
 current_player = 0
 camera = NodePath("../../camera")
 
 [node name="player_2" parent="players" node_paths=PackedStringArray("camera") instance=ExtResource("2_tyoci")]
-position = Vector2(141, 324)
+position = Vector2(256, 256)
 camera = NodePath("../../camera")
 
 [node name="goals" type="Node2D" parent="."]
