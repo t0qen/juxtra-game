@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bxc4wjg31b3av"]
+[gd_scene load_steps=16 format=3 uid="uid://bxc4wjg31b3av"]
 
 [ext_resource type="Script" uid="uid://84vrvqbb0ohj" path="res://data/scripts/ball.gd" id="1_4wqu7"]
 [ext_resource type="Texture2D" uid="uid://6uwan8xm0rwl" path="res://data/assets/ball.png" id="2_p3r1w"]
@@ -79,6 +79,9 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.737069, 0.331897)
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_p3r1w"]
+polygon = PackedVector2Array(-23, -48, -23, -48, -24, -48, -24, -36, -36, -36, -36, -24, -48, -24, -48, 24, -36, 24, -36, 36, -24, 36, -24, 48, 24, 48, 24, 36, 36, 36, 36, 24, 48, 24, 48, -24, 36, -24, 36, -36, 24, -36, 24, -48)
+
 [node name="ball" type="Node2D"]
 
 [node name="root_ball" type="RigidBody2D" parent="." groups=["ball"]]
@@ -122,6 +125,10 @@ shadow_filter = 2
 shadow_filter_smooth = 1.0
 texture = SubResource("GradientTexture2D_5sysg")
 texture_scale = 14.0
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="root_ball"]
+occluder = SubResource("OccluderPolygon2D_p3r1w")
+occluder_light_mask = 2
 
 [node name="shadow" type="Node2D" parent="."]
 
