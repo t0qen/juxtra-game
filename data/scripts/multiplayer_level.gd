@@ -99,13 +99,6 @@ func _ready() -> void:
 	spawn_ball()
 
 func _physics_process(delta: float) -> void:
-	if player_1_score >= 10:
-		$UI/goals/messages/player_1_wins.show()
-		restart()
-	elif player_2_score >= 10:
-		$UI/goals/messages/player_2_wins.show()
-		restart()
-		
 	if !scoring:
 		var ball_rb = current_ball.get_child(0).global_position
 		$Background.global_position = lerp($Background.global_position, ball_rb, 0.2 * delta)
@@ -195,32 +188,25 @@ func manage_scores():
 	# TODO
 	
 #func restart():
-	#hide()
-	#$UI/goals/messages/player_2_wins.hide()
-	#$UI/goals/messages/player_1_wins.hide()
 	#restart_timer.start()
-	#player_1_score = 0
-	#player_2_score = 0
-	#respawn_players()
-	
 # - TIMERS
 func _on_after_goal_timeout() -> void:
 	$UI/goals/messages/player_1_vol.hide()
 	$UI/goals/messages/player_2_vol.hide()
 	$UI/goals/messages/player_1_unvol.hide()
 	$UI/goals/messages/player_2_unvol.hide()
-	respawn_players()
-	player_1.show()
-	player_2.show()
-	spawn_ball()
 	#if player_1_score >= 10:
 		#$UI/goals/messages/player_1_wins.show()
 		#restart()
 	#elif player_2_score >= 10:
 		#$UI/goals/messages/player_2_wins.show()
 		#restart()
+	respawn_players()
+	player_1.show()
+	player_2.show()
+	spawn_ball()
 	scoring = false 
-
+	
 func _on_before_after_goal_timeout() -> void:
 	# lock players
 	player_1.hide()
@@ -257,7 +243,11 @@ func _on_lights_mouse_entered() -> void:
 func _on_lights_mouse_exited() -> void:
 	$UI/Buttons/Lights.icon = normal_light
 
-func _on_restarting_timeout() -> void:
-	#current_ball.queue_free()
-	#spawn_ball()
-	show()
+#func _on_restarting_timeout() -> void:
+	#hide()
+	#$UI/goals/messages/player_2_wins.hide()
+	#$UI/goals/messages/player_1_wins.hide()
+	#player_1_score = 0
+	#player_2_score = 0
+	#respawn_players()
+	#show()

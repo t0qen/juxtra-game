@@ -474,7 +474,7 @@ offset_top = -42.0
 offset_right = 343.0
 offset_bottom = 57.0
 text = "Player 1 have scored in his own goal ! 
--1 to player 1"
++1 to player 2"
 label_settings = SubResource("LabelSettings_02vkq")
 horizontal_alignment = 1
 
@@ -485,7 +485,7 @@ offset_top = -43.0
 offset_right = 343.0
 offset_bottom = 56.0
 text = "Player 2 have scored in his own goal ! 
--1 to player 2"
++1 to player 1"
 label_settings = SubResource("LabelSettings_02vkq")
 horizontal_alignment = 1
 
