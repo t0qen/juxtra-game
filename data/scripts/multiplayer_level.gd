@@ -122,6 +122,8 @@ func update_score():
 # - GOALS / SCORES
 func _on_goal_1_area_entered(area: Area2D) -> void: # player 2 scores
 	if area.is_in_group("ball"): # verify if it's the ball that is in the goal
+		$UI/Help.hide()
+		enable_help = false
 		scoring = true
 		if current_ball.get_child(0).is_in_group("player_1"):
 			print("PLAYER 1 LAST TOUCH")
@@ -139,7 +141,9 @@ func _on_goal_1_area_entered(area: Area2D) -> void: # player 2 scores
 		
 func _on_goal_2_area_entered(area: Area2D) -> void: # player 1 scores
 	if area.is_in_group("ball"): # verify if it's the ball that is in the goal
-		scoring = true 
+		$UI/Help.hide()
+		enable_help = false
+		scoring = true  
 		if current_ball.get_child(0).is_in_group("player_1"):
 			print("PLAYER 1 LAST TOUCH")
 			last_touch_ball = PLAYERS.PLAYER_1
@@ -190,7 +194,7 @@ func manage_scores():
 #func restart():
 	#restart_timer.start()
 # - TIMERS
-func _on_after_goal_timeout() -> void:
+func _on_after_goal_timeout() -> void: 
 	$UI/goals/messages/player_1_vol.hide()
 	$UI/goals/messages/player_2_vol.hide()
 	$UI/goals/messages/player_1_unvol.hide()

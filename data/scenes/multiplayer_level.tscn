@@ -408,8 +408,8 @@ offset_left = -33.0
 offset_top = 116.0
 offset_right = 473.0
 offset_bottom = 169.0
-text = "PLAYER 2:   J or K to move to left or right,
-L to jump, M + J or K to dash on left ot right"
+text = "PLAYER 2:   Y or U to move to left or right,
+I to jump, O + Y or U to dash on left ot right"
 label_settings = SubResource("LabelSettings_wiofu")
 horizontal_alignment = 1
 
