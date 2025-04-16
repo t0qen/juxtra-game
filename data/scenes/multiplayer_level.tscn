@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=4 uid="uid://djd1mq3ot48xw"]
+[gd_scene load_steps=46 format=4 uid="uid://djd1mq3ot48xw"]
 
 [ext_resource type="Script" uid="uid://cfseqshiju1j5" path="res://data/scripts/multiplayer_level.gd" id="1_lpglf"]
 [ext_resource type="Texture2D" uid="uid://bcad7k112u5rt" path="res://data/assets/levels/tiles.png" id="2_5bmcu"]
@@ -9,7 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://c6rabv4jdvjuu" path="res://data/assets/UI/buttons/help.png" id="5_knx5i"]
 [ext_resource type="Texture2D" uid="uid://nvpil8hd5sxv" path="res://data/assets/UI/buttons/lights.png" id="6_rdpnj"]
 [ext_resource type="Texture2D" uid="uid://4pqnm0l6d70j" path="res://data/ressources/texts/juxtra-game.png" id="7_rdpnj"]
-[ext_resource type="FontFile" uid="uid://b4f4t26apapbj" path="res://data/assets/decorations/fonts/tiny5-Regular.otf" id="8_j73fs"]
+[ext_resource type="FontFile" uid="uid://ce74c4mpcssse" path="res://data/assets/fonts/tiny5-Regular.otf" id="8_j73fs"]
+[ext_resource type="Texture2D" uid="uid://bd1tvbn4fmiu7" path="res://data/assets/texts/goal.png" id="9_ql84r"]
 
 [sub_resource type="Gradient" id="Gradient_5bmcu"]
 offsets = PackedFloat32Array(0.0119048)
@@ -218,6 +219,14 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.893162, 0.57265)
 
+[sub_resource type="LabelSettings" id="LabelSettings_02vkq"]
+font = ExtResource("8_j73fs")
+font_size = 47
+
+[sub_resource type="LabelSettings" id="LabelSettings_8uuv4"]
+font = ExtResource("4_rdpnj")
+font_size = 102
+
 [sub_resource type="Gradient" id="Gradient_ql84r"]
 offsets = PackedFloat32Array(0, 0.0238095, 0.0416667, 0.589286, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.502163, 0.502163, 0.502163, 1, 0.544872, 0.544872, 0.544872, 1, 0.117147, 0.117147, 0.117147, 1, 0, 0, 0, 1)
@@ -266,12 +275,13 @@ distance = -524.0
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ciff6"]
 distance = -320.0
 
-[node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "before_after_goal_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
+[node name="multiplayer_level" type="Node2D" node_paths=PackedStringArray("after_goal_timer", "before_after_goal_timer", "restart_timer", "player_1_spawn", "player_2_spawn", "ball_spawn", "player_1", "player_2", "camera")]
 script = ExtResource("1_lpglf")
 enable_ui = true
 enable_light_effects = true
 after_goal_timer = NodePath("timers/after_goal")
 before_after_goal_timer = NodePath("timers/before_after_goal")
+restart_timer = NodePath("timers/restarting")
 player_1_spawn = NodePath("markers/player_1_spawn")
 player_2_spawn = NodePath("markers/player_2_spawn")
 ball_spawn = NodePath("markers/ball_spawn")
@@ -364,11 +374,11 @@ occluder = SubResource("OccluderPolygon2D_wiofu")
 visible = false
 
 [node name="Juxtra-game" type="Sprite2D" parent="UI/Help"]
-position = Vector2(0, -138)
+position = Vector2(1, -151)
 scale = Vector2(4, 4)
 texture = ExtResource("7_rdpnj")
 
-[node name="Text" type="Label" parent="UI/Help"]
+[node name="Intro" type="Label" parent="UI/Help"]
 offset_left = -360.0
 offset_top = -98.0
 offset_right = 595.0
@@ -377,7 +387,8 @@ scale = Vector2(0.75, 0.75)
 text = "Play against your friend on the same keyboard 
 to this physics-based ball game.
 Score by shooting the bouncy ball into the enemy goal.
-You can shoot the ball by dashing and touch it."
+You can shoot the ball by dashing and touch it.
+You have 8 in air jumps, reset by touching the floor."
 label_settings = SubResource("LabelSettings_ql84r")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -387,8 +398,8 @@ offset_left = -473.0
 offset_top = 116.0
 offset_right = 33.0
 offset_bottom = 169.0
-text = "PLAYER 1:   S / D to move on left / right,
-F to jump, G and S / D to dash on left / right"
+text = "PLAYER 1:   S or D to move on left or right,
+F to jump, G + S or D to dash on left or right"
 label_settings = SubResource("LabelSettings_j73fs")
 horizontal_alignment = 1
 
@@ -397,8 +408,8 @@ offset_left = -33.0
 offset_top = 116.0
 offset_right = 473.0
 offset_bottom = 169.0
-text = "PLAYER 2:   J / K to move on left / right,
-L to jump, M and J / K to dash on left / right"
+text = "PLAYER 2:   J or K to move to left or right,
+L to jump, M + J or K to dash on left ot right"
 label_settings = SubResource("LabelSettings_wiofu")
 horizontal_alignment = 1
 
@@ -407,6 +418,9 @@ offset_left = -171.0
 offset_top = -247.0
 offset_right = 346.0
 offset_bottom = -207.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0.530184, 0.143976, 0.279123, 1)
+theme_override_colors/font_hover_color = Color(0.949488, 0.757213, 0.458376, 1)
 theme_override_fonts/font = ExtResource("8_j73fs")
 theme_override_font_sizes/font_size = 24
 button_mask = 7
@@ -419,6 +433,79 @@ color = Color(0.964613, 0.587187, 0.640733, 1)
 energy = 1.5
 texture = SubResource("GradientTexture2D_j73fs")
 texture_scale = 8.0
+
+[node name="goals" type="Node2D" parent="UI"]
+
+[node name="goal_text" type="Sprite2D" parent="UI/goals"]
+visible = false
+position = Vector2(120, -27)
+scale = Vector2(10, 10)
+texture = ExtResource("9_ql84r")
+
+[node name="messages" type="Node2D" parent="UI/goals"]
+position = Vector2(-4.76837e-07, 2.38419e-07)
+
+[node name="player_1_vol" type="Label" parent="UI/goals/messages"]
+visible = false
+offset_left = -245.0
+offset_top = -57.0
+offset_right = 258.0
+offset_bottom = 42.0
+text = "Player 1 scores a nice goal ! 
++2 to player 1"
+label_settings = SubResource("LabelSettings_02vkq")
+horizontal_alignment = 1
+
+[node name="player_2_vol" type="Label" parent="UI/goals/messages"]
+visible = false
+offset_left = -257.0
+offset_top = -57.0
+offset_right = 267.0
+offset_bottom = 42.0
+text = "Player 2 scores a great goal ! 
++2 to player 2"
+label_settings = SubResource("LabelSettings_02vkq")
+horizontal_alignment = 1
+
+[node name="player_1_unvol" type="Label" parent="UI/goals/messages"]
+visible = false
+offset_left = -326.0
+offset_top = -42.0
+offset_right = 343.0
+offset_bottom = 57.0
+text = "Player 1 have scored in his own goal ! 
+-1 to player 1"
+label_settings = SubResource("LabelSettings_02vkq")
+horizontal_alignment = 1
+
+[node name="player_2_unvol" type="Label" parent="UI/goals/messages"]
+visible = false
+offset_left = -326.0
+offset_top = -43.0
+offset_right = 343.0
+offset_bottom = 56.0
+text = "Player 2 have scored in his own goal ! 
+-1 to player 2"
+label_settings = SubResource("LabelSettings_02vkq")
+horizontal_alignment = 1
+
+[node name="player_1_wins" type="Label" parent="UI/goals/messages"]
+visible = false
+offset_left = -469.0
+offset_top = -60.0
+offset_right = 475.0
+offset_bottom = 43.0
+text = "PLAYER 1 WINS THE GAME"
+label_settings = SubResource("LabelSettings_8uuv4")
+
+[node name="player_2_wins" type="Label" parent="UI/goals/messages"]
+visible = false
+offset_left = -469.0
+offset_top = -60.0
+offset_right = 475.0
+offset_bottom = 43.0
+text = "PLAYER 2 WINS THE GAME"
+label_settings = SubResource("LabelSettings_8uuv4")
 
 [node name="light_effects" type="Node2D" parent="."]
 
@@ -485,10 +572,18 @@ shape = SubResource("RectangleShape2D_5bmcu")
 [node name="timers" type="Node2D" parent="."]
 
 [node name="after_goal" type="Timer" parent="timers"]
+process_callback = 0
+wait_time = 3.0
 one_shot = true
 
 [node name="before_after_goal" type="Timer" parent="timers"]
 process_callback = 0
+wait_time = 1.5
+one_shot = true
+
+[node name="restarting" type="Timer" parent="timers"]
+process_callback = 0
+wait_time = 2.0
 one_shot = true
 
 [node name="camera" parent="." instance=ExtResource("2_i4smc")]
@@ -527,3 +622,4 @@ color = Color(0.866224, 0.757478, 0.854015, 1)
 [connection signal="area_entered" from="goals/goal_2" to="." method="_on_goal_2_area_entered"]
 [connection signal="timeout" from="timers/after_goal" to="." method="_on_after_goal_timeout"]
 [connection signal="timeout" from="timers/before_after_goal" to="." method="_on_before_after_goal_timeout"]
+[connection signal="timeout" from="timers/restarting" to="." method="_on_restarting_timeout"]

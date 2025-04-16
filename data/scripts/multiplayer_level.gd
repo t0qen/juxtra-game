@@ -33,6 +33,7 @@ var normal_light= preload("res://data/assets/UI/buttons/lights.png")
 @export_subgroup("Timers")
 @export var after_goal_timer : Timer
 @export var before_after_goal_timer : Timer # a timer for the time just before "after_goal_timer"
+@export var restart_timer : Timer
 # lights
 @export_subgroup("Lights")
 # respawn points
@@ -74,6 +75,7 @@ var scoring : bool = false
 @export var camera_goal_duration : float = 1.5
 @export var camera_goal_direction : Vector2 = Vector2(1, 0)
 
+var goal_text = Label
 var enable_canvas_modulate : bool = true
 var enable_help : bool = false
 # - SCORES
@@ -97,6 +99,13 @@ func _ready() -> void:
 	spawn_ball()
 
 func _physics_process(delta: float) -> void:
+	if player_1_score >= 10:
+		$UI/goals/messages/player_1_wins.show()
+		restart()
+	elif player_2_score >= 10:
+		$UI/goals/messages/player_2_wins.show()
+		restart()
+		
 	if !scoring:
 		var ball_rb = current_ball.get_child(0).global_position
 		$Background.global_position = lerp($Background.global_position, ball_rb, 0.2 * delta)
@@ -121,7 +130,15 @@ func update_score():
 func _on_goal_1_area_entered(area: Area2D) -> void: # player 2 scores
 	if area.is_in_group("ball"): # verify if it's the ball that is in the goal
 		scoring = true
-		manage_scores()
+		if current_ball.get_child(0).is_in_group("player_1"):
+			print("PLAYER 1 LAST TOUCH")
+			last_touch_ball = PLAYERS.PLAYER_1
+		elif current_ball.get_child(0).is_in_group("player_2"):
+			print("PLAYER 2 LAST TOUCH")
+			last_touch_ball = PLAYERS.PLAYER_2
+		else:
+			last_touch_ball = PLAYERS.NOBODY # this will probably never be used because ball can't go to a goal without a player touch
+		$UI/goals/goal_text.show()
 		current_ball.queue_free() # delete the current ball
 		before_after_goal_timer.start()
 		current_goal = GOALS.GOAL_2
@@ -130,40 +147,43 @@ func _on_goal_1_area_entered(area: Area2D) -> void: # player 2 scores
 func _on_goal_2_area_entered(area: Area2D) -> void: # player 1 scores
 	if area.is_in_group("ball"): # verify if it's the ball that is in the goal
 		scoring = true 
-		manage_scores()
+		if current_ball.get_child(0).is_in_group("player_1"):
+			print("PLAYER 1 LAST TOUCH")
+			last_touch_ball = PLAYERS.PLAYER_1
+		elif current_ball.get_child(0).is_in_group("player_2"):
+			print("PLAYER 2 LAST TOUCH")
+			last_touch_ball = PLAYERS.PLAYER_2
+		else:
+			last_touch_ball = PLAYERS.NOBODY # this will probably never be used because ball can't go to a goal without a player touch
+		$UI/goals/goal_text.show()
 		current_ball.queue_free() # delete the current ball
 		before_after_goal_timer.start()
 		current_goal = GOALS.GOAL_1
 		# print GOAL 
 
 func manage_scores():
-	# check wich player touch the balls for the last time
-	if current_ball.get_child(0).is_in_group("player_1"):
-		print("PLAYER 1 LAST TOUCH")
-		last_touch_ball = PLAYERS.PLAYER_1
-	elif current_ball.get_child(0).is_in_group("player_2"):
-		print("PLAYER 2 LAST TOUCH")
-		last_touch_ball = PLAYERS.PLAYER_2
-	else:
-		last_touch_ball = PLAYERS.NOBODY # this will probably never be used because ball can't go to a goal without a player touch
-	
+	$UI/goals/messages.show()
 	# determine wich player wins
 	if last_touch_ball == PLAYERS.PLAYER_1 && current_goal == GOALS.GOAL_2: # player 1 has scored in the enemy goal, +4 for him
 		current_winner_player = PLAYERS.PLAYER_1
 		current_way_to_score = WAY_TO_SCORE.VOLUNTARY
 		player_1_score += 2
+		$UI/goals/messages/player_1_vol.show()
 	elif last_touch_ball == PLAYERS.PLAYER_2 && current_goal == GOALS.GOAL_1: # player 2 has scored in the enemy goal, +4 for him
 		current_winner_player = PLAYERS.PLAYER_2
 		current_way_to_score = WAY_TO_SCORE.VOLUNTARY
 		player_2_score += 2
+		$UI/goals/messages/player_2_vol.show()
 	elif last_touch_ball == PLAYERS.PLAYER_1 && current_goal == GOALS.GOAL_1: # player 1 has scored in him own goal
 		current_winner_player = PLAYERS.PLAYER_2
 		current_way_to_score = WAY_TO_SCORE.UNVOLUNTARY
 		player_2_score += 1
+		$UI/goals/messages/player_1_unvol.show()
 	elif last_touch_ball == PLAYERS.PLAYER_2 && current_goal == GOALS.GOAL_2: # player 1 has scored in him own goal
 		current_winner_player = PLAYERS.PLAYER_1
 		current_way_to_score = WAY_TO_SCORE.UNVOLUNTARY
 		player_1_score += 1
+		$UI/goals/messages/player_2_unvol.show()
 	
 	# print scores
 	print("CURRENT WINNER : ", current_winner_player)
@@ -174,25 +194,43 @@ func manage_scores():
 	update_score()
 	# TODO
 	
+#func restart():
+	#hide()
+	#$UI/goals/messages/player_2_wins.hide()
+	#$UI/goals/messages/player_1_wins.hide()
+	#restart_timer.start()
+	#player_1_score = 0
+	#player_2_score = 0
+	#respawn_players()
+	
 # - TIMERS
 func _on_after_goal_timeout() -> void:
-	# unlock players
+	$UI/goals/messages/player_1_vol.hide()
+	$UI/goals/messages/player_2_vol.hide()
+	$UI/goals/messages/player_1_unvol.hide()
+	$UI/goals/messages/player_2_unvol.hide()
 	respawn_players()
 	player_1.show()
 	player_2.show()
 	spawn_ball()
+	#if player_1_score >= 10:
+		#$UI/goals/messages/player_1_wins.show()
+		#restart()
+	#elif player_2_score >= 10:
+		#$UI/goals/messages/player_2_wins.show()
+		#restart()
 	scoring = false 
 
 func _on_before_after_goal_timeout() -> void:
 	# lock players
 	player_1.hide()
-	player_2.hide()
+	player_2.hide() 
+	$UI/goals/goal_text.hide()
+	manage_scores()
 	after_goal_timer.start() # start the a timer after restarting the game 
 
 func play_anim_ball():
 	current_ball.get_child(0).play_anim_fast()
-
-
 
 func _on_help_mouse_entered() -> void:
 	$UI/Buttons/Help.icon = on_hover_help
@@ -202,7 +240,6 @@ func _on_help_mouse_entered() -> void:
 	else:
 		$UI/Help.hide()
 	print("MOUSE ENTER")
-
 
 func _on_help_mouse_exited() -> void:
 	$UI/Buttons/Help.icon = normal_help
@@ -219,8 +256,8 @@ func _on_lights_mouse_entered() -> void:
 
 func _on_lights_mouse_exited() -> void:
 	$UI/Buttons/Lights.icon = normal_light
-	#if enable_canvas_modulate:
-		#$CanvasModulate.show()
-	#else:
-		#$CanvasModulate.hide()
-	#enable_canvas_modulate = !enable_canvas_modulate
+
+func _on_restarting_timeout() -> void:
+	#current_ball.queue_free()
+	#spawn_ball()
+	show()
