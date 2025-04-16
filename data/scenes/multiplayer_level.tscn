@@ -221,7 +221,7 @@ fill_to = Vector2(0.893162, 0.57265)
 
 [sub_resource type="LabelSettings" id="LabelSettings_02vkq"]
 font = ExtResource("8_j73fs")
-font_size = 47
+font_size = 56
 
 [sub_resource type="LabelSettings" id="LabelSettings_8uuv4"]
 font = ExtResource("4_rdpnj")
@@ -447,10 +447,10 @@ position = Vector2(-4.76837e-07, 2.38419e-07)
 
 [node name="player_1_vol" type="Label" parent="UI/goals/messages"]
 visible = false
-offset_left = -245.0
-offset_top = -57.0
-offset_right = 258.0
-offset_bottom = 42.0
+offset_left = -288.0
+offset_top = -65.0
+offset_right = 312.0
+offset_bottom = 52.0
 text = "Player 1 scores a nice goal ! 
 +2 to player 1"
 label_settings = SubResource("LabelSettings_02vkq")
@@ -458,10 +458,10 @@ horizontal_alignment = 1
 
 [node name="player_2_vol" type="Label" parent="UI/goals/messages"]
 visible = false
-offset_left = -257.0
-offset_top = -57.0
-offset_right = 267.0
-offset_bottom = 42.0
+offset_left = -300.0
+offset_top = -66.0
+offset_right = 325.0
+offset_bottom = 51.0
 text = "Player 2 scores a great goal ! 
 +2 to player 2"
 label_settings = SubResource("LabelSettings_02vkq")
@@ -469,10 +469,10 @@ horizontal_alignment = 1
 
 [node name="player_1_unvol" type="Label" parent="UI/goals/messages"]
 visible = false
-offset_left = -326.0
-offset_top = -42.0
-offset_right = 343.0
-offset_bottom = 57.0
+offset_left = -392.0
+offset_top = -66.0
+offset_right = 405.0
+offset_bottom = 51.0
 text = "Player 1 have scored in his own goal ! 
 +1 to player 2"
 label_settings = SubResource("LabelSettings_02vkq")
@@ -480,10 +480,10 @@ horizontal_alignment = 1
 
 [node name="player_2_unvol" type="Label" parent="UI/goals/messages"]
 visible = false
-offset_left = -326.0
-offset_top = -43.0
-offset_right = 343.0
-offset_bottom = 56.0
+offset_left = -393.0
+offset_top = -67.0
+offset_right = 404.0
+offset_bottom = 50.0
 text = "Player 2 have scored in his own goal ! 
 +1 to player 1"
 label_settings = SubResource("LabelSettings_02vkq")
