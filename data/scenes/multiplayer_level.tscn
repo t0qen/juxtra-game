@@ -221,7 +221,7 @@ fill_to = Vector2(0.893162, 0.57265)
 
 [sub_resource type="LabelSettings" id="LabelSettings_02vkq"]
 font = ExtResource("8_j73fs")
-font_size = 56
+font_size = 58
 
 [sub_resource type="LabelSettings" id="LabelSettings_8uuv4"]
 font = ExtResource("4_rdpnj")

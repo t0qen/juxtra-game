@@ -774,7 +774,6 @@ top_level = true
 scale = Vector2(4, 4)
 collision_layer = 2
 collision_mask = 15
-collision_priority = 10.0
 platform_on_leave = 2
 platform_floor_layers = 4294967291
 script = ExtResource("1_glcv3")
@@ -782,6 +781,11 @@ current_player = 1
 SPEED = {
 "AIR": 600,
 "GROUND": 600
+}
+PUSH_FORCE = {
+"HARD": 300,
+"NORMAL": 100,
+"SOFT": 25
 }
 friction = 20.0
 acceleration = 50.0
