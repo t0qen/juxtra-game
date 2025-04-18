@@ -1,3 +1,6 @@
+# README WILL BE REWIRTED SOON
+
+
 > [!TIP]
 > **⚡ v0.2 is out !** Play directly in your browser without downloading anythings !
 >
@@ -31,12 +34,13 @@ todo : add link to every sections here
 - ...
 
 ## 📸 Previews
-See a video here : https://youtu.be/9pEGZnUsyik
+See a video here : [https://youtu.be/9pEGZnUsyik](https://youtu.be/FOTUuqIrwUs)
 
+![screenshot_3](https://github.com/user-attachments/assets/be5d2e56-3105-4803-821a-bcdae29ea6a2)
+![screenshot_1](https://github.com/user-attachments/assets/66c0bf64-ec67-493a-9cd3-3de9f1796036)
+![screenshot_4](https://github.com/user-attachments/assets/87766d02-c249-43bd-804a-0ad75d3c60bf)
 
-![Screenshot 1](https://github.com/user-attachments/assets/24353c1f-31be-4077-af08-4cb15408a823)
-![Screenshot 2](https://github.com/user-attachments/assets/b76c451a-55e6-44fd-80c0-c014c95ed4ab)
-
+https://github.com/user-attachments/assets/5e314314-5e46-430f-af83-b6be7dbbb9b9
 
 ## 📜 How to play
 For now, to **move the player 1 : ZQSD or WASD**, and for **player 2 : just use arrow keys**.
@@ -77,7 +81,7 @@ That's all !
 
 
 ## 🤩 The team behind this project
-**Coming soon**
+- **leynoo.**, the artist who created players sheetsprites and tilemap.
 
 
 ## 😘 Thanks
